@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accedi - MyApp Sindacato Carabinieri</title>
+    <title>Accedi - MyApp </title>
     
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json">
@@ -558,7 +558,7 @@
                 console.log('🔐 Tentativo di login...');
                 
                 // Create email session
-                const session = await account.createEmailSession(email, password);
+                const session = await account.createEmailPasswordSession(email, password);
                 console.log('✅ Sessione creata:', session);
 
                 // Get user info
