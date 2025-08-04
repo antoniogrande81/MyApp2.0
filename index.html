@@ -196,6 +196,7 @@
             gap: 12px;
             margin: 0.5rem;
             animation: slideIn 1s ease-out 0.6s both;
+            cursor: pointer;
         }
 
         .btn-aurora:hover {
@@ -219,6 +220,7 @@
             margin: 0.5rem;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             animation: slideIn 1s ease-out 0.8s both;
+            cursor: pointer;
         }
 
         .btn-cyber:hover {
@@ -449,10 +451,10 @@
         </p>
         
         <div class="flex flex-wrap justify-center items-center">
-            <a href="auth.html" class="btn-aurora">
+            <a href="registrati.html" class="btn-aurora">
                 🚀 Registrati Ora
             </a>
-            <a href="auth.html" class="btn-cyber">
+            <a href="login.html" class="btn-cyber">
                 🔐 Accedi
             </a>
         </div>
@@ -583,7 +585,7 @@
 
         const client = new Client()
             .setEndpoint('https://fra.cloud.appwrite.io/v1')
-            .setProject('688db9670010e31f3d56');
+            .setProject('688db9670010e3113d56'); // ✅ Project ID corretto
 
         const account = new Account(client);
 
@@ -608,7 +610,7 @@
                             <p class="text-white font-semibold mb-4">
                                 Sei già autenticato. Vai alla tua dashboard per accedere ai servizi.
                             </p>
-                            <div class="flex gap-4 justify-center">
+                            <div class="flex gap-4 justify-center flex-wrap">
                                 <a href="home.html" class="btn-aurora">
                                     🏠 Dashboard Utente
                                 </a>
@@ -666,7 +668,7 @@
                 console.log('🚀 Page fully loaded');
                 
                 // Preload delle pagine critiche
-                const criticalPages = ['auth.html', 'home.html'];
+                const criticalPages = ['registrati.html', 'login.html', 'home.html'];
                 criticalPages.forEach(page => {
                     const link = document.createElement('link');
                     link.rel = 'prefetch';
@@ -674,6 +676,19 @@
                     document.head.appendChild(link);
                 });
             });
+
+            // Registra il Service Worker
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(registration => {
+                            console.log('🔧 SW registered: ', registration);
+                        })
+                        .catch(registrationError => {
+                            console.log('❌ SW registration failed: ', registrationError);
+                        });
+                });
+            }
         });
 
         // 📱 PWA Installation prompt
