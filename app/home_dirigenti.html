@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Dirigenti - MyApp</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="background-color" content="#1a1a2e">
+
+    <!-- Icone -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/icons/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1"></script>
+    
+    <!-- Chart.js per grafici -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- CONFIGURAZIONE COLORI TAILWIND -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Aurora Boreale 2025 Palette
+                        primary: '#1a1a2e',      // Blu notte profondo
+                        secondary: '#16213e',     // Blu oceano
+                        accent: '#0f3460',        // Blu acciaio
+                        aurora: '#e94560',        // Rosa aurora
+                        cyan: '#00d4ff',          // Cyan elettrico
+                        magenta: '#ff006e',       // Magenta vibrante
+                        gold: '#ffd700',          // Oro elegante
+                        teal: '#03dac6',          // Teal premium
+                        dark: '#0a0a23',          // Nero cyber
+                        light: '#f8fafc',         // Bianco ghiaccio
+                        textDark: '#1C1C1E',
+                        backgroundLight: '#F4F4F8',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- STILI CSS COMPLETI -->
+    <style>
+        /* === VARIABILI CSS === */
+        :root {
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #f59e0b 100%);
+        }
+
+        /* === SFONDO PRINCIPALE === */
+        body {
+            background: var(--gradient-aurora);
+            background-size: 400% 400%;
+            animation: aurora 20s ease infinite;
+            min-height: 100vh;
+        }
+
+        /* === ANIMAZIONI === */
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8); }
+        }
+
+        /* === TIPOGRAFIA ULTRA-VISIBILE === */
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+            font-weight: 800;
+        }
+
+        .text-white {
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+        }
+
+        /* === GLASSMORPHISM === */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* === HEADER ADMIN === */
+        .admin-header {
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(233,69,96,0.15));
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-badge {
+            background: var(--gradient-gold);
+            color: #1a1a2e;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        /* === DASHBOARD GRID ADMIN === */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .admin-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-gold);
+        }
+
+        .admin-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(255, 215, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.6);
+        }
+
+        /* === STATS ADMIN === */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .admin-stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-magic);
+        }
+
+        .admin-stat-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: rgba(233, 69, 96, 0.5);
+            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.2);
+        }
+
+        .admin-stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+        }
+
+        .admin-stat-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 1);
+        }
+
+        .admin-stat-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .stat-positive {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .stat-negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* === CHART CONTAINER === */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            height: 400px;
+        }
+
+        .chart-title {
+            color: #1a1a2e;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* === QUICK ACTIONS === */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-action-btn {
+            background: var(--gradient-magic);
+            color: white;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            border-radius: 16px;
+            padding: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.8);
+        }
+
+        .quick-action-icon {
+            font-size: 2rem;
+        }
+
+        .quick-action-text {
+            font-size: 0.9rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* === TABLE STYLES === */
+        .admin-table {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            background: var(--gradient-magic);
+            color: white;
+            padding: 1.5rem 2rem;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .table-content {
+            padding: 2rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 100px;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            align-items: center;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-cell {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .status-active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-inactive {
+            background: rgba(156, 163, 175, 0.2);
+            color: #6b7280;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 1rem;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .chart-container {
+                height: 300px;
+                padding: 1rem;
+            }
+        }
+
+        /* === REDUCED MOTION === */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- ADMIN HEADER -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">👑</div>
+                        <span class="text-white text-xl font-black">Dashboard Dirigenti</span>
+                    </a>
+                    <div class="admin-badge">
+                        🛡️ AMMINISTRATORE
+                    </div>
+                </div>
+                
+                <div class="user-menu">
+                    <div class="user-info">
+                        <div class="user-name text-white font-bold" id="adminName">Caricamento...</div>
+                        <div class="user-role text-white opacity-75 text-sm" id="adminRole">DIRIGENTE</div>
+                    </div>
+                    <div class="user-avatar" id="adminAvatar">👑</div>
+                    <button id="logoutBtn" class="btn-aurora">
+                        🚪 Esci
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content flex-1 p-6">
+        <!-- WELCOME SECTION -->
+        <section class="welcome-section mb-8">
+            <div class="glass-card rounded-3xl p-8 text-center">
+                <h1 class="text-4xl font-black text-primary mb-4">
+                    👑 Dashboard Amministrativa
+                </h1>
+                <p class="text-xl text-gray-600 font-semibold mb-6">
+                    Gestisci MyApp con strumenti avanzati
+                </p>
+                
+                <!-- QUICK ACTIONS -->
+                <div class="quick-actions">
+                    <a href="gestione-utenti.html" class="quick-action-btn">
+                        <div class="quick-action-icon">👥</div>
+                        <div class="quick-action-text">Gestione Utenti</div>
+                    </a>
+                    
+                    <a href="richieste-admin.html" class="quick-action-btn">
+                        <div class="quick-action-icon">📋</div>
+                        <div class="quick-action-text">Richieste</div>
+                    </a>
+                    
+                    <a href="tessere-admin.html" class="quick-action-btn">
+                        <div class="quick-action-icon">🎫</div>
+                        <div class="quick-action-text">Tessere</div>
+                    </a>
+                    
+                    <a href="news-admin.html" class="quick-action-btn">
+                        <div class="quick-action-icon">📰</div>
+                        <div class="quick-action-text">News</div>
+                    </a>
+                    
+                    <a href="statistiche.html" class="quick-action-btn">
+                        <div class="quick-action-icon">📊</div>
+                        <div class="quick-action-text">Statistiche</div>
+                    </a>
+                    
+                    <a href="impostazioni.html" class="quick-action-btn">
+                        <div class="quick-action-icon">⚙️</div>
+                        <div class="quick-action-text">Impostazioni</div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- STATISTICHE OVERVIEW -->
+        <section class="stats-section mb-8">
+            <h2 class="text-3xl font-black text-white mb-6">
+                📈 Panoramica Sistema
+            </h2>
+            
+            <div class="admin-stats">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-number" id="totalUsers">0</div>
+                    <div class="admin-stat-label">Utenti Totali</div>
+                    <div class="admin-stat-change stat-positive">+12% questo mese</div>
+                </div>
+                
+                <div class="admin-stat-card">
+                    <div class="admin-stat-number" id="activeRequests">0</div>
+                    <div class="admin-stat-label">Richieste Attive</div>
+                    <div class="admin-stat-change stat-negative">-5% questa settimana</div>
+                </div>
+                
+                <div class="admin-stat-card">
+                    <div class="admin-stat-number" id="activeTessere">0</div>
+                    <div class="admin-stat-label">Tessere Attive</div>
+                    <div class="admin-stat-change stat-positive">+8% questo mese</div>
+                </div>
+                
+                <div class="admin-stat-card">
+                    <div class="admin-stat-number" id="monthlyRevenue">€0</div>
+                    <div class="admin-stat-label">Entrate Mensili</div>
+                    <div class="admin-stat-change stat-positive">+15% vs mese scorso</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GRAFICI -->
+        <section class="charts-section mb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- GRAFICO ISCRIZIONI -->
+                <div class="chart-container">
+                    <h3 class="chart-title">📊 Nuove Iscrizioni (Ultimi 6 Mesi)</h3>
+                    <canvas id="subscriptionsChart"></canvas>
+                </div>
+                
+                <!-- GRAFICO RICHIESTE -->
+                <div class="chart-container">
+                    <h3 class="chart-title">📋 Richieste per Categoria</h3>
+                    <canvas id="requestsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD ADMIN -->
+        <section class="admin-dashboard mb-8">
+            <h2 class="text-3xl font-black text-white mb-6">
+                🛠️ Strumenti di Gestione
+            </h2>
+            
+            <div class="admin-grid">
+                <div class="admin-card" onclick="navigateTo('gestione-utenti.html')">
+                    <div class="card-header">
+                        <div class="card-icon">👥</div>
+                        <div>
+                            <div class="card-title text-xl font-bold text-primary mb-2">Gestione Utenti</div>
+                            <div class="card-description text-gray-600">
+                                Amministra profili utente, ruoli e permessi. 
+                                Visualizza statistiche dettagliate e gestisci le iscrizioni.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-action text-aurora font-bold mt-4">
+                        Gestisci Utenti →
+                    </div>
+                </div>
+                
+                <div class="admin-card" onclick="navigateTo('richieste-admin.html')">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <div>
+                            <div class="card-title text-xl font-bold text-primary mb-2">Centro Richieste</div>
+                            <div class="card-description text-gray-600">
+                                Monitora e gestisci tutte le richieste degli utenti. 
+                                Assegna priorità, stati e rispondi efficacemente.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-action text-aurora font-bold mt-4">
+                        Gestisci Richieste →
+                    </div>
+                </div>
+                
+                <div class="admin-card" onclick="navigateTo('tessere-admin.html')">
+                    <div class="card-header">
+                        <div class="card-icon">🎫</div>
+                        <div>
+                            <div class="card-title text-xl font-bold text-primary mb-2">Gestione Tessere</div>
+                            <div class="card-description text-gray-600">
+                                Emetti, rinnova e gestisci le tessere digitali. 
+                                Controlla validità e stato delle iscrizioni.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-action text-aurora font-bold mt-4">
+                        Gestisci Tessere →
+                    </div>
+                </div>
+                
+                <div class="admin-card" onclick="navigateTo('comunicazioni.html')">
+                    <div class="card-header">
+                        <div class="card-icon">📢</div>
+                        <div>
+                            <div class="card-title text-xl font-bold text-primary mb-2">Comunicazioni</div>
+                            <div class="card-description text-gray-600">
+                                Invia news, comunicati e notifiche push. 
+                                Gestisci newsletter e campagne informative.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-action text-aurora font-bold mt-4">
+                        Gestisci Comunicazioni →
+                    </div>
+                </div>
+                
+                <div class="admin-card" onclick="navigateTo('analytics.html')">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div>
+                            <div class="card-title text-xl font-bold text-primary mb-2">Analytics Avanzate</div>
+                            <div class="card-description text-gray-600">
+                                Dashboard completa con metriche dettagliate, 
+                                report personalizzati e analisi predittive.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-action text-aurora font-bold mt-4">
+                        Visualizza Analytics →
+                    </div>
+                </div>
+                
+                <div class="admin-card" onclick="navigateTo('backup.html')">
+                    <div class="card-header">
+                        <div class="card-icon">💾</div>
+                        <div>
+                            <div class="card-title text-xl font-bold text-primary mb-2">Backup & Sicurezza</div>
+                            <div class="card-description text-gray-600">
+                                Gestisci backup automatici, log di sicurezza 
+                                e monitoraggio dell'integrità dei dati.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-action text-aurora font-bold mt-4">
+                        Gestisci Backup →
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ULTIMI UTENTI REGISTRATI -->
+        <section class="recent-users mb-8">
+            <div class="admin-table">
+                <div class="table-header">
+                    👥 Ultimi Utenti Registrati
+                </div>
+                <div class="table-content">
+                    <div class="table-row font-bold text-gray-700 border-b-2">
+                        <div class="table-cell">Nome Completo</div>
+                        <div class="table-cell">Email</div>
+                        <div class="table-cell">Telefono</div>
+                        <div class="table-cell">Data Iscrizione</div>
+                        <div class="table-cell">Stato</div>
+                    </div>
+                    
+                    <div id="recentUsersTable">
+                        <!-- Popolato dinamicamente -->
+                        <div class="table-row">
+                            <div class="table-cell">Caricamento...</div>
+                            <div class="table-cell">-</div>
+                            <div class="table-cell">-</div>
+                            <div class="table-cell">-</div>
+                            <div class="table-cell">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RICHIESTE PENDENTI -->
+        <section class="pending-requests mb-8">
+            <div class="admin-table">
+                <div class="table-header">
+                    🔔 Richieste Pendenti (Priorità Alta)
+                </div>
+                <div class="table-content">
+                    <div class="table-row font-bold text-gray-700 border-b-2">
+                        <div class="table-cell">Utente</div>
+                        <div class="table-cell">Tipo Richiesta</div>
+                        <div class="table-cell">Priorità</div>
+                        <div class="table-cell">Data</div>
+                        <div class="table-cell">Azioni</div>
+                    </div>
+                    
+                    <div id="pendingRequestsTable">
+                        <!-- Popolato dinamicamente -->
+                        <div class="table-row">
+                            <div class="table-cell">Caricamento...</div>
+                            <div class="table-cell">-</div>
+                            <div class="table-cell">-</div>
+                            <div class="table-cell">-</div>
+                            <div class="table-cell">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 🔧 CONFIGURAZIONE APPWRITE
+        const { Client, Account, Databases, Query } = Appwrite;
+
+        const client = new Client()
+            .setEndpoint('https://fra.cloud.appwrite.io/v1')
+            .setProject('688db9670010e3113d56'); // ✅ Project ID corretto
+
+        const account = new Account(client);
+        const databases = new Databases(client);
+
+        const DATABASE_ID = '688dbfaf001fcce68c0f';
+        const COLLECTIONS = {
+            user_profiles: '688dca4f00345547d52f',
+            tessere: '688e6222002987f97521',
+            notizie: '688e02b3000595a16b2c',
+            convenzioni: '688e03f000195871d9e',
+            organico_dirigenti: '688e0501000254ad0966'
+        };
+
+        // 🎯 STATO APPLICAZIONE
+        let currentAdmin = null;
+        let adminProfile = null;
+        let dashboardData = {
+            totalUsers: 0,
+            activeRequests: 0,
+            activeTessere: 0,
+            monthlyRevenue: 0,
+            recentUsers: [],
+            pendingRequests: []
+        };
+
+        // 🛠️ UTILITIES
+        const Utils = {
+            formatDate: (dateString) => {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('it-IT');
+            },
+
+            formatCurrency: (amount) => {
+                return new Intl.NumberFormat('it-IT', {
+                    style: 'currency',
+                    currency: 'EUR'
+                }).format(amount);
+            },
+
+            getInitials: (name) => {
+                return name
+                    .split(' ')
+                    .map(word => word.charAt(0))
+                    .join('')
+                    .toUpperCase()
+                    .substring(0, 2);
+            },
+
+            safeRedirect: (url, delay = 500) => {
+                console.log(`🔄 Redirect a: ${url} tra ${delay}ms`);
+                setTimeout(() => {
+                    window.location.href = url;
+                }, delay);
+            }
+        };
+
+        // 👑 ADMIN MANAGER
+        const AdminManager = {
+            // Check admin privileges
+            checkAdminAccess: async () => {
+                try {
+                    const user = await account.get();
+                    console.log('👤 Utente corrente:', user);
+                    
+                    if (!user) {
+                        throw new Error('Utente non autenticato');
+                    }
+
+                    // Get user profile
+                    const response = await databases.listDocuments(
+                        DATABASE_ID,
+                        COLLECTIONS.user_profiles,
+                        [Query.equal('user_id', user.$id)]
+                    );
+
+                    if (response.documents.length === 0) {
+                        throw new Error('Profilo utente non trovato');
+                    }
+
+                    const profile = response.documents[0];
+                    const userRole = profile.role?.toUpperCase();
+
+                    if (userRole !== 'ADMIN' && userRole !== 'DIRIGENTE') {
+                        throw new Error('Accesso non autorizzato - Privilegi insufficienti');
+                    }
+
+                    currentAdmin = user;
+                    adminProfile = profile;
+                    
+                    console.log('✅ Accesso amministratore verificato:', { user, profile });
+                    return { user, profile };
+                    
+                } catch (error) {
+                    console.error('❌ Errore verifica accesso admin:', error);
+                    throw error;
+                }
+            },
+
+            // Get dashboard statistics
+            getDashboardStats: async () => {
+                try {
+                    console.log('📊 Caricamento statistiche dashboard...');
+                    
+                    // Get total users
+                    const usersResponse = await databases.listDocuments(
+                        DATABASE_ID,
+                        COLLECTIONS.user_profiles,
+                        [Query.limit(1000)] // Adjust based on your needs
+                    );
+                    
+                    // Get active tessere
+                    const tessereResponse = await databases.listDocuments(
+                        DATABASE_ID,
+                        COLLECTIONS.tessere,
+                        [Query.equal('stato', 'ATTIVA'), Query.limit(1000)]
+                    );
+
+                    // Mock data for requests and revenue (implement based on your collections)
+                    const stats = {
+                        totalUsers: usersResponse.total || usersResponse.documents.length,
+                        activeRequests: Math.floor(Math.random() * 50) + 10, // Mock data
+                        activeTessere: tessereResponse.total || tessereResponse.documents.length,
+                        monthlyRevenue: Math.floor(Math.random() * 50000) + 25000, // Mock data
+                        recentUsers: usersResponse.documents
+                            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                            .slice(0, 5),
+                        pendingRequests: [] // Mock data - implement based on requests collection
+                    };
+
+                    console.log('✅ Statistiche caricate:', stats);
+                    return stats;
+                    
+                } catch (error) {
+                    console.error('❌ Errore caricamento statistiche:', error);
+                    throw error;
+                }
+            },
+
+            // Logout admin
+            logout: async () => {
+                try {
+                    console.log('🚪 Logout amministratore...');
+                    await account.deleteSession('current');
+                    console.log('✅ Logout completato');
+                    Utils.safeRedirect('index.html');
+                } catch (error) {
+                    console.error('❌ Errore logout:', error);
+                    Utils.safeRedirect('index.html');
+                }
+            }
+        };
+
+        // 🎨 UI MANAGER
+        const UIManager = {
+            // Update admin info
+            updateAdminInfo: (user, profile) => {
+                const adminName = document.getElementById('adminName');
+                const adminRole = document.getElementById('adminRole');
+                const adminAvatar = document.getElementById('adminAvatar');
+
+                if (adminName && profile) {
+                    adminName.textContent = profile.full_name || user.name || 'Amministratore';
+                }
+
+                if (adminRole && profile) {
+                    adminRole.textContent = profile.role || 'DIRIGENTE';
+                }
+
+                if (adminAvatar && profile) {
+                    const initials = Utils.getInitials(profile.full_name || user.name || 'A');
+                    adminAvatar.textContent = initials;
+                }
+            },
+
+            // Update dashboard stats
+            updateDashboardStats: (stats) => {
+                const elements = {
+                    totalUsers: document.getElementById('totalUsers'),
+                    activeRequests: document.getElementById('activeRequests'),
+                    activeTessere: document.getElementById('activeTessere'),
+                    monthlyRevenue: document.getElementById('monthlyRevenue')
+                };
+
+                if (elements.totalUsers) {
+                    elements.totalUsers.textContent = stats.totalUsers.toLocaleString('it-IT');
+                }
+                
+                if (elements.activeRequests) {
+                    elements.activeRequests.textContent = stats.activeRequests.toLocaleString('it-IT');
+                }
+                
+                if (elements.activeTessere) {
+                    elements.activeTessere.textContent = stats.activeTessere.toLocaleString('it-IT');
+                }
+                
+                if (elements.monthlyRevenue) {
+                    elements.monthlyRevenue.textContent = Utils.formatCurrency(stats.monthlyRevenue);
+                }
+            },
+
+            // Update recent users table
+            updateRecentUsersTable: (users) => {
+                const tableContainer = document.getElementById('recentUsersTable');
+                if (!tableContainer) return;
+
+                if (users.length === 0) {
+                    tableContainer.innerHTML = `
+                        <div class="table-row">
+                            <div class="table-cell text-gray-500 text-center" style="grid-column: 1 / -1;">
+                                Nessun utente recente trovato
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const rows = users.map(user => `
+                    <div class="table-row">
+                        <div class="table-cell">${user.full_name || 'N/A'}</div>
+                        <div class="table-cell">${user.email || 'N/A'}</div>
+                        <div class="table-cell">${user.telefono || 'N/A'}</div>
+                        <div class="table-cell">${Utils.formatDate(user.created_at)}</div>
+                        <div class="table-cell">
+                            <span class="status-badge status-active">Attivo</span>
+                        </div>
+                    </div>
+                `).join('');
+
+                tableContainer.innerHTML = rows;
+            },
+
+            // Show loading state
+            showLoading: () => {
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.innerHTML = `
+                        <div class="text-center py-20">
+                            <div class="text-6xl mb-4">⏳</div>
+                            <h2 class="text-2xl font-bold text-white mb-2">Caricamento Dashboard Amministrativa...</h2>
+                            <p class="text-white opacity-75">Verifica privilegi e caricamento dati</p>
+                        </div>
+                    `;
+                }
+            },
+
+            // Show error state
+            showError: (message) => {
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.innerHTML = `
+                        <div class="text-center py-20">
+                            <div class="text-6xl mb-4">❌</div>
+                            <h2 class="text-2xl font-bold text-white mb-2">Accesso Negato</h2>
+                            <p class="text-white opacity-75 mb-6">${message}</p>
+                            <div class="flex gap-4 justify-center">
+                                <a href="auth.html" class="btn-aurora">
+                                    🔐 Effettua Login
+                                </a>
+                                <a href="index.html" class="btn-cyber">
+                                    🏠 Torna alla Home
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        };
+
+        // 📊 CHARTS MANAGER
+        const ChartsManager = {
+            // Initialize subscription chart
+            initSubscriptionsChart: () => {
+                const ctx = document.getElementById('subscriptionsChart');
+                if (!ctx) return;
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre', 'Gennaio'],
+                        datasets: [{
+                            label: 'Nuove Iscrizioni',
+                            data: [65, 78, 90, 123, 145, 168],
+                            borderColor: '#e94560',
+                            backgroundColor: 'rgba(233, 69, 96, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0,0,0,0.1)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(0,0,0,0.1)'
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+
+            // Initialize requests chart
+            initRequestsChart: () => {
+                const ctx = document.getElementById('requestsChart');
+                if (!ctx) return;
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Assistenza Legale', 'Informazioni', 'Reclami', 'Altro'],
+                        datasets: [{
+                            data: [45, 25, 20, 10],
+                            backgroundColor: [
+                                '#e94560',
+                                '#00d4ff',
+                                '#ff006e',
+                                '#03dac6'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    font: {
+                                        size: 12,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+        // 🚀 APP INITIALIZATION
+        const App = {
+            init: async () => {
+                try {
+                    console.log('👑 Inizializzazione dashboard amministrativa...');
+                    
+                    // Check admin access
+                    await AdminManager.checkAdminAccess();
+                    
+                    // Load dashboard data
+                    await App.loadDashboardData();
+                    
+                    // Initialize charts
+                    ChartsManager.initSubscriptionsChart();
+                    ChartsManager.initRequestsChart();
+                    
+                    // Setup event listeners
+                    App.setupEventListeners();
+                    
+                    console.log('✅ Dashboard amministrativa inizializzata');
+                    
+                } catch (error) {
+                    console.error('❌ Errore inizializzazione:', error);
+                    
+                    if (error.message.includes('non autenticato')) {
+                        Utils.safeRedirect('auth.html');
+                    } else if (error.message.includes('non autorizzato') || error.message.includes('Privilegi insufficienti')) {
+                        UIManager.showError('Non hai i privilegi necessari per accedere a questa area. Contatta l\'amministratore.');
+                    } else {
+                        UIManager.showError('Errore di caricamento. Riprova più tardi.');
+                    }
+                }
+            },
+
+            loadDashboardData: async () => {
+                try {
+                    console.log('📊 Caricamento dati dashboard...');
+                    
+                    // Get dashboard statistics
+                    dashboardData = await AdminManager.getDashboardStats();
+                    
+                    // Update UI
+                    UIManager.updateAdminInfo(currentAdmin, adminProfile);
+                    UIManager.updateDashboardStats(dashboardData);
+                    UIManager.updateRecentUsersTable(dashboardData.recentUsers);
+                    
+                    console.log('✅ Dati dashboard caricati:', dashboardData);
+                    
+                } catch (error) {
+                    console.error('❌ Errore caricamento dati dashboard:', error);
+                    throw error;
+                }
+            },
+
+            setupEventListeners: () => {
+                // Logout button
+                const logoutBtn = document.getElementById('logoutBtn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        
+                        if (confirm('Sei sicuro di voler uscire dalla dashboard amministrativa?')) {
+                            logoutBtn.disabled = true;
+                            logoutBtn.innerHTML = '⏳ Uscita...';
+                            
+                            await AdminManager.logout();
+                        }
+                    });
+                }
+
+                // Admin cards hover effects
+                document.querySelectorAll('.admin-card').forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        card.style.transform = 'translateY(-8px) scale(1.02)';
+                    });
+                    
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = 'translateY(0) scale(1)';
+                    });
+                });
+
+                // Quick action buttons
+                document.querySelectorAll('.quick-action-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const href = btn.getAttribute('href');
+                        if (href && href !== '#') {
+                            e.preventDefault();
+                            navigateTo(href);
+                        }
+                    });
+                });
+            }
+        };
+
+        // 🧭 NAVIGATION
+        function navigateTo(url) {
+            console.log(`🧭 Navigazione admin a: ${url}`);
+            
+            // Add loading effect
+            const event = new CustomEvent('navigate', { detail: { url } });
+            document.dispatchEvent(event);
+            
+            // Navigate after short delay for UX
+            setTimeout(() => {
+                window.location.href = url;
+            }, 150);
+        }
+
+        // 🔄 PAGE LIFECYCLE
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('👑 Admin dashboard page loaded');
+            App.init();
+        });
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && currentAdmin) {
+                console.log('👀 Admin page visible, refreshing data...');
+                App.loadDashboardData().catch(console.error);
+            }
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            console.log('⚡ Admin dashboard fully loaded');
+            
+            // Preload admin pages
+            const adminPages = [
+                'gestione-utenti.html',
+                'richieste-admin.html',
+                'tessere-admin.html',
+                'analytics.html'
+            ];
+            adminPages.forEach(page => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = page;
+                document.head.appendChild(link);
+            });
+        });
+    </script>
+</body>
+</html>

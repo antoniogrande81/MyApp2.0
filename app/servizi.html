@@ -1,0 +1,949 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servizi - MyApp</title>
+
+  <!-- PWA & meta -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1a1a2e">
+  <link rel="icon" sizes="16x16" href="/public/icons/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1a1a2e',
+            secondary: '#16213e',
+            accent: '#0f3460',
+            aurora: '#e94560',
+            cyan: '#00d4ff',
+            magenta: '#ff006e',
+            gold: '#ffd700',
+            teal: '#03dac6',
+            dark: '#0a0a23',
+            light: '#f8fafc',
+            textDark: '#1C1C1E',
+            backgroundLight: '#F4F4F8',
+          },
+          screens: {
+            xs: '320px',
+            sm: '640px',
+            md: '768px',
+            lg: '1024px',
+            xl: '1280px',
+            '2xl': '1536px',
+            '3xl': '1920px',
+            '4xl': '2560px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+      --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+      --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+    }
+
+    body {
+      background: var(--gradient-aurora);
+      background-size: 400% 400%;
+      animation: aurora 20s ease infinite;
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    @keyframes aurora {
+      0%, 100% { background-position: 0% 50%; }
+      25% { background-position: 100% 50%; }
+      50% { background-position: 100% 100%; }
+      75% { background-position: 0% 100%; }
+    }
+
+    /* Enhanced Readability */
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 255, 0.92) 25%, rgba(255, 255, 255, 0.95) 50%, rgba(240, 244, 255, 0.92) 75%, rgba(255, 255, 255, 0.95) 100%);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+      transition: all 0.3s ease;
+      color: #1C1C1E;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.18);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 249, 255, 0.95) 25%, rgba(255, 255, 255, 0.98) 50%, rgba(240, 244, 255, 0.95) 75%, rgba(255, 255, 255, 0.98) 100%);
+    }
+
+    /* Improved Typography for Readability */
+    .hero-title { 
+      font-size: 1.75rem; 
+      font-weight: 800; 
+      line-height: 1.2; 
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .section-title { 
+      font-size: 1.25rem; 
+      font-weight: 700; 
+      line-height: 1.3; 
+      color: #1C1C1E;
+      margin-bottom: 1rem;
+    }
+    
+    .body-text { 
+      font-size: 0.95rem; 
+      line-height: 1.6; 
+      color: #374151;
+      font-weight: 500;
+    }
+    
+    .caption-text { 
+      font-size: 0.85rem; 
+      line-height: 1.5; 
+      color: #6B7280;
+      font-weight: 500;
+    }
+
+    /* Enhanced Tab System */
+    .tab-active {
+      background: linear-gradient(135deg, #e94560, #00d4ff);
+      color: white !important;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .tab-button {
+      transition: all 0.3s ease;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+    }
+
+    .tab-button:not(.tab-active):hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    /* Service Items Enhanced */
+    .service-item {
+      background: rgba(248, 250, 252, 0.95);
+      border: 1px solid rgba(203, 213, 225, 0.6);
+      border-radius: 16px;
+      padding: 1.25rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .service-item:hover {
+      background: rgba(255, 255, 255, 0.98);
+      border-color: rgba(233, 69, 96, 0.3);
+      box-shadow: 0 8px 25px rgba(233, 69, 96, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .service-item strong {
+      color: #1C1C1E;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .service-item ul li {
+      color: #4B5563;
+      font-weight: 500;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Enhanced Buttons */
+    .aurora-button {
+      background: linear-gradient(135deg, #e94560 0%, #ff006e 50%, #00d4ff 100%);
+      color: white;
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border-radius: 16px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(233, 69, 96, 0.3);
+      font-size: 1rem;
+    }
+
+    .aurora-button:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(233, 69, 96, 0.4);
+    }
+
+    /* Back Button Enhanced */
+    .back-button {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 16px;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.75rem 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      font-weight: 700;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    /* Responsive Typography */
+    @media (max-width: 480px) {
+      .hero-title { font-size: 1.5rem; }
+      .section-title { font-size: 1.125rem; }
+      .body-text { font-size: 0.9rem; }
+      .caption-text { font-size: 0.8rem; }
+      .service-card { padding: 1rem; }
+      .tab-button { font-size: 0.8rem; padding: 0.6rem 0.8rem; }
+    }
+
+    @media (min-width: 481px) and (max-width: 640px) {
+      .hero-title { font-size: 1.625rem; }
+      .section-title { font-size: 1.2rem; }
+      .service-card { padding: 1.25rem; }
+    }
+
+    @media (min-width: 641px) and (max-width: 1024px) {
+      .hero-title { font-size: 1.75rem; }
+      .service-card { padding: 1.5rem; }
+    }
+
+    @media (min-width: 1025px) {
+      .service-card { padding: 2rem; }
+    }
+
+    /* Responsive Service Grid */
+    .service-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      .service-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (min-width: 481px) and (max-width: 640px) {
+      .service-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 641px) and (max-width: 1024px) {
+      .service-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (min-width: 1025px) {
+      .service-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* Tab Responsive */
+    .tab-container {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 480px) {
+      .tab-container { 
+        flex-direction: column; 
+        gap: 0.5rem; 
+      }
+      .tab-button { 
+        text-align: center; 
+        font-size: 0.8rem;
+      }
+    }
+
+    /* Container Responsive System */
+    .container-responsive {
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .container-responsive {
+        max-width: 640px;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .container-responsive { max-width: 768px; }
+    }
+
+    @media (min-width: 1024px) {
+      .container-responsive { max-width: 1024px; }
+    }
+
+    @media (min-width: 1280px) {
+      .container-responsive { max-width: 1200px; }
+    }
+
+    @media (min-width: 1536px) {
+      .container-responsive { max-width: 1400px; }
+    }
+
+    @media (min-width: 1920px) {
+      .container-responsive { max-width: 1600px; }
+    }
+
+    @media (min-width: 2560px) {
+      .container-responsive { max-width: 2000px; }
+    }
+
+    /* Enhanced Modal */
+    .modal-content {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 24px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    }
+
+    .modal-input {
+      border: 2px solid rgba(203, 213, 225, 0.8);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .modal-input:focus {
+      outline: none;
+      border-color: #e94560;
+      box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+      background: rgba(255, 255, 255, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Aurora Boreale -->
+  <div id="loading" class="fixed inset-0 bg-primary bg-opacity-90 flex items-center justify-center z-50 hidden">
+    <div class="glass-card p-6 text-center">
+      <div class="w-12 h-12 border-4 border-aurora border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <p class="text-primary font-bold">Caricamento servizi…</p>
+    </div>
+  </div>
+
+  <!-- Header with Smart Back Button -->
+  <header class="w-full px-4 py-6">
+    <div class="container-responsive mx-auto">
+      <div class="flex items-center justify-between">
+        <button 
+          onclick="smartBackNavigation()" 
+          class="back-button"
+          title="Torna alla home"
+        >
+          ← <span class="hidden sm:inline">Torna alla Home</span>
+        </button>
+        
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 bg-gradient-to-br from-cyan to-teal rounded-full flex items-center justify-center border-2 border-white/30 shadow-lg">
+            <span class="text-white font-bold text-xl">🛡️</span>
+          </div>
+          <h1 class="hero-title text-white">Servizi BestBadge</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-responsive mx-auto px-4 pb-12">
+    <!-- Hero Enhanced -->
+    <div class="glass-card service-card mb-6 text-center">
+      <div class="w-20 h-20 bg-gradient-to-br from-aurora/20 to-cyan/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-white/30">
+        <span class="text-4xl">⚖️</span>
+      </div>
+      <h2 class="text-2xl font-bold mb-3 text-primary">BestBadge</h2>
+      <p class="body-text mb-4 max-w-2xl mx-auto">
+        Tutela legale, fiscale e di patronato specializzata per il Sindacato Carabinieri
+      </p>
+      <div class="flex flex-wrap justify-center gap-3">
+        <span class="bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 px-4 py-2 rounded-full caption-text font-semibold">ISO 9001:2015</span>
+        <span class="bg-gradient-to-r from-blue-500/20 to-blue-600/20 border border-blue-500/30 px-4 py-2 rounded-full caption-text font-semibold">ISO 14001:2015</span>
+        <span class="bg-gradient-to-r from-purple-500/20 to-purple-600/20 border border-purple-500/30 px-4 py-2 rounded-full caption-text font-semibold">ISO 45001:2018</span>
+      </div>
+    </div>
+
+    <!-- Key Statistics -->
+    <div class="glass-card service-card mb-6">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 border border-green-200">
+          <div class="text-3xl font-bold text-green-600 mb-1">24-72h</div>
+          <div class="caption-text font-semibold text-green-700">Tempo Risposta</div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
+          <div class="text-3xl font-bold text-blue-600 mb-1">100%</div>
+          <div class="caption-text font-semibold text-blue-700">Territorio</div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
+          <div class="text-3xl font-bold text-purple-600 mb-1">12+</div>
+          <div class="caption-text font-semibold text-purple-700">Servizi Attivi</div>
+        </div>
+        <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 border border-orange-200">
+          <div class="text-3xl font-bold text-orange-600 mb-1">24/7</div>
+          <div class="caption-text font-semibold text-orange-700">Supporto</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Tabs -->
+    <div class="tab-container mb-6">
+      <button class="tab-button tab-active flex-1" data-tab="legale">
+        📋 Area Legale
+      </button>
+      <button class="tab-button flex-1" data-tab="fiscale">
+        📊 Area Fiscale
+      </button>
+      <button class="tab-button flex-1" data-tab="admin">
+        🏛️ Amministrativo
+      </button>
+    </div>
+
+    <!-- Tab Legale Enhanced -->
+    <div id="tab-legale" class="tab-content">
+      <div class="glass-card service-card mb-6">
+        <h3 class="section-title flex items-center">
+          <span class="text-3xl mr-3">📋</span>
+          Area Legale Civile
+        </h3>
+        <div class="space-y-4">
+          <div class="service-item">
+            <div class="flex items-start space-x-4">
+              <span class="text-3xl">🏢</span>
+              <div class="flex-1">
+                <strong>Diritto delle Società</strong>
+                <ul class="mt-2 space-y-1">
+                  <li>• Fusioni e scissioni aziendali</li>
+                  <li>• Contrattualistica commerciale avanzata</li>
+                  <li>• Consulenza societaria specializzata</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="service-item">
+            <div class="flex items-start space-x-4">
+              <span class="text-3xl">🏠</span>
+              <div class="flex-1">
+                <strong>Diritto delle Proprietà</strong>
+                <ul class="mt-2 space-y-1">
+                  <li>• Compravendite immobiliari</li>
+                  <li>• Contratti di locazione e comodato</li>
+                  <li>• Procedure di sfratto e recupero crediti</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="service-item">
+            <div class="flex items-start space-x-4">
+              <span class="text-3xl">👥</span>
+              <div class="flex-1">
+                <strong>Diritto del Lavoro</strong>
+                <ul class="mt-2 space-y-1">
+                  <li>• Vertenze lavorative e licenziamenti</li>
+                  <li>• Infortuni sul lavoro e malattie professionali</li>
+                  <li>• Condotta antisindacale e discriminazione</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="service-item">
+            <div class="flex items-start space-x-4">
+              <span class="text-3xl">👨‍👩‍👧‍👦</span>
+              <div class="flex-1">
+                <strong>Diritto di Famiglia</strong>
+                <ul class="mt-2 space-y-1">
+                  <li>• Separazioni consensuali e giudiziali</li>
+                  <li>• Assegni di mantenimento e divisione beni</li>
+                  <li>• Procedure di adozione e affidamento</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card service-card mb-6">
+        <h3 class="section-title flex items-center">
+          <span class="text-3xl mr-3">⚖️</span>
+          Area Penale Specializzata
+        </h3>
+        
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-5 mb-6">
+          <div class="flex items-start space-x-4">
+            <span class="text-4xl">🎖️</span>
+            <div>
+              <strong class="text-lg text-blue-800">Penale Militare</strong>
+              <p class="body-text text-blue-700 mt-2">
+                Consulenza e assistenza specializzata in procedimenti penali militari. 
+                <span class="font-semibold">Copertura completa anche in caso di dolo.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="service-grid">
+          <div class="service-item text-center">
+            <span class="text-4xl block mb-3">🏗️</span>
+            <strong>Reati Edilizi</strong>
+            <p class="caption-text mt-1">Abusi e violazioni urbanistiche</p>
+          </div>
+          <div class="service-item text-center">
+            <span class="text-4xl block mb-3">💰</span>
+            <strong>Truffe e Frodi</strong>
+            <p class="caption-text mt-1">Reati contro il patrimonio</p>
+          </div>
+          <div class="service-item text-center">
+            <span class="text-4xl block mb-3">🌍</span>
+            <strong>Reati Ambientali</strong>
+            <p class="caption-text mt-1">Violazioni normative ambientali</p>
+          </div>
+          <div class="service-item text-center">
+            <span class="text-4xl block mb-3">👶</span>
+            <strong>Reati su Minori</strong>
+            <p class="caption-text mt-1">Tutela dell'infanzia</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Fiscale Enhanced -->
+    <div id="tab-fiscale" class="tab-content hidden">
+      <div class="glass-card service-card mb-6">
+        <h3 class="section-title flex items-center">
+          <span class="text-3xl mr-3">📊</span>
+          Servizi Fiscali F.I.TE.S.C.
+        </h3>
+        
+        <div class="space-y-5">
+          <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-5">
+            <div class="flex items-start space-x-4">
+              <span class="text-4xl">💼</span>
+              <div class="flex-1">
+                <strong class="text-lg text-green-800">Assistenza Fiscale Completa</strong>
+                <ul class="body-text text-green-700 space-y-2 mt-3">
+                  <li>• <strong>Dichiarazioni 730 e Redditi PF</strong> - Compilazione e invio telematico</li>
+                  <li>• <strong>Calcolo ISEE e RED</strong> - Documentazione per prestazioni sociali</li>
+                  <li>• <strong>Bonus ristrutturazioni</strong> - Detrazioni fiscali e incentivi</li>
+                  <li>• <strong>Consulenza tributaria</strong> - Pianificazione fiscale personalizzata</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-xl p-5">
+            <div class="flex items-start space-x-4">
+              <span class="text-4xl">🏛️</span>
+              <div class="flex-1">
+                <strong class="text-lg text-blue-800">Servizi di Patronato</strong>
+                <ul class="body-text text-blue-700 space-y-2 mt-3">
+                  <li>• <strong>Pratiche pensionistiche</strong> - Domande e ricorsi INPS</li>
+                  <li>• <strong>NASpI e disoccupazione</strong> - Indennità e sussidi</li>
+                  <li>• <strong>Assegni familiari</strong> - ANF e bonus famiglia</li>
+                  <li>• <strong>Invalidità civile</strong> - Domande e accompagnamento</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Amministrativo Enhanced -->
+    <div id="tab-admin" class="tab-content hidden">
+      <div class="glass-card service-card mb-6">
+        <h3 class="section-title flex items-center">
+          <span class="text-3xl mr-3">🏛️</span>
+          Materie Amministrative
+        </h3>
+        
+        <div class="space-y-5">
+          <div class="bg-gradient-to-r from-purple-50 to-violet-50 border-2 border-purple-300 rounded-xl p-5">
+            <div class="flex items-start space-x-4">
+              <span class="text-4xl">🎖️</span>
+              <div class="flex-1">
+                <strong class="text-lg text-purple-800">Procedure Militari Specializzate</strong>
+                <ul class="body-text text-purple-700 space-y-2 mt-3">
+                  <li>• <strong>Trasferimenti art. 398 RGA</strong> - Ricorsi e contestazioni</li>
+                  <li>• <strong>Ricorsi gerarchici</strong> - Impugnazioni atti amministrativi</li>
+                  <li>• <strong>Procedure disciplinari</strong> - Difesa in procedimenti disciplinari</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-300 rounded-xl p-5">
+            <div class="flex items-start space-x-4">
+              <span class="text-4xl">⚖️</span>
+              <div class="flex-1">
+                <strong class="text-lg text-orange-800">Ricorsi TAR</strong>
+                <p class="body-text text-orange-700 mt-2">
+                  Assistenza qualificata per ricorsi al Tribunale Amministrativo Regionale. 
+                  <span class="font-semibold">Ogni caso viene valutato con analisi di fattibilità condivisa.</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Benefits Section -->
+    <div class="glass-card service-card mb-6">
+      <h3 class="section-title flex items-center">
+        <span class="text-3xl mr-3">✨</span>
+        Vantaggi e Garanzie
+      </h3>
+      <div class="space-y-4">
+        <div class="service-item">
+          <div class="flex items-center space-x-4">
+            <span class="text-3xl text-green-500">✅</span>
+            <div class="flex-1">
+              <strong>Copertura Nucleo Familiare</strong>
+              <p class="caption-text mt-1">Assistenza estesa a tutti i componenti del nucleo familiare convivente</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="service-item">
+          <div class="flex items-center space-x-4">
+            <span class="text-3xl text-green-500">✅</span>
+            <div class="flex-1">
+              <strong>Tutela Completa Fuori Servizio</strong>
+              <p class="caption-text mt-1">Assistenza garantita anche per questioni personali e private</p>
+            </div>
+          </div>
+        </div>
+        
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action Enhanced -->
+    <div class="glass-card service-card mb-6">
+      <div class="text-center">
+        <h3 class="section-title flex items-center justify-center">
+          <span class="text-3xl mr-3">📞</span>
+          Richiedi Assistenza Specializzata
+        </h3>
+        <p class="body-text mb-6 max-w-2xl mx-auto">
+          Compila il modulo di richiesta per ricevere supporto qualificato dai nostri consulenti specializzati. 
+          <strong>Risposta garantita entro 48-72 ore lavorative.</strong>
+        </p>
+        <button id="openFormBtn" class="aurora-button">
+          📝 Apri Modulo di Richiesta
+        </button>
+      </div>
+    </div>
+
+    <!-- Enhanced Contacts -->
+    <div class="glass-card service-card">
+      <h3 class="section-title flex items-center">
+        <span class="text-3xl mr-3">📧</span>
+        Contatti BestBadge
+      </h3>
+      <div class="space-y-4">
+        <a href="mailto:info@assosafe.org" class="service-item hover:bg-blue-50 transition-colors block">
+          <div class="flex items-center space-x-4">
+            <span class="text-3xl">✉️</span>
+            <div>
+              <strong>Email Ufficiale</strong>
+              <p class="caption-text">info@assosafe.org</p>
+            </div>
+          </div>
+        </a>
+        
+        <a href="https://www.bestbadge.org" target="_blank" class="service-item hover:bg-blue-50 transition-colors block">
+          <div class="flex items-center space-x-4">
+            <span class="text-3xl">🌐</span>
+            <div>
+              <strong>Sito Web Ufficiale</strong>
+              <p class="caption-text">www.bestbadge.org</p>
+            </div>
+          </div>
+        </a>
+        
+        <div class="service-item">
+          <div class="flex items-center space-x-4">
+            <span class="text-3xl">🏢</span>
+            <div>
+              <strong>Partnership Istituzionale</strong>
+              <p class="caption-text">In collaborazione con Fondazione ASSOSAFE</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Enhanced Modal -->
+  <div id="assistanceModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4">
+    <div class="modal-content w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold text-primary">📝 Richiesta Supporto Specializzato</h3>
+        <button id="closeModal" class="text-gray-500 hover:text-primary text-2xl font-bold transition-colors">✕</button>
+      </div>
+      
+      <form id="assistanceForm" class="space-y-5">
+        <div>
+          <label class="block body-text font-semibold mb-2">Nome e Cognome *</label>
+          <input name="nome" type="text" placeholder="Inserisci il tuo nome completo" required class="modal-input w-full">
+        </div>
+        
+        <div>
+          <label class="block body-text font-semibold mb-2">Email *</label>
+          <input name="email" type="email" placeholder="tua.email@example.com" required class="modal-input w-full">
+        </div>
+        
+        <div>
+          <label class="block body-text font-semibold mb-2">Tipo di Assistenza *</label>
+          <select name="tipo" required class="modal-input w-full">
+            <option value="">Seleziona la categoria di assistenza</option>
+            <option value="civile">📋 Diritto Civile (Società, Proprietà, Famiglia)</option>
+            <option value="penale">⚖️ Diritto Penale (incluso Penale Militare)</option>
+            <option value="lavoro">👥 Diritto del Lavoro</option>
+            <option value="fiscale">📊 Assistenza Fiscale</option>
+            <option value="patronato">🏛️ Servizi di Patronato</option>
+            <option value="amministrativo">🏛️ Diritto Amministrativo e TAR</option>
+            <option value="altro">❓ Altro (specificare nella descrizione)</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block body-text font-semibold mb-2">Descrizione del Caso *</label>
+          <textarea name="descrizione" rows="5" placeholder="Descrivi dettagliatamente la tua situazione, includendo tutti i dettagli rilevanti per una valutazione accurata..." required class="modal-input w-full resize-vertical"></textarea>
+          <p class="caption-text mt-2">Più dettagli fornisci, più precisa sarà la consulenza che potremo offrirti.</p>
+        </div>
+        
+        <div class="flex gap-3">
+          <button type="button" id="cancelForm" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 rounded-xl transition-colors">
+            Annulla
+          </button>
+          <button type="submit" class="flex-1 aurora-button">
+            📨 Invia Richiesta
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    /* ===== CONFIGURATION ===== */
+    const APP_CONFIG = {
+      supabaseUrl: 'https://lycrgzptkdkksukcwrld.supabase.co',
+      supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk'
+    };
+
+    /* ===== UTILS ===== */
+    const showLoading = () => document.getElementById('loading').classList.remove('hidden');
+    const hideLoading = () => document.getElementById('loading').classList.add('hidden');
+    
+    const showNote = (msg, type = 'info', duration = 4000) => {
+      const div = document.createElement('div');
+      const bgColors = {
+        'success': 'bg-green-500',
+        'error': 'bg-red-500',
+        'warning': 'bg-yellow-500',
+        'info': 'bg-blue-500'
+      };
+      
+      div.className = `fixed top-20 right-4 z-50 px-5 py-3 rounded-xl text-white font-semibold shadow-lg max-w-sm ${bgColors[type] || bgColors.info}`;
+      div.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span>${msg}</span>
+          <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white/80 hover:text-white font-bold">✕</button>
+        </div>
+      `;
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), duration);
+    };
+
+    /* ===== ENHANCED TAB SYSTEM ===== */
+    const initTabs = () => {
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all tabs
+          document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('tab-active'));
+          
+          // Add active class to clicked tab
+          btn.classList.add('tab-active');
+          
+          // Hide all tab content
+          document.querySelectorAll('.tab-content').forEach(tc => tc.classList.add('hidden'));
+          
+          // Show selected tab content
+          const targetTab = document.getElementById(`tab-${btn.dataset.tab}`);
+          if (targetTab) {
+            targetTab.classList.remove('hidden');
+          }
+          
+          // Smooth scroll to content
+          targetTab.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    };
+
+    /* ===== ENHANCED MODAL SYSTEM ===== */
+    const modal = document.getElementById('assistanceModal');
+    const openBtn = document.getElementById('openFormBtn');
+    const closeBtn = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelForm');
+    const form = document.getElementById('assistanceForm');
+
+    const openModal = () => {
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      // Focus first input
+      setTimeout(() => form.nome.focus(), 100);
+    };
+
+    const closeModal = () => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      form.reset();
+    };
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    // Close on background click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+
+    /* ===== ENHANCED FORM SUBMISSION ===== */
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      
+      try {
+        submitBtn.innerHTML = '⏳ Invio in corso...';
+        submitBtn.disabled = true;
+        
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        showNote('✅ Richiesta inviata con successo! Ti contatteremo entro 48-72 ore lavorative.', 'success', 6000);
+        closeModal();
+        
+      } catch (error) {
+        console.error('Form submission error:', error);
+        showNote('❌ Errore nell\'invio della richiesta. Riprova tra qualche minuto.', 'error');
+      } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+
+    /* ===== SMART BACK NAVIGATION ===== */
+    async function smartBackNavigation() {
+      showLoading();
+      
+      try {
+        const { createClient } = window.supabase;
+        const supabase = createClient(APP_CONFIG.supabaseUrl, APP_CONFIG.supabaseKey);
+        
+        const { data: { user }, error } = await supabase.auth.getUser();
+        
+        if (error || !user) {
+          // No user logged in, go to login
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        // Get user profile and roles
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('ruoli')
+          .eq('id', user.id)
+          .single();
+        
+        const roles = profile?.ruoli || ['USER'];
+        
+        // Navigate based on role
+        if (roles.includes('DIRIGENTE') || roles.includes('ADMIN')) {
+          window.location.href = 'app/home_dirigenti.html';
+        } else {
+          window.location.href = 'app/home.html';
+        }
+        
+      } catch (error) {
+        console.error('Navigation error:', error);
+        showNote('❌ Errore di connessione. Ritorno alla home generale.', 'error');
+        window.location.href = 'index.html';
+      } finally {
+        hideLoading();
+      }
+    }
+
+    /* ===== INITIALIZATION ===== */
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🌌 Servizi BestBadge - Aurora Boreale 2025 Enhanced');
+      
+      // Initialize components
+      initTabs();
+      
+      // Quick load without unnecessary delay
+      showNote('🌌 Servizi BestBadge caricati!', 'success', 2000);
+    });
+
+    /* ===== ERROR HANDLING ===== */
+    window.addEventListener('error', (e) => {
+      console.error('Global error:', e.error);
+    });
+
+    window.addEventListener('unhandledrejection', (e) => {
+      console.error('Unhandled promise rejection:', e.reason);
+      e.preventDefault();
+    });
+  </script>
+</body>
+</html>

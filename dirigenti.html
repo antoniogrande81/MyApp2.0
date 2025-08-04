@@ -1,0 +1,829 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dirigenti - MyApp Sindacato Carabinieri</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="background-color" content="#1a1a2e">
+
+    <!-- Icone Standard -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/public/icons/icon-512x512.png">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+    <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+
+    <!-- Android Support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="MyApp">
+    <meta name="msapplication-TileColor" content="#1a1a2e">
+    
+    <!-- Preconnect per performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://lycrgzptkdkksukcwrld.supabase.co">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Aurora Boreale 2025 Palette
+                        primary: '#1a1a2e',      // Blu notte profondo
+                        secondary: '#16213e',     // Blu oceano
+                        accent: '#0f3460',        // Blu acciaio
+                        aurora: '#e94560',        // Rosa aurora
+                        cyan: '#00d4ff',          // Cyan elettrico
+                        magenta: '#ff006e',       // Magenta vibrante
+                        gold: '#ffd700',          // Oro elegante
+                        teal: '#03dac6',          // Teal premium
+                        dark: '#0a0a23',          // Nero cyber
+                        light: '#f8fafc',         // Bianco ghiaccio
+                        textDark: '#1C1C1E',
+                        backgroundLight: '#F4F4F8',
+                    },
+                    screens: {
+                        'xs': '320px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                        '2xl': '1536px',
+                        '3xl': '1920px',
+                        '4xl': '2560px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+        }
+
+        body {
+            background: var(--gradient-aurora);
+            background-size: 400% 400%;
+            animation: aurora 20s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8); }
+        }
+
+        /* Typography Ultra-Visibile */
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+            font-weight: 800;
+        }
+
+        .text-white {
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+        }
+
+        /* Glassmorphism Avanzato */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Bottoni Aurora */
+        .btn-aurora {
+            background: var(--gradient-magic);
+            color: white;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+        }
+
+        .btn-aurora:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.8);
+        }
+
+        .btn-cyber {
+            background: var(--gradient-cyber);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            color: white;
+            font-weight: 700;
+        }
+
+        .btn-cyber:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.4);
+            border-color: rgba(0, 212, 255, 0.8);
+        }
+
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        }
+
+        .floating-help {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .dirigente-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dirigente-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .dirigente-card:hover::before {
+            left: 100%;
+        }
+
+        .dirigente-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            border-color: rgba(233, 69, 96, 0.5);
+        }
+
+        .dirigente-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: var(--gradient-magic);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 28px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dirigente-card:hover .dirigente-avatar {
+            transform: scale(1.1) rotate(5deg);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid;
+            transition: all 0.3s ease;
+        }
+
+        .role-segretario {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .role-provinciale {
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: white;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .role-regionale {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .contact-button {
+            background: var(--gradient-magic);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .contact-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.8);
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 16px 20px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.2);
+            transform: scale(1.02);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding: 4px;
+        }
+
+        .filter-tab {
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 2px solid;
+        }
+
+        .filter-tab:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .filter-tab:not(.active):hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .filter-tab.active {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a2e;
+            border-color: #e94560;
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 12px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px) scale(1.05);
+            background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.15));
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Header glassmorphism */
+        header {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Bottom navigation glassmorphism */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Logout button style */
+        #logoutBtn {
+            background: var(--gradient-magic) !important;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+        }
+
+        #logoutBtn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.8);
+        }
+
+        /* Responsive text scaling */
+        .hero-title {
+            font-size: clamp(3rem, 12vw, 6rem);
+            font-weight: 900;
+        }
+
+        .section-title {
+            font-size: clamp(2.2rem, 8vw, 4rem);
+            font-weight: 900;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            font-weight: 800;
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* --- MICRO-REGOLE RESPONSIVE AGGIUNTE --- */
+        @media (max-width: 640px) {
+            .hero-title { font-size: 2.25rem; line-height: 2.5rem; }
+            .dirigente-avatar { width: 70px; height: 70px; font-size: 22px; }
+            .contact-button { font-size: 13px; padding: 8px 14px; }
+        }
+
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .hero-title { font-size: 3rem; line-height: 3.5rem; }
+            .dirigente-card { padding: 20px; }
+        }
+
+        @media (min-width: 1025px) {
+            .max-w-md { max-width: 48rem; } /* più largo su desktop */
+            .dirigente-card { padding: 32px; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen font-sans">
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="fixed inset-0 bg-primary bg-opacity-90 flex items-center justify-center z-50 hidden">
+        <div class="glass-strong rounded-2xl p-8 text-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-aurora mx-auto mb-6"></div>
+            <p class="text-ultra-visible font-bold text-lg">Caricamento dirigenti...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="w-full px-4 py-6 relative z-10">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <button onclick="history.back()" class="text-ultra-visible hover:text-cyan transition-all duration-300 hover:scale-110">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <h1 class="text-2xl font-black text-ultra-visible drop-shadow-lg">Dirigenti</h1>
+            </div>
+            <button id="logoutBtn" class="text-white text-sm px-6 py-3 rounded-full font-bold transition-all shadow-lg">
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-4 pb-20">
+        <div class="max-w-md mx-auto space-y-8">
+
+            <!-- Search Bar -->
+            <div>
+                <input type="text" id="searchInput" class="search-box" placeholder="🔍 Cerca dirigente per nome o provincia...">
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">Tutti</button>
+                <button class="filter-tab" data-filter="Regionale">Regionali</button>
+                <button class="filter-tab" data-filter="Provinciale">Provinciali</button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div class="stat-card p-5 text-center">
+                    <div class="text-3xl font-black text-ultra-visible mb-2" id="totalCount">-</div>
+                    <div class="text-sm text-cyan font-bold">Totali</div>
+                </div>
+                <div class="stat-card p-5 text-center">
+                    <div class="text-3xl font-black text-ultra-visible mb-2" id="regionaliCount">-</div>
+                    <div class="text-sm text-cyan font-bold">Regionali</div>
+                </div>
+                <div class="stat-card p-5 text-center">
+                    <div class="text-3xl font-black text-ultra-visible mb-2" id="provincialiCount">-</div>
+                    <div class="text-sm text-cyan font-bold">Provinciali</div>
+                </div>
+            </div>
+
+            <!-- Dirigenti List -->
+            <div id="dirigentiContainer" class="space-y-6">
+                <!-- Skeleton Loading -->
+                <div class="dirigente-skeleton hidden">
+                    <div class="glass-card rounded-2xl p-8">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-24 h-24 loading-skeleton rounded-full mb-6"></div>
+                            <div class="w-40 h-5 loading-skeleton mb-3"></div>
+                            <div class="w-32 h-4 loading-skeleton mb-6"></div>
+                            <div class="w-24 h-8 loading-skeleton"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <div class="text-8xl mb-6">👥</div>
+                <h3 class="text-2xl font-black text-ultra-visible mb-4">Nessun dirigente trovato</h3>
+                <p class="text-cyan text-lg font-semibold">Prova a modificare i filtri di ricerca</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Floating Help Button -->
+    <button class="floating-help btn-aurora w-16 h-16 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110">
+        <span class="text-2xl">🆘</span>
+    </button>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 px-4 py-3">
+        <div class="flex justify-around items-center max-w-md mx-auto">
+            <a href="/index.html" class="flex flex-col items-center text-xs text-gray-600 hover:text-primary transition-colors p-3">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 12 2-2m0 0 7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11 2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6"></path>
+                </svg>
+                Home
+            </a>
+            <a href="/convenzioni.html" class="flex flex-col items-center text-xs text-gray-600 hover:text-primary transition-colors p-3">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Convenzioni
+            </a>
+            <a href="/app/tessera.html" class="flex flex-col items-center text-xs text-gray-600 hover:text-primary transition-colors p-3">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4zm0 2h16v12H4V6zm2 2v8h12V8H6zm2 2h8v4H8v-4z"></path>
+                </svg>
+                Tessera
+            </a>
+            <a href="/app/profilo.html" class="flex flex-col items-center text-xs text-gray-600 hover:text-primary transition-colors p-3">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                Profilo
+            </a>
+        </div>
+    </nav>
+
+    <!-- JavaScript -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        const supabaseUrl = 'https://lycrgzptkdkksukcwrld.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk';
+
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Variabili globali
+        let allDirigenti = [];
+        let filteredDirigenti = [];
+        let currentFilter = 'all';
+
+        // Loading functions
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function showError(message) {
+            hideLoading();
+            alert(`Errore: ${message}`);
+            console.error('Errore:', message);
+        }
+
+        // Auth check
+        async function verificaAutenticazione() {
+            try {
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error || !user) {
+                    window.location.href = '/login.html';
+                    return null;
+                }
+                
+                return user;
+            } catch (error) {
+                console.error('Errore autenticazione:', error);
+                window.location.href = '/login.html';
+                return null;
+            }
+        }
+
+        // Load dirigenti data
+        async function caricaDatiPagina() {
+            showLoading();
+            try {
+                const user = await verificaAutenticazione();
+                if (!user) return;
+
+                // Carica dati dirigenti dalla tabella organico_dirigentisindacali
+                const { data: dirigenti, error } = await supabase
+                    .from('organico_dirigentisindacali')
+                    .select('*')
+                    .order('ordine', { ascending: true });
+
+                if (error) {
+                    console.error('Errore caricamento dirigenti:', error);
+                    showError('Impossibile caricare i dati dei dirigenti');
+                    return;
+                }
+
+                allDirigenti = dirigenti || [];
+                filteredDirigenti = [...allDirigenti];
+                
+                renderDirigenti();
+                updateStats();
+
+            } catch (error) {
+                console.error('Errore:', error);
+                showError('Errore nel caricamento dei dati');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Render dirigenti list
+        function renderDirigenti() {
+            const container = document.getElementById('dirigentiContainer');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (filteredDirigenti.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+                            const html = filteredDirigenti.map(dirigente => {
+                const initials = dirigente.nome_cognome 
+                    ? dirigente.nome_cognome.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)
+                    : '??';
+                
+                const roleClass = getRoleClass(dirigente.ruolo);
+                const provincia = dirigente.provincia || 'Non specificata';
+                
+                return `
+                    <div class="dirigente-card">
+                        <div class="flex flex-col items-center text-center">
+                            ${dirigente.foto_url ? 
+                                `<img src="${dirigente.foto_url}" alt="${dirigente.nome_cognome}" class="dirigente-avatar object-cover">` :
+                                `<div class="dirigente-avatar">${initials}</div>`
+                            }
+                            <h3 class="font-black text-textDark text-xl mb-2">${dirigente.nome_cognome || 'Nome non disponibile'}</h3>
+                            <div class="role-badge ${roleClass} mb-3">${dirigente.ruolo || 'Ruolo non specificato'}</div>
+                            <p class="text-gray-600 text-base font-semibold mb-6">${provincia}</p>
+                            
+                            <div class="flex gap-3 flex-wrap justify-center">
+                                ${dirigente.email ? 
+                                    `<a href="mailto:${dirigente.email}" class="contact-button">
+                                        📧 Email
+                                    </a>` : ''
+                                }
+                                ${dirigente.telefono ? 
+                                    `<a href="tel:${dirigente.telefono}" class="contact-button">
+                                        📞 Chiama
+                                    </a>` : ''
+                                }
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = html;
+        }
+
+        // Get role CSS class
+        function getRoleClass(ruolo) {
+            if (!ruolo) return 'role-segretario';
+            
+            if (ruolo.includes('Regionale')) return 'role-regionale';
+            if (ruolo.includes('Provinciale')) return 'role-provinciale';
+            return 'role-segretario';
+        }
+
+        // Update stats
+        function updateStats() {
+            const total = allDirigenti.length;
+            const regionali = allDirigenti.filter(d => d.ruolo && d.ruolo.includes('Regionale')).length;
+            const provinciali = allDirigenti.filter(d => d.ruolo && d.ruolo.includes('Provinciale')).length;
+            
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('regionaliCount').textContent = regionali;
+            document.getElementById('provincialiCount').textContent = provinciali;
+        }
+
+        // Filter function
+        function filterDirigenti() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            filteredDirigenti = allDirigenti.filter(dirigente => {
+                // Text search
+                const matchesSearch = !searchTerm || 
+                    (dirigente.nome_cognome && dirigente.nome_cognome.toLowerCase().includes(searchTerm)) ||
+                    (dirigente.provincia && dirigente.provincia.toLowerCase().includes(searchTerm)) ||
+                    (dirigente.ruolo && dirigente.ruolo.toLowerCase().includes(searchTerm));
+                
+                // Role filter
+                const matchesFilter = currentFilter === 'all' || 
+                    (dirigente.ruolo && dirigente.ruolo.includes(currentFilter));
+                
+                return matchesSearch && matchesFilter;
+            });
+            
+            renderDirigenti();
+        }
+
+        // Debounced search
+        let searchTimeout;
+        function debouncedSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(filterDirigenti, 300);
+        }
+
+        // Logout
+        async function logout() {
+            if (confirm('Sei sicuro di voler uscire?')) {
+                try {
+                    await supabase.auth.signOut();
+                    window.location.href = '/login.html';
+                } catch (error) {
+                    console.error('Errore durante il logout:', error);
+                    window.location.href = '/login.html';
+                }
+            }
+        }
+
+        // Event listeners
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('searchInput').addEventListener('input', debouncedSearch);
+
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update filter
+                currentFilter = tab.dataset.filter;
+                filterDirigenti();
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', caricaDatiPagina);
+    </script>
+
+    <!-- Smart Home Redirect -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+        
+        const supabase = createClient(
+            'https://lycrgzptkdkksukcwrld.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk'
+        );
+
+        async function handleHomeClick(e) {
+            e.preventDefault();
+            const currentPath = window.location.pathname.toLowerCase();
+
+            // Se siamo già su index.html, non fare nulla
+            if (currentPath.includes('index.html')) return;
+
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('ruoli')
+                    .eq('id', user.id)
+                    .single();
+
+                const roles = profile?.ruoli || ['USER'];
+
+                if (roles.includes('DIRIGENTE') || roles.includes('ADMIN')) {
+                    window.location.href = '/app/home_dirigenti.html';
+                } else {
+                    window.location.href = '/app/home.html';
+                }
+            } catch (err) {
+                console.error(err);
+                // Fallback sicuro
+                window.location.href = '/app/home.html';
+            }
+        }
+
+        // Attacca l'evento al bottone Home
+        document.querySelector('nav a[href="/index.html"]').addEventListener('click', handleHomeClick);
+    </script>
+</body>
+</html>

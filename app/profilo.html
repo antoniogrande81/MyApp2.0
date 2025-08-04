@@ -1,0 +1,899 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilo - MyApp Sindacato Carabinieri</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="background-color" content="#1a1a2e">
+
+    <!-- Icone Standard -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/public/icons/icon-512x512.png">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+    <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+
+    <!-- Android Support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="MyApp">
+    <meta name="msapplication-TileColor" content="#1a1a2e">
+    
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Aurora Boreale 2025 Palette
+                        primary: '#1a1a2e',      // Blu notte profondo
+                        secondary: '#16213e',     // Blu oceano
+                        accent: '#0f3460',        // Blu acciaio
+                        aurora: '#e94560',        // Rosa aurora
+                        cyan: '#00d4ff',          // Cyan elettrico
+                        magenta: '#ff006e',       // Magenta vibrante
+                        gold: '#ffd700',          // Oro elegante
+                        teal: '#03dac6',          // Teal premium
+                        dark: '#0a0a23',          // Nero cyber
+                        light: '#f8fafc',         // Bianco ghiaccio
+                        textDark: '#1C1C1E',
+                        backgroundLight: '#F4F4F8',
+                    },
+                    screens: {
+                        'xs': '320px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                        '2xl': '1536px',
+                        '3xl': '1920px',
+                        '4xl': '2560px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+        }
+
+        body {
+            background: var(--gradient-aurora);
+            background-size: 400% 400%;
+            animation: aurora 20s ease infinite;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(233, 69, 96, 0.6); }
+            50% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.8); }
+        }
+
+        /* Typography Ultra-Visibile */
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+            font-weight: 800;
+        }
+
+        .text-white {
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+        }
+
+        /* Glassmorphism Avanzato */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .glass-effect:hover::before {
+            left: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.2);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .form-input:disabled {
+            background: rgba(200, 200, 200, 0.3);
+            border-color: rgba(200, 200, 200, 0.4);
+            cursor: not-allowed;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #1C1C1E;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .save-success {
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            font-weight: 700;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .validation-error {
+            color: #dc2626;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 6px;
+            padding: 4px 8px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #fef2f2, #fecaca);
+            border: 2px solid #fecaca;
+            color: #991b1b;
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            font-weight: 700;
+        }
+
+        /* Profile Avatar */
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-magic);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        /* Buttons Aurora */
+        .btn-aurora {
+            background: var(--gradient-magic);
+            color: white;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            transition: all 0.3s ease;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-aurora::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.3s;
+        }
+
+        .btn-aurora:hover::before {
+            left: 100%;
+        }
+
+        .btn-aurora:hover {
+            box-shadow: 0 10px 20px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.8);
+        }
+
+        .btn-cyber {
+            background: var(--gradient-cyber);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            color: white;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cyber:hover {
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.4);
+            border-color: rgba(0, 212, 255, 0.8);
+        }
+
+        .btn-neutral {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            border: 2px solid rgba(107, 114, 128, 0.3);
+            color: white;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-neutral:hover {
+            box-shadow: 0 10px 20px rgba(107, 114, 128, 0.4);
+            border-color: rgba(107, 114, 128, 0.8);
+        }
+
+        /* Settings icons */
+        .setting-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Header glassmorphism */
+        header {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive text scaling */
+        .hero-title {
+            font-size: clamp(1.5rem, 6vw, 2rem);
+            font-weight: 900;
+        }
+
+        .section-title {
+            font-size: clamp(1.1rem, 5vw, 1.3rem);
+            font-weight: 900;
+        }
+
+        .card-title {
+            font-size: clamp(0.9rem, 4vw, 1.1rem);
+            font-weight: 800;
+        }
+
+        /* Role badge styling */
+        .role-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid;
+        }
+
+        .role-admin {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .role-dirigente {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .role-user {
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: white;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Loading states */
+        .btn-loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-loading::after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-left: 8px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen font-sans">
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="fixed inset-0 bg-primary bg-opacity-90 flex items-center justify-center z-50">
+        <div class="glass-strong rounded-3xl p-8 text-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-aurora mx-auto mb-6"></div>
+            <p class="text-ultra-visible font-bold text-lg">Caricamento profilo...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="w-full px-4 py-6 relative z-10">
+        <div class="max-w-md mx-auto flex items-center space-x-4">
+            <button id="backBtn" class="text-ultra-visible hover:text-cyan transition-all duration-300">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <h1 class="text-2xl font-black text-ultra-visible drop-shadow-lg">Il Mio Profilo</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-4 pb-8">
+        <div class="max-w-md mx-auto space-y-8">
+
+            <!-- Success Message -->
+            <div id="successMessage" class="save-success">
+                ✅ Profilo aggiornato con successo!
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message">
+                ❌ <span id="errorText">Errore nel caricamento</span>
+            </div>
+
+            <!-- Profile Header Card -->
+            <div class="glass-effect rounded-3xl p-8 text-center">
+                <div class="profile-avatar">
+                    <span class="text-white text-3xl font-black" id="initialsDisplay">--</span>
+                </div>
+                <h2 class="hero-title text-textDark mb-3" id="fullNameDisplay">Caricamento...</h2>
+                <div class="role-badge role-user mb-3" id="roleDisplay">Utente</div>
+                <p class="text-gray-600 text-base font-semibold" id="telefonoDisplay">Telefono: ---</p>
+            </div>
+
+            <!-- Profile Form -->
+            <form id="profileForm" class="glass-effect rounded-3xl p-8">
+                <h3 class="section-title text-textDark mb-8">Modifica Dati Personali</h3>
+                
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label class="form-label" for="full_name">Nome Completo *</label>
+                    <input type="text" id="full_name" name="full_name" class="form-input" required>
+                    <div class="validation-error" id="fullNameError" style="display: none;"></div>
+                </div>
+
+                <!-- Email (readonly) -->
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" readonly>
+                    <small class="text-gray-600 text-sm font-semibold">L'email non può essere modificata</small>
+                </div>
+
+                <!-- Telefono -->
+                <div class="form-group">
+                    <label class="form-label" for="telefono">Telefono</label>
+                    <input type="tel" id="telefono" name="telefono" class="form-input" placeholder="Es: 3351234567">
+                    <div class="validation-error" id="telefonoError" style="display: none;"></div>
+                </div>
+
+                <!-- Data di Nascita -->
+                <div class="form-group">
+                    <label class="form-label" for="data_nascita">Data di Nascita</label>
+                    <input type="date" id="data_nascita" name="data_nascita" class="form-input">
+                    <div class="validation-error" id="dataNascitaError" style="display: none;"></div>
+                </div>
+
+                <!-- Luogo di Nascita -->
+                <div class="form-group">
+                    <label class="form-label" for="luogo_nascita">Luogo di Nascita</label>
+                    <input type="text" id="luogo_nascita" name="luogo_nascita" class="form-input" placeholder="Es: Roma (RM)">
+                    <div class="validation-error" id="luogoNascitaError" style="display: none;"></div>
+                </div>
+
+                <!-- Cognome -->
+                <div class="form-group">
+                    <label class="form-label" for="cognome">Cognome *</label>
+                    <input type="text" id="cognome" name="cognome" class="form-input" required>
+                    <div class="validation-error" id="cognomeError" style="display: none;"></div>
+                </div>
+
+                <!-- Ruolo (readonly) -->
+                <div class="form-group">
+                    <label class="form-label" for="role">Ruolo</label>
+                    <input type="text" id="role" name="role" class="form-input" readonly>
+                    <small class="text-gray-600 text-sm font-semibold">Il ruolo è gestito dall'amministratore</small>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="flex space-x-4 mt-10">
+                    <button type="button" onclick="resetForm()" class="flex-1 btn-neutral py-4 px-8 rounded-2xl transition-all font-bold">
+                        Annulla
+                    </button>
+                    <button type="submit" id="saveBtn" class="flex-1 btn-aurora py-4 px-8 rounded-2xl transition-all font-bold">
+                        Salva Modifiche
+                    </button>
+                </div>
+            </form>
+
+            <!-- Account Settings -->
+            <div class="glass-effect rounded-3xl p-8">
+                <h3 class="section-title text-textDark mb-6">Impostazioni Account</h3>
+                
+                <div class="space-y-4">
+                    <!-- Change Password -->
+                    <button onclick="changePassword()" class="w-full flex items-center justify-between p-4 hover:bg-blue-50 rounded-2xl transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="setting-icon bg-gradient-to-br from-primary to-secondary text-white shadow-lg">
+                                <span class="text-xl">🔐</span>
+                            </div>
+                            <div class="text-left">
+                                <h4 class="card-title text-textDark">Cambia Password</h4>
+                                <p class="text-sm text-gray-600 font-semibold">Modifica la password di accesso</p>
+                            </div>
+                        </div>
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Privacy -->
+                    <button onclick="window.open('/privacy.html', '_blank')" class="w-full flex items-center justify-between p-4 hover:bg-blue-50 rounded-2xl transition-all">
+                        <div class="flex items-center space-x-4">
+                            <div class="setting-icon bg-gradient-to-br from-teal to-cyan text-white shadow-lg">
+                                <span class="text-xl">🛡️</span>
+                            </div>
+                            <div class="text-left">
+                                <h4 class="card-title text-textDark">Privacy & Sicurezza</h4>
+                                <p class="text-sm text-gray-600 font-semibold">Informazioni su privacy e dati</p>
+                            </div>
+                        </div>
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        // Configurazione Appwrite
+        const { Client, Account, Databases, Query, ID } = Appwrite;
+
+        const client = new Client()
+            .setEndpoint('https://cloud.appwrite.io/v1') // Your Appwrite Endpoint
+            .setProject('YOUR_PROJECT_ID'); // Replace with your project ID
+
+        const account = new Account(client);
+        const databases = new Databases(client);
+
+        // IDs Database e Collection
+        const DATABASE_ID = 'YOUR_DATABASE_ID'; // Replace with your database ID
+        const USER_PROFILES_COLLECTION_ID = '688dc04f00345547d52f'; // user_profiles collection
+
+        // Variabili globali
+        let currentUser = null;
+        let currentProfile = null;
+        let originalData = {};
+
+        // Elementi DOM
+        const elements = {
+            loading: document.getElementById('loading'),
+            successMessage: document.getElementById('successMessage'),
+            errorMessage: document.getElementById('errorMessage'),
+            errorText: document.getElementById('errorText'),
+            profileForm: document.getElementById('profileForm'),
+            saveBtn: document.getElementById('saveBtn'),
+            backBtn: document.getElementById('backBtn'),
+            
+            // Display elements
+            initialsDisplay: document.getElementById('initialsDisplay'),
+            fullNameDisplay: document.getElementById('fullNameDisplay'),
+            roleDisplay: document.getElementById('roleDisplay'),
+            telefonoDisplay: document.getElementById('telefonoDisplay'),
+            
+            // Form inputs
+            full_name: document.getElementById('full_name'),
+            email: document.getElementById('email'),
+            telefono: document.getElementById('telefono'),
+            data_nascita: document.getElementById('data_nascita'),
+            luogo_nascita: document.getElementById('luogo_nascita'),
+            cognome: document.getElementById('cognome'),
+            role: document.getElementById('role'),
+            
+            // Error displays
+            fullNameError: document.getElementById('fullNameError'),
+            cognomeError: document.getElementById('cognomeError'),
+            telefonoError: document.getElementById('telefonoError'),
+            dataNascitaError: document.getElementById('dataNascitaError'),
+            luogoNascitaError: document.getElementById('luogoNascitaError')
+        };
+
+        // Utilità per mostrare/nascondere messaggi
+        function showSuccess(message) {
+            elements.successMessage.textContent = '✅ ' + message;
+            elements.successMessage.style.display = 'block';
+            elements.errorMessage.style.display = 'none';
+            setTimeout(() => {
+                elements.successMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showError(message) {
+            elements.errorText.textContent = message;
+            elements.errorMessage.style.display = 'block';
+            elements.successMessage.style.display = 'none';
+        }
+
+        function hideMessages() {
+            elements.successMessage.style.display = 'none';
+            elements.errorMessage.style.display = 'none';
+        }
+
+        // Utilità per la validazione
+        function clearValidationErrors() {
+            elements.fullNameError.style.display = 'none';
+            elements.cognomeError.style.display = 'none';
+            elements.telefonoError.style.display = 'none';
+            elements.dataNascitaError.style.display = 'none';
+            elements.luogoNascitaError.style.display = 'none';
+        }
+
+        function showValidationError(field, message) {
+            const errorElement = elements[field + 'Error'];
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+
+        // Funzione per validare i dati
+        function validateForm() {
+            clearValidationErrors();
+            let isValid = true;
+
+            // Validazione nome completo
+            if (!elements.full_name.value.trim()) {
+                showValidationError('fullName', 'Il nome completo è obbligatorio');
+                isValid = false;
+            } else if (elements.full_name.value.length < 2) {
+                showValidationError('fullName', 'Il nome deve avere almeno 2 caratteri');
+                isValid = false;
+            }
+
+            // Validazione cognome
+            if (!elements.cognome.value.trim()) {
+                showValidationError('cognome', 'Il cognome è obbligatorio');
+                isValid = false;
+            } else if (elements.cognome.value.length < 2) {
+                showValidationError('cognome', 'Il cognome deve avere almeno 2 caratteri');
+                isValid = false;
+            }
+
+            // Validazione telefono (opzionale, ma se inserito deve essere valido)
+            if (elements.telefono.value.trim()) {
+                const phoneRegex = /^[0-9+\-\s]+$/;
+                if (!phoneRegex.test(elements.telefono.value) || elements.telefono.value.length < 8) {
+                    showValidationError('telefono', 'Inserisci un numero di telefono valido');
+                    isValid = false;
+                }
+            }
+
+            // Validazione data di nascita (se presente)
+            if (elements.data_nascita.value) {
+                const birthDate = new Date(elements.data_nascita.value);
+                const today = new Date();
+                const age = today.getFullYear() - birthDate.getFullYear();
+                
+                if (age < 18 || age > 100) {
+                    showValidationError('dataNascita', 'Inserisci una data di nascita valida');
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        // Funzione per ottenere le iniziali
+        function getInitials(fullName, cognome) {
+            const nameParts = fullName ? fullName.trim().split(' ') : [];
+            const firstInitial = nameParts.length > 0 ? nameParts[0].charAt(0).toUpperCase() : '';
+            const lastInitial = cognome ? cognome.charAt(0).toUpperCase() : '';
+            return firstInitial + lastInitial || '--';
+        }
+
+        // Funzione per ottenere il ruolo in italiano
+        function getRoleInItalian(role) {
+            if (!role) return 'Utente';
+            
+            switch (role.toUpperCase()) {
+                case 'ADMIN': return 'Amministratore';
+                case 'DIRIGENTE': return 'Dirigente';
+                case 'USER': return 'Utente';
+                default: return 'Utente';
+            }
+        }
+
+        // Funzione per ottenere la classe CSS del ruolo
+        function getRoleClass(role) {
+            if (!role) return 'role-user';
+            
+            switch (role.toUpperCase()) {
+                case 'ADMIN': return 'role-admin';
+                case 'DIRIGENTE': return 'role-dirigente';
+                case 'USER': return 'role-user';
+                default: return 'role-user';
+            }
+        }
+
+        // Funzione per aggiornare la visualizzazione del profilo
+        function updateProfileDisplay(profile) {
+            // Aggiorna le iniziali
+            elements.initialsDisplay.textContent = getInitials(profile.full_name, profile.cognome);
+            
+            // Aggiorna il nome completo
+            elements.fullNameDisplay.textContent = `${profile.full_name || ''} ${profile.cognome || ''}`.trim() || 'Nome non disponibile';
+            
+            // Aggiorna il ruolo
+            const roleText = getRoleInItalian(profile.role);
+            const roleClass = getRoleClass(profile.role);
+            elements.roleDisplay.textContent = roleText;
+            elements.roleDisplay.className = `role-badge ${roleClass} mb-3`;
+            
+            // Aggiorna il telefono
+            elements.telefonoDisplay.textContent = `Telefono: ${profile.telefono || 'Non specificato'}`;
+        }
+
+        // Funzione per caricare i dati del profilo
+        async function loadProfile() {
+            try {
+                elements.loading.style.display = 'flex';
+                hideMessages();
+
+                // Verifica se l'utente è autenticato
+                currentUser = await account.get();
+                
+                if (!currentUser) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                // Carica i dati del profilo dalla collezione user_profiles
+                const response = await databases.listDocuments(
+                    DATABASE_ID,
+                    USER_PROFILES_COLLECTION_ID,
+                    [Query.equal('user_id', currentUser.$id)]
+                );
+
+                if (response.documents.length === 0) {
+                    // Se non esiste il profilo, creane uno nuovo
+                    const newProfile = {
+                        user_id: currentUser.$id,
+                        email: currentUser.email,
+                        full_name: currentUser.name || '',
+                        cognome: '',
+                        telefono: '',
+                        role: 'USER',
+                        data_nascita: '',
+                        luogo_nascita: ''
+                    };
+
+                    const createdProfile = await databases.createDocument(
+                        DATABASE_ID,
+                        USER_PROFILES_COLLECTION_ID,
+                        ID.unique(),
+                        newProfile
+                    );
+
+                    currentProfile = createdProfile;
+                } else {
+                    currentProfile = response.documents[0];
+                }
+
+                // Salva i dati originali per il reset
+                originalData = { ...currentProfile };
+
+                // Popola i campi del form
+                elements.full_name.value = currentProfile.full_name || '';
+                elements.cognome.value = currentProfile.cognome || '';
+                elements.email.value = currentProfile.email || currentUser.email || '';
+                elements.telefono.value = currentProfile.telefono || '';
+                elements.role.value = getRoleInItalian(currentProfile.role);
+                elements.data_nascita.value = currentProfile.data_nascita || '';
+                elements.luogo_nascita.value = currentProfile.luogo_nascita || '';
+
+                // Aggiorna la visualizzazione
+                updateProfileDisplay(currentProfile);
+
+            } catch (error) {
+                console.error('Errore nel caricamento del profilo:', error);
+                if (error.code === 401) {
+                    // Non autenticato
+                    window.location.href = '/login.html';
+                } else {
+                    showError('Errore nel caricamento del profilo');
+                }
+            } finally {
+                elements.loading.style.display = 'none';
+            }
+        }
+
+        // Funzione per salvare le modifiche
+        async function saveProfile(event) {
+            event.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+
+            try {
+                // Mostra loading sul pulsante
+                elements.saveBtn.classList.add('btn-loading');
+                elements.saveBtn.disabled = true;
+                hideMessages();
+
+                const updateData = {
+                    full_name: elements.full_name.value.trim(),
+                    cognome: elements.cognome.value.trim(),
+                    telefono: elements.telefono.value.trim() || null,
+                    data_nascita: elements.data_nascita.value || null,
+                    luogo_nascita: elements.luogo_nascita.value.trim() || null
+                };
+
+                const updatedProfile = await databases.updateDocument(
+                    DATABASE_ID,
+                    USER_PROFILES_COLLECTION_ID,
+                    currentProfile.$id,
+                    updateData
+                );
+
+                // Aggiorna i dati correnti
+                currentProfile = updatedProfile;
+                originalData = { ...updatedProfile };
+                
+                // Aggiorna la visualizzazione
+                updateProfileDisplay(updatedProfile);
+                
+                showSuccess('Profilo aggiornato con successo!');
+
+            } catch (error) {
+                console.error('Errore nel salvataggio:', error);
+                showError('Errore nel salvataggio delle modifiche');
+            } finally {
+                elements.saveBtn.classList.remove('btn-loading');
+                elements.saveBtn.disabled = false;
+            }
+        }
+
+        // Funzione per resettare il form
+        window.resetForm = function() {
+            elements.full_name.value = originalData.full_name || '';
+            elements.cognome.value = originalData.cognome || '';
+            elements.telefono.value = originalData.telefono || '';
+            elements.data_nascita.value = originalData.data_nascita || '';
+            elements.luogo_nascita.value = originalData.luogo_nascita || '';
+            clearValidationErrors();
+            hideMessages();
+        };
+
+        // Funzione per il tasto indietro basato sul ruolo
+        function handleBackNavigation() {
+            if (!currentProfile || !currentProfile.role) {
+                // Fallback alla home standard se non abbiamo dati del ruolo
+                window.location.href = '/home.html';
+                return;
+            }
+
+            const userRole = currentProfile.role.toUpperCase();
+
+            // Se è ADMIN o DIRIGENTE, va alla home dirigenti
+            if (userRole === 'ADMIN' || userRole === 'DIRIGENTE') {
+                window.location.href = '/home_dirigenti.html';
+            } else {
+                // Altrimenti va alla home standard
+                window.location.href = '/home.html';
+            }
+        }
+
+        // Funzione placeholder per cambio password
+        window.changePassword = function() {
+            alert('Funzionalità cambio password in sviluppo');
+        };
+
+        // Event listeners
+        elements.profileForm.addEventListener('submit', saveProfile);
+        elements.backBtn.addEventListener('click', handleBackNavigation);
+
+        // Carica il profilo all'avvio
+        loadProfile();
+
+    </script>
+</body>
+</html>

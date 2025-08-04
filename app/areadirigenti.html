@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area Riservata Dirigenti</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1a1a2e',
+                        secondary: '#16213e',
+                        accent: '#0f3460',
+                        aurora: '#e94560',
+                        cyan: '#00d4ff',
+                        magenta: '#ff006e',
+                        gold: '#ffd700',
+                        teal: '#03dac6',
+                        dark: '#0a0a23',
+                        light: '#f8fafc',
+                        success: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :root {
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+            --gradient-teal: linear-gradient(135deg, #03dac6 0%, #00d4ff 100%);
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--gradient-aurora);
+            background-size: 400% 400%;
+            animation: aurora 15s ease infinite;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes aurora {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fade-in 0.6s ease-out forwards;
+        }
+
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+            font-weight: 800;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 5vw, 2.25rem);
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 215, 0, 0.15);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #e94560, #00d4ff, #03dac6);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 215, 0, 0.25);
+        }
+
+        .admin-card {
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-gold);
+        }
+
+        .admin-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 25px 50px rgba(255, 215, 0, 0.2);
+        }
+
+        .function-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            border-radius: 18px;
+            padding: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-align: center;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                        0 0 0 1px rgba(255, 215, 0, 0.1);
+            position: relative;
+        }
+
+        .function-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 15px;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(233, 69, 96, 0.3), rgba(0, 212, 255, 0.3));
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: xor;
+            -webkit-mask-composite: xor;
+            pointer-events: none;
+        }
+
+        .function-card:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-6px) scale(1.03);
+            border-color: rgba(255, 215, 0, 0.6);
+            box-shadow: 0 25px 50px rgba(255, 215, 0, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                        0 0 0 2px rgba(255, 215, 0, 0.3);
+        }
+
+        .function-card:hover::before {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.5), rgba(233, 69, 96, 0.5), rgba(0, 212, 255, 0.5));
+        }
+
+        .btn-aurora {
+            background: var(--gradient-magic);
+            color: white;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            min-height: 44px;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-aurora:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.6);
+        }
+
+        .btn-gold {
+            background: var(--gradient-gold);
+            color: #1a1a2e;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 44px;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.4);
+            border-color: rgba(255, 215, 0, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1a1a2e;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            min-height: 44px;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-row {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .user-row:hover {
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin: 0.125rem;
+        }
+
+        .role-badge.admin {
+            background: var(--gradient-gold);
+            color: #1a1a2e;
+        }
+
+        .role-badge.dirigente {
+            background: var(--gradient-magic);
+            color: white;
+        }
+
+        .role-badge.user {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .glass-card {
+                border-radius: 20px;
+                padding: 1.5rem;
+            }
+
+            .function-card {
+                min-height: 120px;
+                padding: 1rem;
+            }
+
+            .admin-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Focus states for accessibility */
+        .btn-aurora:focus,
+        .btn-gold:focus,
+        .btn-secondary:focus,
+        .function-card:focus {
+            outline: 2px solid #ffd700;
+            outline-offset: 2px;
+        }
+
+        /* Loading states */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #ffd700;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="font-inter">
+
+    <!-- Back Button -->
+    <div class="absolute top-6 left-6 z-10">
+        <button onclick="history.back()" class="flex items-center gap-3 text-ultra-visible hover:text-gold transition-all duration-300 transform hover:scale-110 group">
+            <svg class="w-8 h-8 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span class="text-lg font-bold">Indietro</span>
+        </button>
+    </div>
+
+    <main class="min-h-screen px-4 py-8 max-w-6xl mx-auto">
+
+        <!-- Hero Section -->
+        <div class="text-center mb-12 fade-in">
+            <div class="w-24 h-24 bg-gradient-to-br from-gold to-aurora rounded-full mx-auto mb-8 flex items-center justify-center shadow-2xl">
+                <span class="text-4xl text-white">🏛️</span>
+            </div>
+            <h1 class="hero-title text-ultra-visible mb-6">Area Riservata Dirigenti</h1>
+            <p class="text-xl text-ultra-visible opacity-90 max-w-3xl mx-auto font-semibold">
+                Accesso esclusivo alle funzioni direzionali e amministrative
+            </p>
+        </div>
+
+        <!-- User Info Card -->
+        <div class="glass-card p-6 md:p-8 mb-8 text-center fade-in">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <div class="w-16 h-16 bg-gradient-to-br from-gold to-aurora rounded-full flex items-center justify-center shadow-lg">
+                    <span class="text-2xl text-white" id="userIcon">👤</span>
+                </div>
+                <div class="text-left">
+                    <h2 class="text-2xl font-bold text-primary" id="userName">Caricamento...</h2>
+                    <div id="userRoles" class="mt-2">
+                        <!-- Roles badges will be inserted here -->
+                    </div>
+                </div>
+            </div>
+            <p class="text-gray-600 font-semibold" id="accessLevel">Verificando privilegi...</p>
+        </div>
+
+        <!-- Funzioni Dirigenti -->
+        <div class="glass-card p-6 md:p-8 mb-8 fade-in">
+            <h3 class="section-title text-primary mb-8 text-center">
+                <span class="mr-3 text-3xl">⚡</span>
+                Funzioni Dirigenziali
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="dirigentiFunctions">
+                <!-- Functions will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Funzioni Amministrative -->
+        <div class="glass-card p-6 md:p-8 mb-8 fade-in">
+            <h3 class="section-title text-primary mb-8 text-center">
+                <span class="mr-3 text-3xl">📋</span>
+                Funzioni Amministrative
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="function-card" onclick="window.open('https://form.jotform.com/243226223182044', '_blank')">
+                    <div class="text-4xl mb-3">💰</div>
+                    <h4 class="font-bold text-ultra-visible text-lg mb-2">Richiedi Rimborso</h4>
+                    <p class="text-ultra-visible opacity-80 text-sm">Compila il modulo per richieste di rimborso spese</p>
+                </div>
+
+                <div class="function-card" onclick="window.open('https://form.jotform.com/243262801203343', '_blank')">
+                    <div class="text-4xl mb-3">📝</div>
+                    <h4 class="font-bold text-ultra-visible text-lg mb-2">Richiedi Permesso</h4>
+                    <p class="text-ultra-visible opacity-80 text-sm">Inoltra richiesta di permesso sindacale</p>
+                </div>
+
+                <div class="function-card" onclick="window.open('https://eu.jotform.com/tables/243226223182044?st=UGpyTWZFR0lXeUlKclRSWFpURFNEWEk5TklTZ2RSWithczc5UzJ3ajVKVDRrenVEWlIxdzJaVDduV1I0ZjVVM21BM1NzQlNmOEZ2cFNxQ3hIczlkK2JWL2w2a0grU1FSa0NrVGl2WmZCcGNsTlkvZlZ1V2FKUUNkdUdJL0d1YXA=', '_blank')">
+                    <div class="text-4xl mb-3">📊</div>
+                    <h4 class="font-bold text-ultra-visible text-lg mb-2">Tabella Rendiconto</h4>
+                    <p class="text-ultra-visible opacity-80 text-sm">Visualizza i dati di rendiconto</p>
+                </div>
+
+                <div class="function-card" onclick="window.open('https://eu.jotform.com/tables/243262801203343', '_blank')">
+                    <div class="text-4xl mb-3">📅</div>
+                    <h4 class="font-bold text-ultra-visible text-lg mb-2">Tabella Permessi</h4>
+                    <p class="text-ultra-visible opacity-80 text-sm">Gestisci permessi sindacali</p>
+                </div>
+
+                <div class="function-card" onclick="window.open('https://mega.nz/#fm/b3ojlZgY', '_blank')">
+                    <div class="text-4xl mb-3">☁️</div>
+                    <h4 class="font-bold text-ultra-visible text-lg mb-2">Accesso Cloud</h4>
+                    <p class="text-ultra-visible opacity-80 text-sm">Repository documenti</p>
+                </div>
+
+                <div class="function-card" onclick="window.open('https://www.carabinierinsc.it/webmail/?_task=mail&_mbox=INBOX#', '_blank')">
+                    <div class="text-4xl mb-3">📧</div>
+                    <h4 class="font-bold text-ultra-visible text-lg mb-2">Casella di Posta</h4>
+                    <p class="text-ultra-visible opacity-80 text-sm">Accedi alla webmail</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestione Ruoli (Solo ADMIN) -->
+        <div id="adminSection" class="admin-card p-6 md:p-8 mb-8 fade-in" style="display: none;">
+            <h3 class="section-title text-ultra-visible mb-8 text-center">
+                <span class="mr-3 text-3xl">👑</span>
+                Gestione Ruoli Utenti
+                <span class="text-sm font-normal opacity-80 block mt-2">Solo Amministratori</span>
+            </h3>
+            
+            <div class="mb-6 text-center">
+                <button onclick="loadUsers()" class="btn-gold" id="loadUsersBtn">
+                    <span class="mr-2">🔄</span>
+                    Carica Utenti
+                </button>
+            </div>
+
+            <div id="usersContainer" class="max-h-96 overflow-y-auto">
+                <!-- Users list will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Contact Support -->
+        <div class="glass-card p-6 md:p-8 text-center fade-in">
+            <h3 class="section-title text-primary mb-4">Supporto Tecnico</h3>
+            <p class="text-gray-600 text-lg mb-6">Hai bisogno di assistenza con le funzioni dirigenziali?</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="mailto:support@aurora.app" class="btn-aurora">
+                    <span class="mr-2">📧</span>
+                    Contatta Supporto
+                </a>
+                <a href="tel:+390000000000" class="btn-secondary">
+                    <span class="mr-2">📞</span>
+                    Chiamata Urgente
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Gestione Ruoli -->
+    <div id="rolesModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-primary">Modifica Ruoli Utente</h3>
+                <button onclick="closeRolesModal()" class="text-gray-500 hover:text-aurora text-3xl font-bold transition-colors" aria-label="Chiudi">&times;</button>
+            </div>
+            
+            <div class="mb-6">
+                <h4 class="font-bold text-primary mb-2" id="modalUserName">Nome Utente</h4>
+                <p class="text-gray-600 mb-4" id="modalUserEmail">email@example.com</p>
+            </div>
+
+            <form id="rolesForm" class="space-y-4">
+                <input type="hidden" id="modalUserId">
+                
+                <div>
+                    <label class="block text-sm font-bold text-primary mb-2">Ruoli Attuali:</label>
+                    <div class="flex flex-wrap gap-2 mb-4" id="currentRoles">
+                        <!-- Current roles will be shown here -->
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-primary mb-2">Seleziona Nuovi Ruoli:</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="USER" class="mr-2">
+                            <span class="role-badge user">USER</span>
+                            <span class="ml-2 text-sm text-gray-600">Utente base</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="DIRIGENTE" class="mr-2">
+                            <span class="role-badge dirigente">DIRIGENTE</span>
+                            <span class="ml-2 text-sm text-gray-600">Accesso area dirigenti</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="ADMIN" class="mr-2">
+                            <span class="role-badge admin">ADMIN</span>
+                            <span class="ml-2 text-sm text-gray-600">Amministratore completo</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-4">
+                    <button type="submit" class="flex-1 btn-gold" id="saveRolesBtn">
+                        <span class="mr-2">💾</span>
+                        Salva Modifiche
+                    </button>
+                    <button type="button" onclick="closeRolesModal()" class="flex-1 btn-secondary">
+                        <span class="mr-2">❌</span>
+                        Annulla
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+        
+        const supabase = createClient(
+            'https://lycrgzptkdkksukcwrld.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk'
+        );
+
+        let currentUser = null;
+        let currentUserRoles = [];
+        let allUsers = [];
+        let editingUserId = null;
+
+        // Initialize app
+        async function init() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) {
+                    window.location.href = '../login.html';
+                    return;
+                }
+
+                currentUser = user;
+                await loadUserProfile();
+                loadDirigentiFunctions();
+                
+                // Show admin section if user is ADMIN
+                if (currentUserRoles.includes('ADMIN')) {
+                    document.getElementById('adminSection').style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Errore inizializzazione:', error);
+                showNotification('❌ Errore nel caricamento', 'error');
+            }
+        }
+
+        async function loadUserProfile() {
+            try {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('nome, email, ruoli')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (!profile) throw new Error('Profilo non trovato');
+
+                currentUserRoles = profile.ruoli || ['USER'];
+
+                // Check if user has required permissions
+                if (!currentUserRoles.includes('DIRIGENTE') && !currentUserRoles.includes('ADMIN')) {
+                    window.location.href = 'home.html';
+                    return;
+                }
+
+                // Update UI
+                document.getElementById('userName').textContent = profile.nome || 'Dirigente';
+                document.getElementById('userIcon').textContent = currentUserRoles.includes('ADMIN') ? '👑' : '🎯';
+                
+                // Update roles badges
+                const rolesContainer = document.getElementById('userRoles');
+                rolesContainer.innerHTML = currentUserRoles.map(role => {
+                    const badgeClass = role === 'ADMIN' ? 'admin' : role === 'DIRIGENTE' ? 'dirigente' : 'user';
+                    const icon = role === 'ADMIN' ? '👑' : role === 'DIRIGENTE' ? '🎯' : '👤';
+                    return `<span class="role-badge ${badgeClass}">${icon} ${role}</span>`;
+                }).join('');
+
+                // Update access level
+                const accessLevel = currentUserRoles.includes('ADMIN') ? 
+                    'Accesso Amministratore Completo' : 
+                    'Accesso Dirigente Autorizzato';
+                document.getElementById('accessLevel').textContent = accessLevel;
+
+            } catch (error) {
+                console.error('Errore caricamento profilo:', error);
+                showNotification('❌ Errore nel caricamento del profilo', 'error');
+            }
+        }
+
+        function loadDirigentiFunctions() {
+            const functions = [
+                {
+                    icon: '👥',
+                    title: 'Gestione Soci',
+                    description: 'Amministra gli iscritti',
+                    action: () => window.location.href = 'gestione-soci.html',
+                    roles: ['DIRIGENTE', 'ADMIN']
+                },
+                {
+                    icon: '📊',
+                    title: 'Statistiche',
+                    description: 'Report e analytics',
+                    action: () => window.location.href = 'dashboard-statistiche.html',
+                    roles: ['DIRIGENTE', 'ADMIN']
+                },
+                {
+                    icon: '📰',
+                    title: 'Gestione Notizie',
+                    description: 'Pubblica comunicazioni',
+                    action: () => window.location.href = 'gestione-notizie.html',
+                    roles: ['DIRIGENTE', 'ADMIN']
+                },
+                {
+                    icon: '🏷️',
+                    title: 'Convenzioni',
+                    description: 'Gestisci partnership',
+                    action: () => window.location.href = 'gestione-convenzioni.html',
+                    roles: ['DIRIGENTE', 'ADMIN']
+                },
+                {
+                    icon: '💼',
+                    title: 'Servizi Legali',
+                    description: 'Amministra pratiche',
+                    action: () => showNotification('🚧 Funzione in sviluppo', 'info'),
+                    roles: ['DIRIGENTE', 'ADMIN']
+                },
+                {
+                    icon: '⚙️',
+                    title: 'Configurazioni',
+                    description: 'Impostazioni sistema',
+                    action: () => showNotification('🚧 Funzione in sviluppo', 'info'),
+                    roles: ['ADMIN']
+                }
+            ];
+
+            const container = document.getElementById('dirigentiFunctions');
+            container.innerHTML = functions
+                .filter(func => func.roles.some(role => currentUserRoles.includes(role)))
+                .map(func => `
+                    <div class="function-card" onclick="(${func.action})()">
+                        <div class="text-4xl mb-3">${func.icon}</div>
+                        <h4 class="font-bold text-ultra-visible text-lg mb-2">${func.title}</h4>
+                        <p class="text-ultra-visible opacity-80 text-sm">${func.description}</p>
+                    </div>
+                `).join('');
+        }
+
+        // Load users for role management (ADMIN only)
+        async function loadUsers() {
+            if (!currentUserRoles.includes('ADMIN')) {
+                showNotification('❌ Accesso negato', 'error');
+                return;
+            }
+
+            const loadBtn = document.getElementById('loadUsersBtn');
+            loadBtn.innerHTML = '<div class="spinner"></div>Caricamento...';
+            loadBtn.disabled = true;
+
+            try {
+                const { data: users, error } = await supabase
+                    .from('profiles')
+                    .select('id, nome, email, ruoli, created_at')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                allUsers = users || [];
+                displayUsers();
+
+                loadBtn.innerHTML = '<span class="mr-2">✅</span>Aggiorna Lista';
+
+            } catch (error) {
+                console.error('Errore caricamento utenti:', error);
+                showNotification('❌ Errore nel caricamento degli utenti', 'error');
+                loadBtn.innerHTML = '<span class="mr-2">⚠️</span>Riprova';
+            } finally {
+                loadBtn.disabled = false;
+            }
+        }
+
+        function displayUsers() {
+            const container = document.getElementById('usersContainer');
+            
+            if (allUsers.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-4">👥</div>
+                        <p class="text-ultra-visible font-semibold">Nessun utente trovato</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = allUsers.map(user => {
+                const userRoles = user.ruoli || ['USER'];
+                const rolesHtml = userRoles.map(role => {
+                    const badgeClass = role === 'ADMIN' ? 'admin' : role === 'DIRIGENTE' ? 'dirigente' : 'user';
+                    const icon = role === 'ADMIN' ? '👑' : role === 'DIRIGENTE' ? '🎯' : '👤';
+                    return `<span class="role-badge ${badgeClass}">${icon} ${role}</span>`;
+                }).join('');
+
+                return `
+                    <div class="user-row">
+                        <div class="flex justify-between items-center">
+                            <div class="flex-1">
+                                <div class="font-bold text-primary text-lg">${user.nome || 'Nome non disponibile'}</div>
+                                <div class="text-gray-600 text-sm mb-2">${user.email || 'Email non disponibile'}</div>
+                                <div class="flex flex-wrap gap-1">${rolesHtml}</div>
+                            </div>
+                            <div class="ml-4">
+                                <button onclick="openRolesModal('${user.id}')" class="btn-gold text-sm px-3 py-2">
+                                    <span class="mr-1">✏️</span>
+                                    Modifica
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Modal functions
+        function openRolesModal(userId) {
+            const user = allUsers.find(u => u.id === userId);
+            if (!user) return;
+
+            editingUserId = userId;
+            
+            document.getElementById('modalUserName').textContent = user.nome || 'Nome non disponibile';
+            document.getElementById('modalUserEmail').textContent = user.email || 'Email non disponibile';
+            document.getElementById('modalUserId').value = userId;
+
+            // Show current roles
+            const currentRoles = user.ruoli || ['USER'];
+            const currentRolesHtml = currentRoles.map(role => {
+                const badgeClass = role === 'ADMIN' ? 'admin' : role === 'DIRIGENTE' ? 'dirigente' : 'user';
+                const icon = role === 'ADMIN' ? '👑' : role === 'DIRIGENTE' ? '🎯' : '👤';
+                return `<span class="role-badge ${badgeClass}">${icon} ${role}</span>`;
+            }).join('');
+            document.getElementById('currentRoles').innerHTML = currentRolesHtml;
+
+            // Set checkboxes
+            const checkboxes = document.querySelectorAll('input[name="roles"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = currentRoles.includes(checkbox.value);
+            });
+
+            document.getElementById('rolesModal').classList.add('active');
+        }
+
+        function closeRolesModal() {
+            document.getElementById('rolesModal').classList.remove('active');
+            editingUserId = null;
+        }
+
+        // Save roles
+        async function saveUserRoles(event) {
+            event.preventDefault();
+            
+            if (!editingUserId) return;
+
+            const saveBtn = document.getElementById('saveRolesBtn');
+            saveBtn.innerHTML = '<div class="spinner"></div>Salvando...';
+            saveBtn.disabled = true;
+
+            try {
+                const formData = new FormData(event.target);
+                const selectedRoles = formData.getAll('roles');
+
+                // Ensure at least USER role
+                if (selectedRoles.length === 0) {
+                    selectedRoles.push('USER');
+                }
+
+                const { error } = await supabase
+                    .from('profiles')
+                    .update({ ruoli: selectedRoles })
+                    .eq('id', editingUserId);
+
+                if (error) throw error;
+
+                showNotification('✅ Ruoli aggiornati con successo!', 'success');
+                closeRolesModal();
+                await loadUsers(); // Refresh the list
+
+            } catch (error) {
+                console.error('Errore salvataggio ruoli:', error);
+                showNotification('❌ Errore nel salvataggio dei ruoli', 'error');
+            } finally {
+                saveBtn.innerHTML = '<span class="mr-2">💾</span>Salva Modifiche';
+                saveBtn.disabled = false;
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'bg-gradient-to-r from-green-500 to-green-600',
+                error: 'bg-gradient-to-r from-red-500 to-red-600',
+                info: 'bg-gradient-to-r from-blue-500 to-blue-600'
+            };
+            
+            notification.className = `fixed top-6 right-6 ${colors[type]} text-white px-6 py-4 rounded-2xl shadow-2xl z-50 transform translate-x-full transition-transform duration-500 font-bold text-base backdrop-blur-md border border-white/20`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 500);
+            }, 4000);
+        }
+
+        // Smart Home Redirect
+        async function smartHomeRedirect() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (!user) {
+                    window.location.href = '../login.html';
+                    return;
+                }
+
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('ruoli')
+                    .eq('id', user.id)
+                    .single();
+
+                const userRoles = profile?.ruoli || ['USER'];
+                
+                if (userRoles.includes('DIRIGENTE') || userRoles.includes('ADMIN')) {
+                    window.location.href = 'home_dirigenti.html';
+                } else {
+                    window.location.href = 'home.html';
+                }
+            } catch (error) {
+                console.error('Errore smart navigation:', error);
+                window.location.href = 'home.html';
+            }
+        }
+
+        // Event listeners
+        document.getElementById('rolesForm').addEventListener('submit', saveUserRoles);
+
+        // Close modal on click outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                closeRolesModal();
+            }
+        });
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeRolesModal();
+            }
+        });
+
+        // Expose functions globally
+        window.loadUsers = loadUsers;
+        window.openRolesModal = openRolesModal;
+        window.closeRolesModal = closeRolesModal;
+        window.smartHomeRedirect = smartHomeRedirect;
+
+        // Initialize app
+        init();
+    </script>
+
+</body>
+</html>

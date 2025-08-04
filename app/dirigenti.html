@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dirigenti – MyApp – Il tuo dirigente sempre con te</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://lycrgzptkdkksukcwrld.supabase.co">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Aurora Boreale 2025 Palette - Ultra Readable
+                        primary: '#1a1a2e',
+                        secondary: '#16213e',
+                        accent: '#0f3460',
+                        aurora: '#e94560',
+                        cyan: '#00d4ff',
+                        magenta: '#ff006e',
+                        gold: '#ffd700',
+                        teal: '#03dac6',
+                        dark: '#0a0a23',
+                        light: '#ffffff',
+                        muted: '#64748b',
+                        success: '#00ea8d',
+                        warning: '#ffb800',
+                        error: '#ff4757',
+                        // Ultra-High Contrast Colors for Maximum Readability
+                        textPrimary: '#111827',        // Quasi nero per massima leggibilità
+                        textSecondary: '#1f2937',      // Grigio scuro molto leggibile
+                        textMuted: '#374151',          // Grigio medio con ottimo contrasto
+                        bgCard: '#ffffff',             // Bianco puro per le card
+                        bgOverlay: '#ffffff',          // Bianco solido per overlay
+                        bgSection: 'rgba(255, 255, 255, 0.98)', // Quasi bianco per sezioni
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    fontSize: {
+                        // Font sizes aumentate per migliore leggibilità
+                        'fluid-xs': 'clamp(0.875rem, 2.5vw, 1rem)',        // Più grande
+                        'fluid-sm': 'clamp(1rem, 2.8vw, 1.125rem)',        // Più grande
+                        'fluid-base': 'clamp(1.125rem, 3vw, 1.25rem)',     // Più grande
+                        'fluid-lg': 'clamp(1.25rem, 3.5vw, 1.5rem)',       // Più grande
+                        'fluid-xl': 'clamp(1.5rem, 4vw, 1.75rem)',         // Più grande
+                        'fluid-2xl': 'clamp(1.75rem, 4.5vw, 2.25rem)',     // Più grande
+                        'fluid-3xl': 'clamp(2.25rem, 5.5vw, 2.75rem)',     // Più grande
+                        'fluid-4xl': 'clamp(2.75rem, 6.5vw, 3.5rem)',      // Più grande
+                        'fluid-5xl': 'clamp(3rem, 7.5vw, 4.5rem)',         // Più grande
+                        'fluid-6xl': 'clamp(3.5rem, 8.5vw, 5.5rem)',       // Più grande
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :root {
+            /* Enhanced Aurora Gradients - Less Distracting for Readability */
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+            
+            /* Ultra-Readable Card Backgrounds */
+            --bg-card-solid: #ffffff;
+            --bg-card-slight: rgba(255, 255, 255, 0.98);
+            --bg-section: rgba(255, 255, 255, 0.95);
+            
+            /* Enhanced Shadows for Better Definition */
+            --shadow-card-readable: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-card-hover-readable: 0 16px 60px rgba(0, 0, 0, 0.18);
+            --border-card-readable: 2px solid rgba(226, 232, 240, 0.8);
+            
+            /* Typography Enhancements */
+            --line-height-comfortable: 1.7;
+            --line-height-headers: 1.3;
+        }
+
+        * {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--gradient-aurora);
+            background-size: 400% 400%;
+            animation: aurora-subtle 25s ease infinite;
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+            overflow-x: hidden;
+            position: relative;
+            line-height: var(--line-height-comfortable);
+            font-weight: 500; /* Peso base più pesante per migliore leggibilità */
+        }
+
+        /* Aurora Background - More Subtle for Better Readability */
+        @keyframes aurora-subtle {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+
+        /* Ultra-Readable Card Design */
+        .dirigente-card {
+            background: var(--bg-card-solid);
+            border: var(--border-card-readable);
+            border-radius: 20px;
+            padding: clamp(2rem, 5vw, 3rem); /* Padding aumentato */
+            padding-bottom: clamp(2.5rem, 6vw, 3.5rem); /* Padding extra in basso per i pulsanti */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: visible; /* Cambiato da hidden a visible per evitare clipping */
+            box-shadow: var(--shadow-card-readable);
+            color: #111827;
+            line-height: var(--line-height-comfortable);
+            min-height: clamp(400px, 50vw, 500px); /* Altezza minima per garantire spazio */
+        }
+
+        .dirigente-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px; /* Più spesso per maggiore visibilità */
+            background: var(--gradient-magic);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .dirigente-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .dirigente-card:hover {
+            transform: translateY(-8px) scale(1.01); /* Effetto più subtle */
+            box-shadow: var(--shadow-card-hover-readable);
+            border-color: rgba(233, 69, 96, 0.4);
+        }
+
+        /* Enhanced Avatar - Larger and More Visible */
+        .dirigente-avatar {
+            width: clamp(100px, 15vw, 130px); /* Più grande */
+            height: clamp(100px, 15vw, 130px); /* Più grande */
+            border-radius: 50%;
+            background: var(--gradient-magic);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(2.5rem, 6vw, 3.5rem); /* Font più grande */
+            margin: 0 auto 2rem; /* Margin aumentato */
+            box-shadow: 0 12px 40px rgba(233, 69, 96, 0.4);
+            transition: all 0.3s ease;
+            border: 4px solid white; /* Bordo più spesso */
+            font-weight: 900;
+            color: white;
+        }
+
+        .dirigente-card:hover .dirigente-avatar {
+            transform: scale(1.05); /* Effetto più subtle */
+            box-shadow: 0 16px 50px rgba(233, 69, 96, 0.5);
+        }
+
+        /* Ultra-Readable Typography */
+        .readable-title {
+            color: #111827;
+            font-weight: 800;
+            text-shadow: none;
+            letter-spacing: -0.01em;
+            line-height: var(--line-height-headers);
+            margin-bottom: 1rem; /* Margin aumentato */
+        }
+
+        .readable-subtitle {
+            color: #1f2937;
+            font-weight: 700; /* Più pesante */
+            text-shadow: none;
+            line-height: var(--line-height-headers);
+            margin-bottom: 0.75rem;
+        }
+
+        .readable-text {
+            color: #374151;
+            font-weight: 600; /* Più pesante */
+            line-height: var(--line-height-comfortable);
+            margin-bottom: 0.5rem;
+        }
+
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.9), 
+                0 2px 4px rgba(0, 0, 0, 0.8),
+                0 1px 2px rgba(0, 0, 0, 1);
+            font-weight: 900;
+            line-height: var(--line-height-headers);
+        }
+
+        /* Enhanced Navigation Buttons */
+        .btn-back, .btn-home {
+            background: var(--gradient-cyber);
+            color: white;
+            border: 3px solid rgba(0, 212, 255, 0.4); /* Bordo più spesso */
+            z-index: 1000;
+            padding: clamp(0.6rem, 2vw, 0.8rem) clamp(1rem, 3vw, 1.5rem);
+            border-radius: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* Gap aumentato */
+            font-weight: 700;
+            font-size: clamp(0.9rem, 2.5vw, 1rem); /* Font più grande */
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+            line-height: 1.2;
+            cursor: pointer;
+            border: none;
+            min-width: clamp(90px, 20vw, 120px);
+        }
+
+        .btn-home {
+            background: var(--gradient-magic);
+            border-color: rgba(233, 69, 96, 0.4);
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.3);
+        }
+
+        .btn-back:hover, .btn-home:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .btn-back:hover {
+            box-shadow: 0 12px 35px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-home:hover {
+            box-shadow: 0 12px 35px rgba(233, 69, 96, 0.4);
+        }
+
+        /* Loading States - More Readable */
+        .loading-card {
+            background: var(--bg-card-solid);
+            border-radius: 24px;
+            padding: 3rem; /* Padding aumentato */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px; /* Più alto */
+            animation: pulse 2s infinite;
+            border: var(--border-card-readable);
+        }
+
+        .loading-spinner {
+            width: 60px; /* Più grande */
+            height: 60px;
+            border: 5px solid rgba(233, 69, 96, 0.1); /* Più spesso */
+            border-left: 5px solid #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        .loading-text {
+            color: #374151;
+            font-size: clamp(1.1rem, 3vw, 1.3rem); /* Font più grande */
+            font-weight: 600;
+        }
+
+        .error-card {
+            background: rgba(255, 71, 87, 0.05); /* Background più chiaro */
+            border: 3px solid rgba(255, 71, 87, 0.4); /* Bordo più spesso */
+            border-radius: 24px;
+            padding: 3rem; /* Padding aumentato */
+            text-align: center;
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        /* Search Box - Larger and More Readable */
+        .search-box {
+            background: var(--bg-card-solid);
+            border: 3px solid rgba(0, 0, 0, 0.1); /* Bordo più definito */
+            border-radius: 20px;
+            padding: clamp(1.2rem, 4vw, 1.5rem) clamp(1.5rem, 4vw, 2rem); /* Più grande */
+            width: 100%;
+            font-size: clamp(1.1rem, 3.5vw, 1.3rem); /* Font più grande */
+            font-weight: 600;
+            margin-bottom: 2rem; /* Margin aumentato */
+            transition: all 0.3s ease;
+            color: #111827;
+            line-height: 1.4;
+        }
+
+        .search-box::placeholder {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.15);
+            transform: none; /* Rimuovo lo scale per evitare confusione */
+        }
+
+        /* Filter Tabs - Larger and More Readable */
+        .filter-tabs {
+            display: flex;
+            gap: 1rem; /* Gap aumentato */
+            margin-bottom: 2rem; /* Margin aumentato */
+            overflow-x: auto;
+            padding: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-tab {
+            padding: clamp(1rem, 3vw, 1.3rem) clamp(1.5rem, 4vw, 2rem); /* Più grande */
+            border-radius: 25px;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem); /* Font più grande */
+            font-weight: 700;
+            white-space: nowrap;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 3px solid; /* Bordo più spesso */
+            line-height: 1.2;
+        }
+
+        .filter-tab:not(.active) {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .filter-tab:not(.active):hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .filter-tab.active {
+            background: var(--bg-card-solid);
+            color: #111827;
+            border-color: #e94560;
+            box-shadow: 0 12px 30px rgba(233, 69, 96, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Role Badges - Larger and More Readable */
+        .role-badge {
+            display: inline-block;
+            padding: clamp(0.7rem, 2vw, 1rem) clamp(1.2rem, 3vw, 1.6rem); /* Più grande */
+            border-radius: 25px;
+            font-weight: 800; /* Più pesante */
+            font-size: clamp(0.85rem, 2.2vw, 1rem); /* Font più grande */
+            text-align: center;
+            margin-bottom: 1.5rem; /* Margin aumentato */
+            text-transform: uppercase;
+            letter-spacing: 1.2px; /* Più spaziato */
+            border: 3px solid; /* Bordo più spesso */
+            line-height: 1.2;
+        }
+
+        .role-regionale {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border-color: rgba(245, 158, 11, 0.5);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .role-provinciale {
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: white;
+            border-color: rgba(16, 185, 129, 0.5);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .role-segretario {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-color: rgba(59, 130, 246, 0.5);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Contact Buttons - Larger and More Readable */
+        .contact-button {
+            background: var(--gradient-magic);
+            color: white;
+            padding: clamp(1rem, 3vw, 1.3rem) clamp(1.8rem, 5vw, 2.3rem); /* Padding più generoso */
+            border-radius: 25px;
+            font-size: clamp(1rem, 2.8vw, 1.2rem); /* Font più grande */
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; /* Centra il contenuto */
+            gap: 0.75rem; /* Gap aumentato */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid rgba(233, 69, 96, 0.4); /* Bordo più spesso */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+            min-width: clamp(120px, 25vw, 150px); /* Larghezza minima garantita */
+            white-space: nowrap; /* Evita testo su più righe */
+            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.2); /* Ombra per migliore visibilità */
+        }
+
+        .contact-button:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(233, 69, 96, 0.5);
+            border-color: rgba(233, 69, 96, 0.8);
+        }
+
+        /* Stats Cards - Larger and More Readable */
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border: 3px solid rgba(255, 255, 255, 0.3); /* Bordo più spesso */
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            padding: clamp(1.5rem, 4vw, 2rem); /* Padding aumentato */
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: var(--bg-card-solid);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+            border-color: rgba(233, 69, 96, 0.3);
+        }
+
+        .stat-number {
+            font-size: clamp(2rem, 6vw, 3rem); /* Font più grande */
+            font-weight: 900;
+            color: #111827;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem); /* Font più grande */
+            color: #374151;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        /* Empty State - More Readable */
+        .empty-state {
+            text-align: center;
+            padding: clamp(3rem, 8vw, 5rem); /* Padding aumentato */
+            color: white;
+        }
+
+        .empty-icon {
+            font-size: clamp(4rem, 12vw, 6rem); /* Più grande */
+            margin-bottom: 2rem;
+        }
+
+        .empty-title {
+            font-size: clamp(1.8rem, 5vw, 2.5rem); /* Font più grande */
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: var(--line-height-headers);
+        }
+
+        .empty-text {
+            font-size: clamp(1.1rem, 3vw, 1.4rem); /* Font più grande */
+            font-weight: 600;
+            line-height: var(--line-height-comfortable);
+        }
+
+        /* Contact Section - Ultra Readable */
+        .contact-section {
+            background: var(--bg-card-solid);
+            border-radius: 24px;
+            padding: clamp(2.5rem, 6vw, 4rem); /* Padding aumentato */
+            box-shadow: var(--shadow-card-readable);
+            border: var(--border-card-readable);
+        }
+
+        .contact-title {
+            font-size: clamp(2rem, 5vw, 3rem); /* Font più grande */
+            font-weight: 900;
+            color: #111827;
+            margin-bottom: 2.5rem; /* Margin aumentato */
+            line-height: var(--line-height-headers);
+        }
+
+        .contact-info-card {
+            border-radius: 20px;
+            padding: clamp(2rem, 5vw, 2.5rem); /* Padding aumentato */
+            text-white;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.2); /* Bordo più definito */
+        }
+
+        .contact-icon {
+            font-size: clamp(3rem, 8vw, 4rem); /* Più grande */
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info-title {
+            font-size: clamp(1.2rem, 3.5vw, 1.5rem); /* Font più grande */
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: var(--line-height-headers);
+        }
+
+        .contact-info-text {
+            font-size: clamp(1rem, 2.8vw, 1.2rem); /* Font più grande */
+            font-weight: 600;
+            line-height: var(--line-height-comfortable);
+        }
+
+        .contact-cta {
+            background: var(--gradient-magic);
+            color: white;
+            padding: clamp(1.2rem, 4vw, 1.5rem) clamp(2rem, 5vw, 2.5rem); /* Più grande */
+            border-radius: 25px;
+            font-size: clamp(1.1rem, 3vw, 1.3rem); /* Font più grande */
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(233, 69, 96, 0.4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.3;
+        }
+
+        .contact-cta:hover {
+            transform: scale(1.03);
+            box-shadow: 0 16px 40px rgba(233, 69, 96, 0.5);
+        }
+
+        /* Device-Specific Ultra-Readable Optimizations - Enhanced */
+        
+        /* Smartwatch & Very Small Devices (240px - 320px) */
+        @media (max-width: 320px) {
+            .dirigente-card {
+                padding: 1.5rem 1rem 2rem;
+                min-height: 350px;
+                border-radius: 16px;
+            }
+            
+            .dirigente-avatar {
+                width: 70px;
+                height: 70px;
+                font-size: 1.5rem;
+            }
+
+            .btn-back, .btn-home {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+                min-width: 70px;
+                gap: 0.3rem;
+            }
+
+            .search-box {
+                padding: 1rem 1.2rem;
+                font-size: 1rem;
+            }
+
+            .contact-button {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .dirigenti-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        /* Mobile Portrait Standard (321px - 480px) */
+        @media (min-width: 321px) and (max-width: 480px) and (orientation: portrait) {
+            .dirigente-card {
+                padding: 2rem 1.5rem 2.5rem;
+                margin-bottom: 2rem;
+                border-radius: 20px;
+                min-height: 380px;
+            }
+            
+            .dirigente-avatar {
+                width: 90px;
+                height: 90px;
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .btn-back, .btn-home {
+                padding: 0.8rem 1.3rem;
+                font-size: 1rem;
+                min-width: 90px;
+            }
+
+            .search-box {
+                padding: 1.2rem 1.5rem;
+                font-size: 1.1rem;
+            }
+
+            .contact-button {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                min-width: 140px;
+            }
+
+            .dirigenti-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .readable-title {
+                font-size: 1.4rem;
+                line-height: 1.3;
+            }
+        }
+
+        /* Mobile Landscape (481px - 667px) */
+        @media (min-width: 481px) and (max-width: 667px) and (orientation: landscape) {
+            .dirigente-card {
+                padding: 1.8rem 2rem 2.3rem;
+                min-height: 320px;
+            }
+
+            .dirigenti-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+
+            .btn-back, .btn-home {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.95rem;
+            }
+
+            .search-box {
+                padding: 1.1rem 1.8rem;
+                font-size: 1.05rem;
+            }
+        }
+
+        /* Phablet/Large Mobile (668px - 767px) */
+        @media (min-width: 668px) and (max-width: 767px) {
+            .dirigente-card {
+                padding: 2.2rem 2rem 2.7rem;
+                min-height: 400px;
+            }
+
+            .dirigenti-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.8rem;
+            }
+
+            .dirigente-avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 2.2rem;
+            }
+
+            .btn-back, .btn-home {
+                padding: 0.9rem 1.4rem;
+                font-size: 1.05rem;
+                min-width: 100px;
+            }
+
+            .contact-button {
+                padding: 1.1rem 1.8rem;
+                font-size: 1.05rem;
+                min-width: 150px;
+            }
+        }
+
+        /* Tablet Portrait (768px - 1024px) */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+            .dirigenti-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .dirigente-card {
+                padding: 2.5rem 2.2rem 3rem;
+                min-height: 450px;
+            }
+
+            .dirigente-avatar {
+                width: 110px;
+                height: 110px;
+                font-size: 2.5rem;
+            }
+
+            .search-box {
+                padding: 1.3rem 2rem;
+                font-size: 1.2rem;
+            }
+
+            .btn-back, .btn-home {
+                padding: 1rem 1.6rem;
+                font-size: 1.1rem;
+                min-width: 110px;
+            }
+
+            .contact-button {
+                padding: 1.2rem 2rem;
+                font-size: 1.1rem;
+                min-width: 160px;
+            }
+        }
+
+        /* Tablet Landscape (768px - 1024px) */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            .dirigenti-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.8rem;
+            }
+            
+            .dirigente-card {
+                padding: 2rem 2rem 2.5rem;
+                min-height: 380px;
+            }
+
+            .dirigente-avatar {
+                width: 95px;
+                height: 95px;
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Small Laptop (1025px - 1366px) */
+        @media (min-width: 1025px) and (max-width: 1366px) {
+            .dirigenti-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2.2rem;
+            }
+            
+            .dirigente-card {
+                padding: 2.8rem 2.5rem 3.3rem;
+                min-height: 480px;
+            }
+
+            .dirigente-card:hover {
+                transform: translateY(-12px) scale(1.02);
+            }
+
+            .dirigente-avatar {
+                width: 115px;
+                height: 115px;
+                font-size: 2.7rem;
+            }
+
+            .search-box {
+                padding: 1.4rem 2.2rem;
+                font-size: 1.3rem;
+            }
+
+            .filter-tab {
+                padding: 1.2rem 2.2rem;
+                font-size: 1.1rem;
+            }
+
+            .btn-back, .btn-home {
+                padding: 1.1rem 1.8rem;
+                font-size: 1.15rem;
+                min-width: 120px;
+            }
+
+            .contact-button {
+                padding: 1.3rem 2.2rem;
+                font-size: 1.15rem;
+                min-width: 170px;
+            }
+        }
+
+        /* Large Laptop/Desktop (1367px - 1920px) */
+        @media (min-width: 1367px) and (max-width: 1920px) {
+            .container-custom {
+                max-width: 1300px;
+            }
+
+            .dirigenti-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2.5rem;
+            }
+
+            .dirigente-card {
+                padding: 3rem 2.8rem 3.5rem;
+                min-height: 520px;
+            }
+
+            .dirigente-card:hover {
+                transform: translateY(-16px) scale(1.03);
+            }
+
+            .dirigente-avatar {
+                width: 125px;
+                height: 125px;
+                font-size: 3rem;
+            }
+
+            .search-box {
+                padding: 1.5rem 2.5rem;
+                font-size: 1.4rem;
+            }
+
+            .btn-back, .btn-home {
+                padding: 1.2rem 2rem;
+                font-size: 1.2rem;
+                min-width: 130px;
+            }
+
+            .contact-button {
+                padding: 1.4rem 2.5rem;
+                font-size: 1.2rem;
+                min-width: 180px;
+            }
+        }
+
+        /* Ultra-wide Desktop (1921px - 2560px) */
+        @media (min-width: 1921px) and (max-width: 2560px) {
+            .dirigenti-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 3rem;
+            }
+
+            .dirigente-card {
+                padding: 3.2rem 3rem 3.7rem;
+                min-height: 550px;
+            }
+
+            .dirigente-avatar {
+                width: 135px;
+                height: 135px;
+                font-size: 3.2rem;
+            }
+
+            .search-box {
+                padding: 1.6rem 2.8rem;
+                font-size: 1.5rem;
+            }
+
+            .btn-back, .btn-home {
+                padding: 1.3rem 2.2rem;
+                font-size: 1.25rem;
+                min-width: 140px;
+            }
+
+            .contact-button {
+                padding: 1.5rem 2.8rem;
+                font-size: 1.25rem;
+                min-width: 200px;
+            }
+        }
+
+        /* 4K and Beyond (2561px+) */
+        @media (min-width: 2561px) {
+            .dirigenti-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 3.5rem;
+            }
+
+            .dirigente-card {
+                padding: 3.5rem 3.2rem 4rem;
+                min-height: 600px;
+            }
+
+            .dirigente-avatar {
+                width: 150px;
+                height: 150px;
+                font-size: 3.5rem;
+            }
+
+            .search-box {
+                padding: 1.8rem 3rem;
+                font-size: 1.6rem;
+            }
+
+            .btn-back, .btn-home {
+                padding: 1.4rem 2.5rem;
+                font-size: 1.3rem;
+                min-width: 150px;
+            }
+
+            .contact-button {
+                padding: 1.6rem 3rem;
+                font-size: 1.3rem;
+                min-width: 220px;
+            }
+
+            .stat-number {
+                font-size: 4rem;
+            }
+
+            .contact-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        /* Performance Optimizations */
+        .performance-mode-low * {
+            animation-duration: 0.2s !important;
+            transition-duration: 0.2s !important;
+        }
+
+        .reduced-animations * {
+            animation-duration: 0.3s !important;
+            transition-duration: 0.3s !important;
+        }
+
+        .is-scrolling .dirigente-card {
+            pointer-events: none;
+        }
+
+        .touch-device .dirigente-card:hover {
+            transform: none;
+        }
+
+        .touch-device .dirigente-card:active {
+            transform: scale(0.98);
+        }
+
+        .high-dpi .dirigente-card,
+        .high-dpi .btn-back,
+        .high-dpi .btn-home,
+        .high-dpi .contact-button {
+            border-width: 1px;
+        }
+
+        /* Device-specific optimizations */
+        .device-smartwatch .floating-icons,
+        .device-mobile-portrait .floating-icons {
+            display: none;
+        }
+
+        .device-desktop-4k .dirigente-card {
+            backdrop-filter: blur(20px);
+        }
+
+        .orientation-landscape .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+        }
+
+        .orientation-portrait .hero-title {
+            font-size: clamp(3rem, 10vw, 5rem);
+        }
+
+        /* Loading states per dispositivo */
+        .device-smartwatch .loading-spinner {
+            width: 40px;
+            height: 40px;
+        }
+
+        .device-desktop-4k .loading-spinner {
+            width: 80px;
+            height: 80px;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 12px;
+        }
+
+        /* Accessibility Enhancements - Ultra Readable */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media (prefers-contrast: high) {
+            .dirigente-card {
+                border: 4px solid #000000 !important;
+                background: #ffffff !important;
+            }
+            
+            .readable-title, .readable-subtitle, .readable-text {
+                color: #000000 !important;
+                font-weight: 900 !important;
+            }
+
+            .search-box {
+                border: 4px solid #000000 !important;
+            }
+
+            .filter-tab.active {
+                border: 4px solid #000000 !important;
+            }
+        }
+
+        /* Focus States - Ultra Visible */
+        .dirigente-card:focus-within {
+            outline: 4px solid #e94560 !important;
+            outline-offset: 4px !important;
+        }
+
+        .btn-back:focus {
+            outline: 4px solid #00d4ff !important;
+            outline-offset: 4px !important;
+        }
+
+        .search-box:focus {
+            outline: 4px solid #e94560 !important;
+            outline-offset: 2px !important;
+        }
+
+        .filter-tab:focus {
+            outline: 4px solid #ffffff !important;
+            outline-offset: 2px !important;
+        }
+
+        .contact-button:focus {
+            outline: 4px solid #ffffff !important;
+            outline-offset: 2px !important;
+        }
+
+        /* Print Styles - Ultra Readable */
+        @media print {
+            body::before,
+            .btn-back {
+                display: none !important;
+            }
+            
+            .dirigente-card {
+                background: white !important;
+                box-shadow: none !important;
+                border: 2px solid #000 !important;
+                break-inside: avoid;
+                margin-bottom: 2rem !important;
+                padding: 2rem !important;
+            }
+
+            .readable-title, .readable-subtitle, .readable-text {
+                color: #000000 !important;
+            }
+
+            .role-badge {
+                border: 2px solid #000 !important;
+                background: white !important;
+                color: #000 !important;
+            }
+        }
+
+        /* Dark Mode Improvements */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-card-solid: #1f2937;
+                --bg-card-slight: rgba(31, 41, 55, 0.98);
+            }
+
+            .dirigente-card {
+                background: var(--bg-card-solid);
+                border-color: rgba(75, 85, 99, 0.8);
+            }
+
+            .readable-title {
+                color: #f9fafb;
+            }
+
+            .readable-subtitle {
+                color: #e5e7eb;
+            }
+
+            .readable-text {
+                color: #d1d5db;
+            }
+
+            .search-box {
+                background: var(--bg-card-solid);
+                color: #f9fafb;
+                border-color: rgba(75, 85, 99, 0.8);
+            }
+
+            .search-box::placeholder {
+                color: #9ca3af;
+            }
+        }
+    </style>
+</head>
+<body class="relative overflow-x-hidden">
+    
+    <!-- Back Button -->
+    <a href="index.html" class="btn-back" aria-label="Torna alla homepage">
+        <span class="text-xl">←</span>
+        <span>Indietro</span>
+    </a>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative pt-20">
+        
+        <!-- Main Title -->
+        <h1 class="text-ultra-visible mb-8 fade-in-up" 
+            style="font-size: clamp(3rem, 10vw, 5rem); font-weight: 900; line-height: 1.1;">
+            I Nostri Dirigenti
+        </h1>
+
+        <!-- Subtitle -->
+        <div class="text-ultra-visible mb-16 fade-in-up" 
+             style="font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 800; animation-delay: 0.2s;">
+            Al servizio del Sindacato Carabinieri
+        </div>
+
+        <!-- Intro Message -->
+        <div class="bg-white rounded-3xl p-8 md:p-12 mb-20 max-w-5xl fade-in-up shadow-xl border-2 border-gray-200" 
+             style="animation-delay: 0.4s;">
+            <p class="readable-text text-xl md:text-2xl leading-relaxed mb-8">
+                <span class="readable-title text-3xl md:text-4xl block mb-6">Esperienza e Competenza</span>
+                <span class="readable-subtitle text-xl md:text-2xl">Il nostro team di dirigenti unisce esperienza militare e competenza legale per offrire la migliore tutela ai nostri iscritti.</span>
+            </p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-3 gap-6 mb-12 max-w-2xl w-full fade-in-up" style="animation-delay: 0.6s;">
+            <div class="stat-card text-center">
+                <div class="stat-number" id="totalCount">-</div>
+                <div class="stat-label text-cyan">Totali</div>
+            </div>
+            <div class="stat-card text-center">
+                <div class="stat-number" id="regionaliCount">-</div>
+                <div class="stat-label text-cyan">Regionali</div>
+            </div>
+            <div class="stat-card text-center">
+                <div class="stat-number" id="provincialiCount">-</div>
+                <div class="stat-label text-cyan">Provinciali</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dirigenti Section -->
+    <section class="py-20 md:py-32 px-4 relative">
+        <div class="max-w-7xl mx-auto container-custom">
+            
+            <!-- Section Header -->
+            <div class="text-center mb-20">
+                <h2 class="text-ultra-visible mb-12" 
+                    style="font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 900;">
+                    Il Nostro Team
+                </h2>
+                
+                <p class="text-cyan text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed font-bold mb-16">
+                    Dirigenti con esperienza pluriennale al servizio del personale dell'Arma dei Carabinieri
+                </p>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="max-w-3xl mx-auto mb-16">
+                <!-- Search Bar -->
+                <input type="text" id="searchInput" class="search-box" placeholder="🔍 Cerca dirigente per nome o provincia...">
+                
+                <!-- Filter Tabs -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">Tutti</button>
+                    <button class="filter-tab" data-filter="Regionale">Regionali</button>
+                    <button class="filter-tab" data-filter="Provinciale">Provinciali</button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingContainer" class="dirigenti-grid grid gap-8 mb-20">
+                <div class="loading-card">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Caricamento dirigenti...</p>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorContainer" class="hidden mb-20">
+                <div class="error-card max-w-2xl mx-auto">
+                    <h3 class="text-2xl font-bold mb-4">⚠️ Errore di Caricamento</h3>
+                    <p class="text-lg mb-6">Non è stato possibile caricare i dati dei dirigenti.</p>
+                    <button onclick="loadDirigenti()" class="bg-red-500 text-white px-8 py-4 rounded-lg hover:bg-red-600 transition-colors font-bold text-lg">
+                        🔄 Riprova
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-icon">👥</div>
+                <h3 class="empty-title text-ultra-visible">Nessun dirigente trovato</h3>
+                <p class="empty-text text-cyan font-bold">Prova a modificare i filtri di ricerca</p>
+            </div>
+
+            <!-- Dirigenti Grid -->
+            <div id="dirigentiContainer" class="dirigenti-grid grid gap-8 mb-20 hidden">
+                <!-- Dirigenti cards will be inserted here -->
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <h3 class="contact-title text-center">Contatta la Dirigenza</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div class="contact-info-card bg-gradient-to-r from-primary to-secondary text-white group">
+                        <div class="contact-icon group-hover:scale-110 transition-transform duration-300">📧</div>
+                        <div class="contact-info-title">Email Generale</div>
+                        <div class="contact-info-text">veneto@carabinierinsc.it</div>
+                    </div>
+                    <div class="contact-info-card bg-gradient-to-r from-aurora to-magenta text-white group">
+                        <div class="contact-icon group-hover:scale-110 transition-transform duration-300">📱</div>
+                        <div class="contact-info-title">Telefono</div>
+                        <div class="contact-info-text">378 081 9900</div>
+                    </div>
+                    <div class="contact-info-card bg-gradient-to-r from-teal to-success text-white group">
+                        <div class="contact-icon group-hover:scale-110 transition-transform duration-300">⏰</div>
+                        <div class="contact-info-title">Orari</div>
+                        <div class="contact-info-text">Lun-Ven 9:00-18:00</div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="https://form.jotform.com/250396120847357" target="_blank" class="contact-cta inline-block">
+                        📝 Richiedi Appuntamento
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript with Real Supabase Integration -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // Configurazione Supabase reale
+        const supabaseUrl = 'https://lycrgzptkdkksukcwrld.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk';
+
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Sistema di gestione dirigenti
+        class DirigentiManager {
+            constructor() {
+                this.allDirigenti = [];
+                this.filteredDirigenti = [];
+                this.isLoading = false;
+                this.hasError = false;
+                this.deviceType = this.detectDevice();
+                this.currentFilter = 'all';
+                
+                this.init();
+            }
+
+            // Sistema avanzato di rilevamento dispositivo
+            detectDevice() {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                const pixelRatio = window.devicePixelRatio || 1;
+                const orientation = width > height ? 'landscape' : 'portrait';
+                
+                // Detecta tipo di dispositivo basato su multiple caratteristiche
+                const deviceInfo = {
+                    width: width,
+                    height: height,
+                    pixelRatio: pixelRatio,
+                    orientation: orientation,
+                    touchDevice: 'ontouchstart' in window,
+                    userAgent: navigator.userAgent.toLowerCase()
+                };
+                
+                // Classificazione avanzata dei dispositivi
+                if (width <= 320) {
+                    return { type: 'smartwatch', info: deviceInfo, breakpoint: 'xs' };
+                } else if (width <= 480) {
+                    return { 
+                        type: orientation === 'portrait' ? 'mobile-portrait' : 'mobile-landscape', 
+                        info: deviceInfo, 
+                        breakpoint: 'sm' 
+                    };
+                } else if (width <= 667) {
+                    return { type: 'mobile-large', info: deviceInfo, breakpoint: 'sm-lg' };
+                } else if (width <= 768) {
+                    return { type: 'phablet', info: deviceInfo, breakpoint: 'md-sm' };
+                } else if (width <= 1024) {
+                    return { 
+                        type: orientation === 'portrait' ? 'tablet-portrait' : 'tablet-landscape', 
+                        info: deviceInfo, 
+                        breakpoint: 'md' 
+                    };
+                } else if (width <= 1366) {
+                    return { type: 'laptop-small', info: deviceInfo, breakpoint: 'lg' };
+                } else if (width <= 1920) {
+                    return { type: 'desktop', info: deviceInfo, breakpoint: 'xl' };
+                } else if (width <= 2560) {
+                    return { type: 'desktop-ultrawide', info: deviceInfo, breakpoint: '2xl' };
+                } else {
+                    return { type: 'desktop-4k', info: deviceInfo, breakpoint: '4xl' };
+                }
+            }
+
+            // Inizializzazione
+            async init() {
+                try {
+                    console.log(`📱 Dispositivo rilevato: ${this.deviceType.type} (${this.deviceType.breakpoint})`);
+                    console.log(`📐 Dimensioni: ${this.deviceType.info.width}x${this.deviceType.info.height}`);
+                    console.log(`📺 Orientamento: ${this.deviceType.info.orientation}`);
+                    console.log(`👆 Touch: ${this.deviceType.info.touchDevice}`);
+                    
+                    await this.loadDirigenti();
+                    this.setupEventListeners();
+                    this.setupAccessibility();
+                    this.setupSmartNavigation();
+                    this.adjustForDevice();
+                    this.setupPerformanceOptimizations();
+                } catch (error) {
+                    console.error('❌ Errore inizializzazione:', error);
+                    this.showError();
+                }
+            }
+
+            // Carica dirigenti da Supabase
+            async loadDirigenti() {
+                this.showLoading();
+                
+                try {
+                    console.log('🔄 Caricamento dirigenti da Supabase...');
+                    
+                    const { data, error } = await supabase
+                        .from('organico_dirigentisindacali')
+                        .select('*')
+                        .order('ordine', { ascending: true });
+
+                    if (error) {
+                        throw new Error(`Errore Supabase: ${error.message}`);
+                    }
+
+                    if (!data || data.length === 0) {
+                        console.warn('⚠️ Nessun dirigente trovato nel database');
+                        this.allDirigenti = [];
+                    } else {
+                        this.allDirigenti = data;
+                        console.log(`✅ Caricati ${data.length} dirigenti da Supabase`);
+                    }
+
+                    this.filteredDirigenti = [...this.allDirigenti];
+                    this.renderDirigenti();
+                    this.updateStats();
+
+                } catch (error) {
+                    console.error('❌ Errore caricamento dirigenti:', error);
+                    this.showError();
+                }
+            }
+
+            // Mostra stato di caricamento
+            showLoading() {
+                this.isLoading = true;
+                document.getElementById('loadingContainer').classList.remove('hidden');
+                document.getElementById('dirigentiContainer').classList.add('hidden');
+                document.getElementById('errorContainer').classList.add('hidden');
+                document.getElementById('emptyState').classList.add('hidden');
+            }
+
+            // Mostra errore
+            showError() {
+                this.hasError = true;
+                this.isLoading = false;
+                document.getElementById('loadingContainer').classList.add('hidden');
+                document.getElementById('dirigentiContainer').classList.add('hidden');
+                document.getElementById('emptyState').classList.add('hidden');
+                document.getElementById('errorContainer').classList.remove('hidden');
+            }
+
+            // Renderizza dirigenti
+            renderDirigenti() {
+                this.isLoading = false;
+                this.hasError = false;
+                
+                const container = document.getElementById('dirigentiContainer');
+                const loadingContainer = document.getElementById('loadingContainer');
+                const errorContainer = document.getElementById('errorContainer');
+                const emptyState = document.getElementById('emptyState');
+                
+                // Nascondi stati di loading/error
+                loadingContainer.classList.add('hidden');
+                errorContainer.classList.add('hidden');
+                
+                if (this.filteredDirigenti.length === 0) {
+                    container.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+                
+                emptyState.classList.add('hidden');
+                container.classList.remove('hidden');
+
+                // Genera HTML per ogni dirigente
+                container.innerHTML = this.filteredDirigenti.map((dirigente, index) => 
+                    this.createDirigenteCard(dirigente, index)
+                ).join('');
+
+                // Anima le card con stagger
+                this.animateCards();
+            }
+
+            // Crea singola card dirigente
+            createDirigenteCard(dirigente, index) {
+                const initials = dirigente.nome_cognome 
+                    ? dirigente.nome_cognome.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)
+                    : '??';
+                
+                const roleClass = this.getRoleClass(dirigente.ruolo);
+                const provincia = dirigente.provincia || 'Non specificata';
+                
+                return `
+                    <div class="dirigente-card fade-in-up" 
+                         style="animation-delay: ${index * 0.1}s; opacity: 0;"
+                         tabindex="0"
+                         role="article"
+                         aria-label="Informazioni su ${dirigente.nome_cognome}">
+                        
+                        <!-- Avatar -->
+                        <div class="dirigente-avatar" aria-hidden="true">
+                            ${dirigente.foto_url ? 
+                                `<img src="${dirigente.foto_url}" alt="${dirigente.nome_cognome}" class="w-full h-full object-cover rounded-full">` :
+                                `<span>${initials}</span>`
+                            }
+                        </div>
+                        
+                        <!-- Nome -->
+                        <h3 class="readable-title text-center">
+                            ${dirigente.nome_cognome || 'Nome non disponibile'}
+                        </h3>
+                        
+                        <!-- Badge Ruolo -->
+                        <div class="text-center">
+                            <span class="role-badge ${roleClass}">
+                                ${dirigente.ruolo || 'Ruolo non specificato'}
+                            </span>
+                        </div>
+                        
+                        <!-- Provincia -->
+                        <p class="readable-text text-center mb-8">
+                            <span class="inline-flex items-center gap-2">
+                                <span class="text-2xl">📍</span>
+                                <span class="font-bold text-lg">${provincia}</span>
+                            </span>
+                        </p>
+                        
+                        <!-- Contatti -->
+                        <div class="flex flex-col gap-4 justify-center items-center mt-auto pt-4">
+                            ${dirigente.email ? 
+                                `<a href="mailto:${dirigente.email}" 
+                                   class="contact-button w-full max-w-xs"
+                                   aria-label="Invia email a ${dirigente.nome_cognome}">
+                                    <span class="text-xl">📧</span>
+                                    <span>Email</span>
+                                </a>` : ''
+                            }
+                            ${dirigente.telefono ? 
+                                `<a href="tel:${dirigente.telefono}" 
+                                   class="contact-button w-full max-w-xs"
+                                   aria-label="Chiama ${dirigente.nome_cognome}">
+                                    <span class="text-xl">📞</span>
+                                    <span>Chiama</span>
+                                </a>` : ''
+                            }
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Ottieni classe CSS per il ruolo
+            getRoleClass(ruolo) {
+                if (!ruolo) return 'role-provinciale'; // Default verde invece di blu
+                
+                if (ruolo.includes('Regionale')) return 'role-regionale';
+                if (ruolo.includes('Provinciale')) return 'role-provinciale';
+                if (ruolo.includes('Segretario Generale')) return 'role-provinciale'; // Uniforma a verde
+                return 'role-provinciale'; // Tutti gli altri ruoli uniformati a verde
+            }
+
+            // Anima le card con effetto stagger
+            animateCards() {
+                const cards = document.querySelectorAll('.dirigente-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                    }, index * 150);
+                });
+            }
+
+            // Aggiorna statistiche
+            updateStats() {
+                const total = this.allDirigenti.length;
+                const regionali = this.allDirigenti.filter(d => d.ruolo && d.ruolo.includes('Regionale')).length;
+                const provinciali = this.allDirigenti.filter(d => d.ruolo && d.ruolo.includes('Provinciale')).length;
+                
+                document.getElementById('totalCount').textContent = total;
+                document.getElementById('regionaliCount').textContent = regionali;
+                document.getElementById('provincialiCount').textContent = provinciali;
+            }
+
+            // Filtra dirigenti
+            filterDirigenti() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+                
+                this.filteredDirigenti = this.allDirigenti.filter(dirigente => {
+                    // Text search
+                    const matchesSearch = !searchTerm || 
+                        (dirigente.nome_cognome && dirigente.nome_cognome.toLowerCase().includes(searchTerm)) ||
+                        (dirigente.provincia && dirigente.provincia.toLowerCase().includes(searchTerm)) ||
+                        (dirigente.ruolo && dirigente.ruolo.toLowerCase().includes(searchTerm));
+                    
+                    // Role filter
+                    const matchesFilter = this.currentFilter === 'all' || 
+                        (dirigente.ruolo && dirigente.ruolo.includes(this.currentFilter));
+                    
+                    return matchesSearch && matchesFilter;
+                });
+                
+                this.renderDirigenti();
+            }
+
+            // Setup navigazione intelligente
+            setupSmartNavigation() {
+                const homeBtn = document.getElementById('homeBtn');
+                const backBtn = document.getElementById('backBtn');
+                
+                if (!homeBtn) {
+                    console.warn('⚠️ Pulsante home non trovato');
+                }
+                
+                if (!backBtn) {
+                    console.warn('⚠️ Pulsante back non trovato');
+                }
+
+                // Setup Home button
+                if (homeBtn) {
+                    homeBtn.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await this.handleSmartNavigation('home');
+                    });
+                }
+
+                // Setup Back button con stessa logica
+                if (backBtn) {
+                    backBtn.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await this.handleSmartNavigation('back');
+                    });
+                }
+
+                console.log('🏠 Smart navigation configurata per entrambi i pulsanti');
+            }
+
+            // Gestisce la navigazione intelligente verso home/back
+            async handleSmartNavigation(buttonType = 'home') {
+                try {
+                    // Visual feedback
+                    const targetBtn = buttonType === 'home' ? 
+                        document.getElementById('homeBtn') : 
+                        document.getElementById('backBtn');
+                        
+                    if (targetBtn) {
+                        targetBtn.style.transform = 'scale(0.95)';
+                        targetBtn.style.opacity = '0.8';
+                        setTimeout(() => {
+                            targetBtn.style.transform = '';
+                            targetBtn.style.opacity = '';
+                        }, 200);
+                    }
+
+                    console.log(`🔄 Verificando profilo utente per navigazione ${buttonType}...`);
+
+                    // Verifica autenticazione
+                    const { data: { user }, error: authError } = await supabase.auth.getUser();
+                    
+                    if (authError || !user) {
+                        console.log('❌ Utente non autenticato, reindirizzo a login');
+                        window.location.href = '/login.html';
+                        return;
+                    }
+
+                    // Recupera profilo utente
+                    const { data: profile, error: profileError } = await supabase
+                        .from('profiles')
+                        .select('ruoli')
+                        .eq('id', user.id)
+                        .single();
+
+                    if (profileError) {
+                        console.error('❌ Errore recupero profilo:', profileError);
+                        // Fallback sicuro
+                        window.location.href = '/app/home.html';
+                        return;
+                    }
+
+                    const roles = profile?.ruoli || ['USER'];
+                    console.log(`👤 Ruoli utente per ${buttonType}:`, roles);
+
+                    // Logica di reindirizzamento identica per entrambi i pulsanti
+                    if (roles.includes('DIRIGENTE') || roles.includes('ADMIN')) {
+                        console.log(`👔 ${buttonType}: Reindirizzo a home dirigenti`);
+                        window.location.href = '/app/home_dirigenti.html';
+                    } else {
+                        console.log(`👤 ${buttonType}: Reindirizzo a home utente`);
+                        window.location.href = '/app/home.html';
+                    }
+
+                } catch (error) {
+                    console.error(`❌ Errore navigazione smart ${buttonType}:`, error);
+                    // Fallback sicuro
+                    window.location.href = '/app/home.html';
+                }
+            }
+
+            // Setup ottimizzazioni performance per dispositivo
+            setupPerformanceOptimizations() {
+                const device = this.deviceType;
+                
+                // Ottimizzioni per dispositivi con risorse limitate
+                if (device.type === 'smartwatch' || device.type === 'mobile-portrait') {
+                    // Riduce frequenza degli aggiornamenti
+                    this.performanceMode = 'low';
+                    
+                    // Disabilita alcune animazioni per performance
+                    document.body.classList.add('performance-mode-low');
+                    
+                    console.log('⚡ Modalità performance bassa attivata');
+                }
+                
+                // Ottimizzazioni per dispositivi touch
+                if (device.info.touchDevice) {
+                    document.body.classList.add('touch-device');
+                    
+                    // Ottimizza eventi touch
+                    this.setupTouchOptimizations();
+                }
+                
+                // Ottimizzazioni per schermi ad alta densità
+                if (device.info.pixelRatio > 2) {
+                    document.body.classList.add('high-dpi');
+                    console.log(`📺 Schermo alta densità rilevato: ${device.info.pixelRatio}x`);
+                }
+                
+                // Ottimizzazioni per orientamento
+                document.body.classList.add(`orientation-${device.info.orientation}`);
+                
+                console.log('⚡ Ottimizzazioni performance configurate');
+            }
+
+            // Setup ottimizzazioni touch specifiche
+            setupTouchOptimizations() {
+                // Aumenta l'area di tap per dispositivi touch
+                const touchElements = document.querySelectorAll('.contact-button, .filter-tab, .btn-back, .btn-home');
+                touchElements.forEach(element => {
+                    element.style.minHeight = '44px'; // iOS guidelines
+                    element.style.minWidth = '44px';
+                });
+
+                // Ottimizza scroll per dispositivi touch
+                if ('scrollBehavior' in document.documentElement.style) {
+                    document.documentElement.style.scrollBehavior = 'smooth';
+                }
+
+                console.log('👆 Ottimizzazioni touch configurate');
+            }
+            setupEventListeners() {
+                // Responsive resize handler
+                let resizeTimer;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(() => {
+                        const newDeviceType = this.detectDevice();
+                        if (newDeviceType !== this.deviceType) {
+                            this.deviceType = newDeviceType;
+                            console.log(`📱 Dispositivo cambiato: ${this.deviceType}`);
+                            this.adjustForDevice();
+                        }
+                    }, 250);
+                });
+
+                // Search with debounce
+                let searchTimeout;
+                document.getElementById('searchInput').addEventListener('input', () => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => this.filterDirigenti(), 300);
+                });
+
+                // Filter tabs
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Update active tab
+                        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        
+                        // Update filter
+                        this.currentFilter = tab.dataset.filter;
+                        this.filterDirigenti();
+                    });
+                });
+
+                // Back button enhancement
+                const backBtn = document.querySelector('.btn-back');
+                if (backBtn) {
+                    backBtn.addEventListener('click', (e) => {
+                        // Visual feedback
+                        backBtn.style.transform = 'scale(0.97)';
+                        setTimeout(() => {
+                            backBtn.style.transform = '';
+                        }, 150);
+                    });
+                }
+
+                // Performance monitoring
+                this.monitorPerformance();
+            }
+
+            // Adatta UI al dispositivo
+            adjustForDevice() {
+                const container = document.getElementById('dirigentiContainer');
+                if (!container) return;
+
+                // Rimuovi classi esistenti
+                container.classList.remove('grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4');
+
+                // Applica layout basato su dispositivo
+                switch (this.deviceType) {
+                    case 'mobile':
+                        container.classList.add('grid-cols-1');
+                        break;
+                    case 'tablet':
+                        container.classList.add('grid-cols-2');
+                        break;
+                    case 'laptop':
+                        container.classList.add('grid-cols-2', 'lg:grid-cols-3');
+                        break;
+                    case 'desktop':
+                        container.classList.add('grid-cols-3', 'xl:grid-cols-4');
+                        break;
+                }
+            }
+
+            // Setup accessibilità
+            setupAccessibility() {
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        if (document.activeElement) {
+                            document.activeElement.blur();
+                        }
+                    }
+                });
+
+                // Focus management migliorato
+                const focusableElements = document.querySelectorAll('a, button, .dirigente-card[tabindex="0"], input');
+                focusableElements.forEach(element => {
+                    element.addEventListener('focus', function() {
+                        this.style.outline = '4px solid #e94560';
+                        this.style.outlineOffset = '4px';
+                    });
+                    
+                    element.addEventListener('blur', function() {
+                        this.style.outline = '';
+                        this.style.outlineOffset = '';
+                    });
+                });
+
+                // Screen reader announcements
+                this.announceToScreenReader('Pagina dirigenti caricata con successo');
+            }
+
+            // Annuncia a screen reader
+            announceToScreenReader(message) {
+                const announcement = document.createElement('div');
+                announcement.setAttribute('aria-live', 'polite');
+                announcement.setAttribute('aria-atomic', 'true');
+                announcement.style.position = 'absolute';
+                announcement.style.left = '-10000px';
+                announcement.textContent = message;
+                document.body.appendChild(announcement);
+                
+                setTimeout(() => {
+                    document.body.removeChild(announcement);
+                }, 1000);
+            }
+
+            // Monitor performance
+            monitorPerformance() {
+                // Memory usage monitoring
+                if (performance.memory) {
+                    const checkMemory = () => {
+                        const used = Math.round(performance.memory.usedJSHeapSize / 1048576);
+                        const limit = Math.round(performance.memory.jsHeapSizeLimit / 1048576);
+                        
+                        if (used / limit > 0.8) {
+                            console.warn(`⚠️ Memoria alta: ${used}MB/${limit}MB`);
+                        }
+                    };
+                    
+                    setInterval(checkMemory, 30000); // Check ogni 30 secondi
+                }
+
+                // Load time tracking
+                window.addEventListener('load', () => {
+                    const loadTime = performance.now();
+                    console.log(`⚡ Pagina dirigenti caricata in ${Math.round(loadTime)}ms`);
+                });
+            }
+
+            // Funzione pubblica per ricaricare dirigenti
+            async reload() {
+                await this.loadDirigenti();
+            }
+        }
+
+        // Funzione globale per reload (usata dal pulsante error)
+        async function loadDirigenti() {
+            if (window.dirigentiManager) {
+                await window.dirigentiManager.reload();
+            }
+        }
+
+        // Rendi la funzione disponibile globalmente
+        window.loadDirigenti = loadDirigenti;
+
+        // Inizializzazione sistema
+        document.addEventListener('DOMContentLoaded', () => {
+            window.dirigentiManager = new DirigentiManager();
+        });
+
+        // Error handling globale
+        window.addEventListener('error', (e) => {
+            console.error('💥 Errore globale:', e.error);
+        });
+
+        // Supporto per reduced motion
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.body.classList.add('reduced-motion');
+            console.log('🎭 Reduced motion attivato');
+        }
+
+        // Page visibility management
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Pausa animazioni quando la pagina non è visibile
+                document.body.style.animationPlayState = 'paused';
+            } else {
+                // Riprendi animazioni
+                document.body.style.animationPlayState = 'running';
+            }
+        });
+
+        // Connection monitoring
+        if ('connection' in navigator) {
+            const connection = navigator.connection;
+            
+            if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+                document.body.classList.add('low-bandwidth');
+                console.log('📶 Connessione lenta rilevata, ottimizzazioni attive');
+            }
+        }
+    </script>
+
+</body>
+</html>

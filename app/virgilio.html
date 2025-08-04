@@ -1,0 +1,1303 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virgilio - MyApp</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="background-color" content="#1a1a2e">
+
+    <!-- Icone Standard -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+
+    <!-- Android Support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="MyApp">
+    <meta name="msapplication-TileColor" content="#1a1a2e">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Nascondi warning Tailwind
+        const originalConsoleWarn = console.warn;
+        console.warn = function(...args) {
+            const message = args.join(' ');
+            if (!message.includes('should not be used in production')) {
+                originalConsoleWarn.apply(console, args);
+            }
+        };
+
+        if (typeof tailwind !== 'undefined') {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: '#1a1a2e',
+                            secondary: '#16213e',
+                            accent: '#0f3460',
+                            aurora: '#e94560',
+                            cyan: '#00d4ff',
+                            magenta: '#ff006e',
+                            gold: '#ffd700',
+                            teal: '#03dac6',
+                            dark: '#0a0a23',
+                            light: '#f8fafc',
+                        }
+                    }
+                }
+            };
+        }
+    </script>
+    <style>
+        :root {
+            --gradient-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --shadow-card: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --shadow-elevated: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --chat-height-desktop: 500px;
+            --chat-height-tablet: 450px;
+            --chat-height-mobile: 60vh;
+            --header-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--gradient-bg);
+            background-size: 400% 400%;
+            animation: gradientShift 30s ease infinite;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* HEADER ADATTIVO */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            height: var(--header-height);
+        }
+
+        /* BACK BUTTON STYLING */
+        .back-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(233, 69, 96, 0.5);
+            color: #e94560;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button:active {
+            transform: scale(0.95);
+        }
+
+        /* CONTAINER CHAT ADATTIVO */
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-elevated);
+            width: 100%;
+            max-width: 900px;
+            margin: 1rem auto;
+            overflow: hidden;
+            height: calc(100vh - var(--header-height) - 2rem);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #e94560, #00d4ff);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            scroll-behavior: smooth;
+            /* Smooth scrolling migliorato */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 2px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #e94560;
+            border-radius: 2px;
+        }
+
+        /* MESSAGGI ADATTIVI */
+        .message {
+            margin-bottom: 1rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-bot {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .message-user {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            flex-direction: row-reverse;
+        }
+
+        .message-system {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            /* Migliore visualizzazione su mobile */
+            min-width: 40px;
+            min-height: 40px;
+        }
+
+        .avatar-bot {
+            background: linear-gradient(135deg, #00d4ff, #03dac6);
+        }
+
+        .avatar-user {
+            background: linear-gradient(135deg, #e94560, #ff006e);
+        }
+
+        .avatar-system {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+            /* Importante per mobile */
+            overflow-wrap: break-word;
+        }
+
+        .content-bot {
+            background: #f8f9fa;
+            color: #2d3748;
+            border-bottom-left-radius: 6px;
+        }
+
+        .content-user {
+            background: linear-gradient(135deg, #e94560, #ff006e);
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+
+        .content-system {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: white;
+            border-bottom-left-radius: 6px;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        /* TYPING INDICATOR */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 0;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            padding: 1rem 1.25rem;
+            background: #f8f9fa;
+            border-radius: 16px;
+            border-bottom-left-radius: 6px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #6b7280;
+            border-radius: 50%;
+            animation: typingBounce 1.5s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.3s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* INPUT AREA ADATTIVA */
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+            background: #f8f9fa;
+            flex-shrink: 0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s ease;
+            min-height: 44px;
+            max-height: 120px;
+            font-family: inherit;
+            /* Importante per iOS */
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .chat-input:focus {
+            border-color: #e94560;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #e94560, #00d4ff);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.75rem;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            /* Touch-friendly */
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .send-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+        }
+
+        .send-button:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* LOADING SPINNER */
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* STATUS BAR ADATTIVA */
+        .status-bar {
+            background: #f8f9fa;
+            padding: 0.5rem 1rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #6b7280;
+            flex-shrink: 0;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+
+        .status-dot.disconnected {
+            background: #ef4444;
+        }
+
+        /* BUTTONS ADATTIVI */
+        .action-button {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            /* Touch-friendly */
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-button:hover {
+            background: #f3f4f6;
+            border-color: #e94560;
+            color: #e94560;
+        }
+
+        .action-button:active {
+            transform: scale(0.98);
+        }
+
+        .action-button.primary {
+            background: linear-gradient(135deg, #e94560, #00d4ff);
+            color: white;
+            border: none;
+        }
+
+        .action-button.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.3);
+        }
+
+        /* ALERT MESSAGES */
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem;
+            font-weight: 500;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* WEB SEARCH INDICATOR */
+        .web-search-badge {
+            background: linear-gradient(135deg, #00d4ff, #03dac6);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* RESPONSIVE DESIGN MIGLIORATO */
+        
+        /* Large Desktop */
+        @media (min-width: 1200px) {
+            .chat-container {
+                max-width: 1000px;
+            }
+        }
+
+        /* Tablet Landscape */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .chat-container {
+                margin: 1rem;
+                height: calc(100vh - var(--header-height) - 2rem);
+            }
+            
+            .message-content {
+                max-width: 80%;
+            }
+        }
+
+        /* Tablet Portrait */
+        @media (max-width: 768px) and (min-width: 481px) {
+            .chat-container {
+                margin: 0.75rem;
+                border-radius: 16px;
+                height: calc(100vh - var(--header-height) - 1.5rem);
+            }
+            
+            .chat-header {
+                padding: 1.25rem;
+            }
+            
+            .chat-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .avatar {
+                width: 36px;
+                height: 36px;
+                min-width: 36px;
+                min-height: 36px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            :root {
+                --header-height: 56px;
+            }
+            
+            .header {
+                height: var(--header-height);
+                padding: 0.5rem 1rem;
+            }
+            
+            .header .max-w-4xl {
+                padding: 0;
+            }
+            
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            
+            .back-button {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+            }
+            
+            .back-button svg {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .action-button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                min-height: 32px;
+            }
+            
+            .chat-container {
+                margin: 0.5rem;
+                border-radius: 12px;
+                height: calc(100vh - var(--header-height) - 1rem);
+            }
+            
+            .chat-header {
+                padding: 1rem 0.75rem;
+            }
+            
+            .chat-header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .chat-header p {
+                font-size: 0.85rem;
+            }
+            
+            .chat-messages {
+                padding: 0.75rem;
+            }
+            
+            .message-content {
+                max-width: 90%;
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .avatar {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+                min-height: 32px;
+                font-size: 1rem;
+            }
+            
+            .chat-input-area {
+                padding: 0.75rem;
+            }
+            
+            .chat-input {
+                font-size: 16px; /* Previene zoom su iOS */
+                padding: 0.8rem;
+            }
+            
+            .send-button {
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
+                min-height: 48px;
+            }
+            
+            .status-bar {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 360px) {
+            .chat-container {
+                margin: 0.25rem;
+            }
+            
+            .chat-header {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .chat-header h1 {
+                font-size: 1.2rem;
+            }
+            
+            .message-content {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.85rem;
+            }
+            
+            .back-button {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+            }
+            
+            .back-button svg {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .action-button {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.75rem;
+                min-height: 30px;
+            }
+        }
+
+        /* Landscape mobile orientation */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .chat-container {
+                height: calc(100vh - var(--header-height) - 0.5rem);
+            }
+            
+            .chat-header {
+                padding: 0.75rem;
+            }
+            
+            .chat-header h1 {
+                font-size: 1.2rem;
+                margin-bottom: 0.25rem;
+            }
+            
+            .chat-header p {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .avatar {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .content-bot {
+                background: #2d3748;
+                color: #e2e8f0;
+            }
+            
+            .chat-input-area {
+                background: #1a202c;
+            }
+            
+            .status-bar {
+                background: #1a202c;
+                color: #a0aec0;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus visible per accessibilità */
+        *:focus-visible {
+            outline: 2px solid #e94560;
+            outline-offset: 2px;
+        }
+
+        /* Miglioramenti per iOS Safari */
+        @supports (-webkit-touch-callout: none) {
+            .chat-input {
+                font-size: 16px; /* Previene zoom automatico */
+            }
+            
+            .chat-container {
+                /* Fix per Safari mobile viewport */
+                height: calc(100vh - var(--header-height) - env(safe-area-inset-bottom) - 1rem);
+            }
+        }
+
+        /* Support per notch devices */
+        @media screen and (min-width: 375px) and (max-width: 812px) and (-webkit-min-device-pixel-ratio: 3) {
+            .chat-container {
+                height: calc(100vh - var(--header-height) - env(safe-area-inset-bottom) - 1rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Semplificato -->
+    <header class="header">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <button onclick="history.back()" class="back-button" title="Torna indietro">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <h1 class="text-white font-bold text-lg">Virgilio </h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="clearChatBtn" class="action-button text-sm">
+                    🗑️ Pulisci
+                </button>
+                <button onclick="showHelp()" class="action-button text-sm">
+                    ❓ Aiuto
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading -->
+    <div id="loading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-gray-700 font-medium">Caricamento Virgilio ...</p>
+        </div>
+    </div>
+
+    <!-- Main Chat Container -->
+    <main class="py-6">
+        <div class="chat-container">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="flex items-center justify-center gap-3 mb-2">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                        <span class="text-2xl">🤖</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">Virgilio </h1>
+                        <p class="text-sm opacity-90">Il tuo assistente sindacale AI</p>
+                    </div>
+                </div>
+                <div class="text-sm opacity-80">
+                    Chiedi informazioni su contratti, diritti e procedure • Ricerca web integrata 🌐
+                </div>
+            </div>
+
+            <!-- Alert Messages -->
+            <div id="alertContainer"></div>
+
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="chat-messages">
+                <!-- Welcome Message -->
+                <div class="message message-bot">
+                    <div class="avatar avatar-bot">🤖</div>
+                    <div class="message-content content-bot">
+                        <div>
+                            Ciao! Sono <strong>Virgilio </strong> ✨, il tuo assistente sindacale AI di nuova generazione.
+                            <br><br>
+                            <strong>🎯 Le mie specializzazioni principali:</strong>
+                            <br><br>
+                            📋 <strong>Contratto di Lavoro</strong> - Normative, diritti e doveri dei Carabinieri<br>
+                            🏥 <strong>Permessi per Malattia</strong> - Procedure, certificazioni e tempistiche<br>
+                            🏖️ <strong>Ferie e Permessi</strong> - Regolamenti, richieste e diritti alle vacanze<br>
+                            💰 <strong>Stipendio e Aumenti</strong> - Progressioni, indennità e trattamento economico<br>
+                            👥 <strong>Dirigenti Sindacali</strong> - Contatti diretti di dirigenti regionali e provinciali<br>
+                            📝 <strong>Procedure Legali</strong> - Disciplinari, ricorsi e tutele legali<br>
+                            <br>
+                            🌐 <strong>Novità:</strong> Posso effettuare ricerche web in tempo reale per informazioni sempre aggiornate!
+                            <br><br>
+                            <strong>💬 Come posso aiutarti oggi?</strong><br>
+                            <em>Scrivi la tua domanda nell'area qui sotto. Ad esempio:</em><br>
+                            • "Come funzionano i permessi per malattia?"<br>
+                            • "Dimmi tutto sul contratto di lavoro"<br>
+                            • "Chi sono i dirigenti sindacali?"<br>
+                            • "Informazioni su stipendio e aumenti"
+                        </div>
+                        <div class="message-time">Ora</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div id="typingIndicator" class="typing-indicator hidden">
+                <div class="avatar avatar-bot">🤖</div>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area">
+                <!-- Input -->
+                <div class="input-wrapper">
+                    <textarea 
+                        id="messageInput" 
+                        class="chat-input" 
+                        placeholder="✨ Scrivi la tua domanda..." 
+                        rows="1"
+                        maxlength="500"
+                    ></textarea>
+                    <button id="sendButton" class="send-button" disabled>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="connection-status">
+                    <div id="statusDot" class="status-dot"></div>
+                    <span id="statusText">Connesso</span>
+                </div>
+                <div>
+                    Token: <span id="tokenCount">0</span> • 
+                    Caratteri: <span id="charCount">0</span>/500
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript Semplificato -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // Configurazione
+        const supabaseUrl = 'https://lycrgzptkdkksukcwrld.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const CHATBOT_CONFIG = {
+            apiEndpoint: 'https://myapp-chatbot-server.onrender.com/api/chat',
+            apiEndpointLocal: 'http://localhost:3001/api/chat',
+            maxTokens: 500,
+            temperature: 0.7,
+            model: 'gpt-4o-mini',
+            maxHistory: 10,
+            retryAttempts: 3,
+            retryDelay: 1000
+        };
+
+        // Variabili globali
+        let currentUser = null;
+        let conversationHistory = [];
+        let isProcessing = false;
+        let totalTokensUsed = 0;
+        let dirigenti = [];
+
+        // Elementi DOM
+        const messagesContainer = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const tokenCount = document.getElementById('tokenCount');
+        const charCount = document.getElementById('charCount');
+        const alertContainer = document.getElementById('alertContainer');
+
+        // Utility Functions
+        function showAlert(message, type = 'info') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            alertContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function updateConnectionStatus(connected) {
+            if (connected) {
+                statusDot.className = 'status-dot';
+                statusText.textContent = 'Connesso';
+            } else {
+                statusDot.className = 'status-dot disconnected';
+                statusText.textContent = 'Disconnesso';
+            }
+        }
+
+        function updateCharCount() {
+            const count = messageInput.value.length;
+            charCount.textContent = count;
+            
+            if (count > 400) {
+                charCount.style.color = '#ef4444';
+            } else {
+                charCount.style.color = '#6b7280';
+            }
+        }
+
+        function updateSendButton() {
+            const hasText = messageInput.value.trim().length > 0;
+            sendButton.disabled = !hasText || isProcessing;
+        }
+
+        function autoResizeTextarea() {
+            messageInput.style.height = 'auto';
+            messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
+        }
+
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTyping() {
+            typingIndicator.classList.remove('hidden');
+            scrollToBottom();
+        }
+
+        function hideTyping() {
+            typingIndicator.classList.add('hidden');
+        }
+
+        function formatTime() {
+            return new Date().toLocaleTimeString('it-IT', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatMessage(text) {
+            return escapeHtml(text)
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // Add Message Function
+        function addMessage(content, type = 'bot', hasWebSearch = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message message-${type}`;
+            
+            let webSearchBadge = '';
+            if (hasWebSearch && type === 'bot') {
+                webSearchBadge = '<div class="web-search-badge">🌐 Ricerca Web</div>';
+            }
+            
+            if (type === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="avatar avatar-user">👤</div>
+                    <div class="message-content content-user">
+                        <div>${escapeHtml(content)}</div>
+                        <div class="message-time">${formatTime()}</div>
+                    </div>
+                `;
+            } else if (type === 'system') {
+                messageDiv.innerHTML = `
+                    <div class="avatar avatar-system">ℹ️</div>
+                    <div class="message-content content-system">
+                        <div>${content}</div>
+                        <div class="message-time">${formatTime()}</div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="avatar avatar-bot">🤖</div>
+                    <div class="message-content content-bot">
+                        ${webSearchBadge}
+                        <div>${formatMessage(content)}</div>
+                        <div class="message-time">${formatTime()}</div>
+                    </div>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // Load Dirigenti
+        async function loadDirigenti() {
+            try {
+                const { data, error } = await supabase
+                    .from('organico_dirigentisindacali')
+                    .select('*')
+                    .order('id', { ascending: true });
+                
+                if (error) throw error;
+                
+                dirigenti = data || [];
+                console.log('✅ Dirigenti caricati:', dirigenti.length);
+                
+            } catch (error) {
+                console.error('❌ Errore caricamento dirigenti:', error);
+                dirigenti = [
+                    {
+                        nome_cognome: 'Antonio Grande',
+                        ruolo: 'Segretario Generale Regionale - Veneto',
+                        email: 'veneto@carabinierinsic.it',
+                        telefono: '3351470886'
+                    }
+                ];
+            }
+        }
+
+        // Send Message Function
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            
+            if (!message || isProcessing) return;
+            
+            isProcessing = true;
+            updateSendButton();
+            
+            // Add user message
+            addMessage(message, 'user');
+            conversationHistory.push({ role: 'user', content: message });
+            
+            // Clear input
+            messageInput.value = '';
+            updateCharCount();
+            updateSendButton();
+            autoResizeTextarea();
+            
+            // Show typing
+            showTyping();
+            
+            try {
+                // Get session
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) {
+                    throw new Error('Sessione scaduta');
+                }
+
+                // Determine endpoint
+                const apiEndpoint = window.location.hostname === 'localhost' ? 
+                    CHATBOT_CONFIG.apiEndpointLocal : 
+                    CHATBOT_CONFIG.apiEndpoint;
+                
+                // Check for web search
+                const needsWebSearch = /ultime notizie|news|aggiornamenti|recenti|oggi|attuale|corrente|nuovo|ultima|current|stipendio 2025|contratto 2025|aumenti|novità/i.test(message);
+                
+                // Prepare request
+                const requestBody = {
+                    messages: conversationHistory.slice(-CHATBOT_CONFIG.maxHistory),
+                    model: CHATBOT_CONFIG.model,
+                    max_tokens: CHATBOT_CONFIG.maxTokens,
+                    temperature: CHATBOT_CONFIG.temperature,
+                    system_context: `Sei Virgilio, assistente AI del Sindacato Carabinieri. Rispondi in modo conciso e professionale.`,
+                    enable_web_search: needsWebSearch,
+                    web_search_query: needsWebSearch ? message : null
+                };
+
+                // API call with retry
+                let lastError = null;
+                for (let attempt = 0; attempt < CHATBOT_CONFIG.retryAttempts; attempt++) {
+                    try {
+                        const response = await fetch(apiEndpoint, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${session.access_token}`
+                            },
+                            body: JSON.stringify(requestBody)
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({}));
+                            throw new Error(errorData.error || `HTTP ${response.status}`);
+                        }
+
+                        const data = await response.json();
+                        
+                        if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                            throw new Error('Risposta API non valida');
+                        }
+
+                        const botResponse = data.choices[0].message.content;
+                        const hasWebSearch = data.web_search_performed || false;
+                        
+                        // Add bot response
+                        addMessage(botResponse, 'bot', hasWebSearch);
+                        conversationHistory.push({ role: 'assistant', content: botResponse });
+                        
+                        // Update token count
+                        if (data.usage) {
+                            totalTokensUsed += data.usage.total_tokens || 0;
+                            tokenCount.textContent = totalTokensUsed.toLocaleString();
+                        }
+
+                        updateConnectionStatus(true);
+                        console.log('✅ Messaggio inviato con successo');
+                        break;
+                        
+                    } catch (error) {
+                        lastError = error;
+                        console.warn(`⚠️ Tentativo ${attempt + 1} fallito:`, error.message);
+                        
+                        if (attempt < CHATBOT_CONFIG.retryAttempts - 1) {
+                            await new Promise(r => setTimeout(r, CHATBOT_CONFIG.retryDelay * (attempt + 1)));
+                        }
+                    }
+                }
+
+                if (lastError) {
+                    throw lastError;
+                }
+
+            } catch (error) {
+                console.error('❌ Errore invio messaggio:', error);
+                
+                // Remove last user message from history
+                conversationHistory.pop();
+                
+                // Show error
+                let errorMessage = 'Errore di connessione';
+                if (error.message.includes('scadut')) {
+                    errorMessage = 'Sessione scaduta, riaccedi';
+                } else if (error.message.includes('network') || error.message.includes('fetch')) {
+                    errorMessage = 'Problema di rete, riprova';
+                } else if (error.message.includes('500')) {
+                    errorMessage = 'Servizio temporaneamente non disponibile';
+                }
+                
+                showAlert(errorMessage, 'error');
+                updateConnectionStatus(false);
+                
+            } finally {
+                hideTyping();
+                isProcessing = false;
+                updateSendButton();
+                messageInput.focus();
+            }
+        }
+
+        // Authentication
+        async function verificaAutenticazione() {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (!session) {
+                    console.log('❌ Nessuna sessione attiva');
+                    window.location.href = '../login.html';
+                    return null;
+                }
+
+                console.log('✅ Utente autenticato:', session.user.email);
+                return session.user;
+                
+            } catch (error) {
+                console.error('❌ Errore verifica auth:', error);
+                window.location.href = '../login.html';
+                return null;
+            }
+        }
+
+        window.showHelp = function() {
+            const helpMessage = `🆘 <strong>Aiuto Virgilio </strong><br><br>
+
+<strong>Comandi disponibili:</strong><br>
+• Usa i pulsanti rapidi per domande frequenti<br>
+• Scrivi domande in linguaggio naturale<br>
+• Chiedi informazioni su contratti e diritti<br>
+• Per dirigenti sindacali scrivi "dirigenti"<br><br>
+
+<strong>Contatti di emergenza:</strong><br>
+📞 Telefono: 06-123456789<br>
+📧 Email: assistenza@sindacato.it<br><br>
+
+<em>Virgilio è sempre qui per aiutarti! ✨</em>`;
+
+            addMessage(helpMessage, 'system');
+        };
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('loading').classList.remove('hidden');
+            
+            try {
+                // Verify authentication
+                currentUser = await verificaAutenticazione();
+                if (!currentUser) return;
+
+                // Load dirigenti
+                await loadDirigenti();
+
+                // Setup input listeners
+                messageInput.addEventListener('input', () => {
+                    updateCharCount();
+                    updateSendButton();
+                    autoResizeTextarea();
+                });
+
+                messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+
+                sendButton.addEventListener('click', sendMessage);
+
+                // Clear chat
+                document.getElementById('clearChatBtn').addEventListener('click', () => {
+                    if (confirm('Vuoi davvero cancellare tutta la conversazione?')) {
+                        conversationHistory = [];
+                        totalTokensUsed = 0;
+                        tokenCount.textContent = '0';
+                        
+                        // Remove all messages except welcome
+                        const messages = messagesContainer.querySelectorAll('.message');
+                        messages.forEach((msg, index) => {
+                            if (index > 0) msg.remove();
+                        });
+                        
+                        showAlert('Chat cancellata con successo! ✨', 'success');
+                    }
+                });
+
+                // Focus input
+                messageInput.focus();
+                updateSendButton();
+
+                console.log('🤖✨ Virgilio  inizializzato!');
+                
+            } catch (error) {
+                console.error('❌ Errore inizializzazione:', error);
+                showAlert('Errore di inizializzazione. Ricarica la pagina.', 'error');
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        });
+
+        // Global error handling
+        window.addEventListener('error', (event) => {
+            console.error('❌ Errore JavaScript:', event.error);
+            showAlert('Si è verificato un errore imprevisto', 'error');
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('❌ Promise rejected:', event.reason);
+            showAlert('Errore di rete o server', 'error');
+        });
+
+        console.log('🤖✨ Virgilio Semplificato - Ready!');
+    </script>
+</body>
+</html>

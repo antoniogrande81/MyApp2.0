@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Appwrite - MyApp</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a2e, #e94560);
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        h1 {
+            text-align: center;
+            color: #1a1a2e;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #e94560;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+        .section h2 {
+            color: #e94560;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        button {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #d63651;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .success { color: #28a745; font-weight: bold; }
+        .error { color: #dc3545; font-weight: bold; }
+        .warning { color: #ffc107; font-weight: bold; }
+        .info { color: #17a2b8; font-weight: bold; }
+        .log {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 10px;
+        }
+        .config-display {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .status-card {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .status-ok { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        .status-error { background: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+        .status-warning { background: #fff3cd; color: #856404; border: 2px solid #ffeaa7; }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #e94560;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug Tool Appwrite - MyApp</h1>
+        
+        <!-- STATUS OVERVIEW -->
+        <div class="section">
+            <h2>📊 Stato Sistema</h2>
+            <div class="grid">
+                <div id="sdkStatus" class="status-card status-warning">
+                    SDK: Verifica in corso...
+                </div>
+                <div id="connectionStatus" class="status-card status-warning">
+                    Connessione: Verifica in corso...
+                </div>
+                <div id="projectStatus" class="status-card status-warning">
+                    Progetto: Verifica in corso...
+                </div>
+                <div id="sessionStatus" class="status-card status-warning">
+                    Sessione: Verifica in corso...
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIGURAZIONE CORRENTE -->
+        <div class="section">
+            <h2>⚙️ Configurazione Corrente</h2>
+            <div id="currentConfig" class="config-display">
+                Caricamento configurazione...
+            </div>
+        </div>
+
+        <!-- TEST CONNESSIONE -->
+        <div class="section">
+            <h2>🌐 Test Connessione</h2>
+            <button onclick="testBasicConnection()">Test Connessione Base</button>
+            <button onclick="testProjectAccess()">Test Accesso Progetto</button>
+            <button onclick="testDatabaseAccess()">Test Database</button>
+            <button onclick="testFullStack()">Test Stack Completo</button>
+        </div>
+
+        <!-- LOGIN TEST -->
+        <div class="section">
+            <h2>🔐 Test Login</h2>
+            <div style="margin-bottom: 15px;">
+                <input type="email" id="testEmail" placeholder="Email di test" value="antoniogrande81@gmail.com">
+                <input type="password" id="testPassword" placeholder="Password di test">
+            </div>
+            <button onclick="testLogin()">Test Login Completo</button>
+            <button onclick="testSessionCreation()">Solo Creazione Sessione</button>
+            <button onclick="testAccountAccess()">Solo Accesso Account</button>
+        </div>
+
+        <!-- PULIZIA E RESET -->
+        <div class="section">
+            <h2>🧹 Pulizia e Reset</h2>
+            <button onclick="clearAllData()" class="danger">Pulisci Tutto</button>
+            <button onclick="resetAppwriteClient()">Reset Client Appwrite</button>
+            <button onclick="checkCurrentSession()">Verifica Sessione</button>
+            <button onclick="forceLogout()">Force Logout</button>
+        </div>
+
+        <!-- INFORMAZIONI AVANZATE -->
+        <div class="section">
+            <h2>📋 Informazioni Avanzate</h2>
+            <button onclick="showProjectInfo()">Info Progetto</button>
+            <button onclick="showStorageInfo()">Info Storage Browser</button>
+            <button onclick="showNetworkInfo()">Info Network</button>
+            <button onclick="exportLogs()">Esporta Log</button>
+        </div>
+
+        <!-- LOG OUTPUT -->
+        <div class="section">
+            <h2>📝 Log Output</h2>
+            <div id="logOutput" class="log">
+Inizializzazione debug tool...
+            </div>
+        </div>
+    </div>
+
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1"></script>
+    
+    <script>
+        // CONFIGURAZIONE
+        const CONFIG = {
+            endpoint: 'https://fra.cloud.appwrite.io/v1',
+            projectId: '688db9670010e3113d56',
+            databaseId: '688dbfaf001fcce68c0f'
+        };
+
+        let client = null;
+        let account = null;
+        let databases = null;
+
+        // LOGGING
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? 'ERROR' : 
+                          type === 'success' ? 'SUCCESS' : 
+                          type === 'warning' ? 'WARNING' : 'INFO';
+            
+            const logEntry = `[${timestamp}] ${prefix}: ${message}\n`;
+            
+            const logOutput = document.getElementById('logOutput');
+            logOutput.textContent += logEntry;
+            logOutput.scrollTop = logOutput.scrollHeight;
+            
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        // UPDATE STATUS CARDS
+        function updateStatus(cardId, status, message) {
+            const card = document.getElementById(cardId);
+            if (!card) return;
+            
+            card.className = `status-card status-${status}`;
+            card.textContent = message;
+        }
+
+        // INITIALIZE APPWRITE
+        function initializeAppwrite() {
+            try {
+                log('Inizializzazione Appwrite...');
+                
+                if (typeof Appwrite === 'undefined') {
+                    throw new Error('Appwrite SDK non caricato');
+                }
+
+                const { Client, Account, Databases } = Appwrite;
+                
+                client = new Client()
+                    .setEndpoint(CONFIG.endpoint)
+                    .setProject(CONFIG.projectId);
+                
+                account = new Account(client);
+                databases = new Databases(client);
+                
+                updateStatus('sdkStatus', 'ok', 'SDK: Caricato');
+                log('Appwrite SDK inizializzato correttamente', 'success');
+                
+                return true;
+            } catch (error) {
+                updateStatus('sdkStatus', 'error', 'SDK: Errore');
+                log('ERRORE inizializzazione: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        // TEST BASIC CONNECTION
+        async function testBasicConnection() {
+            log('Test connessione base...');
+            
+            try {
+                const response = await fetch(CONFIG.endpoint + '/health');
+                
+                if (response.ok) {
+                    updateStatus('connectionStatus', 'ok', 'Connessione: OK');
+                    log('Connessione Appwrite OK', 'success');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateStatus('connectionStatus', 'error', 'Connessione: ERRORE');
+                log('ERRORE connessione: ' + error.message, 'error');
+            }
+        }
+
+        // TEST PROJECT ACCESS
+        async function testProjectAccess() {
+            log('Test accesso progetto...');
+            
+            try {
+                // Try to access project info via health endpoint
+                const response = await fetch(`${CONFIG.endpoint}/health`);
+                
+                if (response.ok) {
+                    updateStatus('projectStatus', 'ok', 'Progetto: Accessibile');
+                    log('Progetto Appwrite accessibile', 'success');
+                    
+                    // Test with actual project endpoint
+                    const projectTest = await fetch(`${CONFIG.endpoint}/account`, {
+                        headers: {
+                            'X-Appwrite-Project': CONFIG.projectId
+                        }
+                    });
+                    
+                    log(`Test progetto response: ${projectTest.status} ${projectTest.statusText}`);
+                    
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateStatus('projectStatus', 'error', 'Progetto: ERRORE');
+                log('ERRORE accesso progetto: ' + error.message, 'error');
+            }
+        }
+
+        // TEST DATABASE ACCESS
+        async function testDatabaseAccess() {
+            log('Test accesso database...');
+            
+            if (!databases) {
+                log('Database client non inizializzato', 'error');
+                return;
+            }
+            
+            try {
+                // Try to list documents (this will fail if not authenticated, but gives us info)
+                const { Query } = Appwrite;
+                await databases.listDocuments(
+                    CONFIG.databaseId,
+                    '688dca4f00345547d52f', // user_profiles collection
+                    [Query.limit(1)]
+                );
+                
+                log('Database accessibile', 'success');
+            } catch (error) {
+                log('Database test: ' + error.message + ' (normale se non autenticato)', 'warning');
+            }
+        }
+
+        // TEST SESSION CREATION
+        async function testSessionCreation() {
+            log('Test solo creazione sessione...');
+            
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            if (!email || !password) {
+                log('Inserisci email e password', 'error');
+                return;
+            }
+            
+            try {
+                // Clear everything first
+                await clearAllData();
+                
+                log('Tentativo creazione sessione...');
+                const session = await account.createEmailPasswordSession(email, password);
+                
+                log('SESSION CREATA!', 'success');
+                log('Session ID: ' + session.$id);
+                log('User ID: ' + session.userId);
+                log('Provider: ' + session.provider);
+                
+                updateStatus('sessionStatus', 'ok', 'Sessione: Creata');
+                
+                return session;
+                
+            } catch (error) {
+                updateStatus('sessionStatus', 'error', 'Sessione: ERRORE');
+                log('ERRORE creazione sessione: ' + error.message, 'error');
+                log('Error code: ' + (error.code || 'N/A'));
+                log('Error type: ' + (error.type || 'N/A'));
+            }
+        }
+
+        // TEST ACCOUNT ACCESS
+        async function testAccountAccess() {
+            log('Test accesso account...');
+            
+            try {
+                const user = await account.get();
+                
+                log('ACCOUNT ACCESSIBILE!', 'success');
+                log('User ID: ' + user.$id);
+                log('Name: ' + user.name);
+                log('Email: ' + user.email);
+                log('Status: ' + user.status);
+                log('Email verified: ' + user.emailVerification);
+                
+                updateStatus('sessionStatus', 'ok', 'Sessione: Valida');
+                
+                return user;
+                
+            } catch (error) {
+                updateStatus('sessionStatus', 'error', 'Sessione: Non Valida');
+                log('ERRORE accesso account: ' + error.message, 'error');
+                log('Error code: ' + (error.code || 'N/A'));
+                log('Error type: ' + (error.type || 'N/A'));
+                
+                // Additional debug info
+                if (error.message.includes('guests')) {
+                    log('DIAGNOSI: Utente ha ruolo GUESTS invece di USERS', 'warning');
+                    log('POSSIBILI CAUSE:', 'warning');
+                    log('1. Project ID errato', 'warning');
+                    log('2. Sessione non salvata correttamente', 'warning');
+                    log('3. Cookies/Storage bloccati', 'warning');
+                    log('4. CORS issues', 'warning');
+                }
+            }
+        }
+
+        // FULL LOGIN TEST
+        async function testLogin() {
+            log('=== TEST LOGIN COMPLETO ===');
+            
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            if (!email || !password) {
+                log('Inserisci email e password per il test', 'error');
+                return;
+            }
+            
+            try {
+                // Step 1: Clean everything
+                log('STEP 1: Pulizia completa...');
+                await clearAllData();
+                
+                // Step 2: Create session
+                log('STEP 2: Creazione sessione...');
+                const session = await account.createEmailPasswordSession(email, password);
+                log('Sessione creata con successo!', 'success');
+                
+                // Step 3: Wait for propagation
+                log('STEP 3: Attesa propagazione sessione...');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Step 4: Test account access
+                log('STEP 4: Test accesso account...');
+                const user = await account.get();
+                log('Account accessibile!', 'success');
+                
+                // Step 5: Success summary
+                log('=== LOGIN TEST COMPLETATO CON SUCCESSO ===', 'success');
+                log('User: ' + user.name + ' (' + user.email + ')');
+                log('Status: ' + user.status);
+                
+                updateStatus('sessionStatus', 'ok', 'Login: Funzionante');
+                
+                // Test redirect
+                log('Test completato! Puoi ora andare alla dashboard.');
+                
+            } catch (error) {
+                log('=== LOGIN TEST FALLITO ===', 'error');
+                log('ERRORE: ' + error.message, 'error');
+                
+                if (error.message.includes('guests')) {
+                    log('=== DIAGNOSI PROBLEMA GUESTS ===', 'warning');
+                    log('Il problema è che la sessione si crea ma utente resta "guests"', 'warning');
+                    log('SOLUZIONI DA PROVARE:', 'warning');
+                    log('1. Verifica Project ID nel console Appwrite', 'warning');
+                    log('2. Controlla impostazioni Auth nel progetto', 'warning');
+                    log('3. Verifica che Auth sia abilitato', 'warning');
+                    log('4. Prova con un progetto nuovo', 'warning');
+                }
+            }
+        }
+
+        // CLEAR ALL DATA
+        async function clearAllData() {
+            log('Pulizia completa dati...');
+            
+            try {
+                // Logout from Appwrite
+                if (account) {
+                    try {
+                        await account.deleteSession('current');
+                        log('Sessione Appwrite eliminata');
+                    } catch (e) {
+                        log('Nessuna sessione da eliminare');
+                    }
+                }
+                
+                // Clear storage
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Clear cookies
+                document.cookie.split(";").forEach(function(c) { 
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+                });
+                
+                // Clear specific Appwrite cookies
+                const appwriteCookies = ['appwrite-session', 'a_session_console', 'cookieFallback'];
+                appwriteCookies.forEach(function(name) {
+                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.appwrite.io;';
+                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.fra.cloud.appwrite.io;';
+                });
+                
+                log('Pulizia completata', 'success');
+                updateStatus('sessionStatus', 'warning', 'Sessione: Pulita');
+                
+            } catch (error) {
+                log('ERRORE durante pulizia: ' + error.message, 'error');
+            }
+        }
+
+        // SHOW PROJECT INFO
+        async function showProjectInfo() {
+            log('=== INFORMAZIONI PROGETTO ===');
+            log('Endpoint: ' + CONFIG.endpoint);
+            log('Project ID: ' + CONFIG.projectId);
+            log('Database ID: ' + CONFIG.databaseId);
+            
+            // Test health endpoint
+            try {
+                const health = await fetch(CONFIG.endpoint + '/health');
+                const healthData = await health.text();
+                log('Health response: ' + healthData);
+            } catch (e) {
+                log('Health check failed: ' + e.message, 'error');
+            }
+            
+            // Show browser info
+            log('User Agent: ' + navigator.userAgent);
+            log('Cookies enabled: ' + navigator.cookieEnabled);
+            log('Local storage available: ' + (typeof Storage !== "undefined"));
+        }
+
+        // SHOW STORAGE INFO
+        function showStorageInfo() {
+            log('=== INFORMAZIONI STORAGE ===');
+            log('LocalStorage items: ' + localStorage.length);
+            log('SessionStorage items: ' + sessionStorage.length);
+            
+            // Show localStorage contents
+            if (localStorage.length > 0) {
+                log('LocalStorage contents:');
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key);
+                    log('  ' + key + ': ' + (value.length > 100 ? value.substring(0, 100) + '...' : value));
+                }
+            }
+            
+            // Show cookies
+            if (document.cookie) {
+                log('Cookies: ' + document.cookie);
+            } else {
+                log('Nessun cookie presente');
+            }
+        }
+
+        // SHOW NETWORK INFO
+        function showNetworkInfo() {
+            log('=== INFORMAZIONI NETWORK ===');
+            log('Online: ' + navigator.onLine);
+            log('Connection type: ' + (navigator.connection ? navigator.connection.effectiveType : 'N/A'));
+            log('Language: ' + navigator.language);
+            log('Platform: ' + navigator.platform);
+            log('URL corrente: ' + window.location.href);
+            log('Origin: ' + window.location.origin);
+        }
+
+        // RESET APPWRITE CLIENT
+        function resetAppwriteClient() {
+            log('Reset client Appwrite...');
+            
+            client = null;
+            account = null;
+            databases = null;
+            
+            if (initializeAppwrite()) {
+                log('Client Appwrite resettato con successo', 'success');
+            } else {
+                log('ERRORE reset client', 'error');
+            }
+        }
+
+        // CHECK CURRENT SESSION
+        async function checkCurrentSession() {
+            log('Verifica sessione corrente...');
+            
+            try {
+                const user = await account.get();
+                log('SESSIONE ATTIVA TROVATA!', 'success');
+                log('User: ' + JSON.stringify(user, null, 2));
+                updateStatus('sessionStatus', 'ok', 'Sessione: Attiva');
+            } catch (error) {
+                log('Nessuna sessione attiva: ' + error.message, 'warning');
+                updateStatus('sessionStatus', 'warning', 'Sessione: Nessuna');
+            }
+        }
+
+        // FORCE LOGOUT
+        async function forceLogout() {
+            log('Force logout...');
+            await clearAllData();
+            log('Logout forzato completato', 'success');
+        }
+
+        // EXPORT LOGS
+        function exportLogs() {
+            const logContent = document.getElementById('logOutput').textContent;
+            const blob = new Blob([logContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'myapp-debug-log-' + new Date().toISOString().slice(0,19).replace(/:/g, '-') + '.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            log('Log esportato', 'success');
+        }
+
+        // TEST FULL STACK
+        async function testFullStack() {
+            log('=== TEST STACK COMPLETO ===');
+            
+            await testBasicConnection();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testProjectAccess();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testDatabaseAccess();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await checkCurrentSession();
+            
+            log('Test stack completo terminato');
+        }
+
+        // SHOW CURRENT CONFIG
+        function showCurrentConfig() {
+            const configDisplay = document.getElementById('currentConfig');
+            configDisplay.innerHTML = `
+<strong>Configurazione Appwrite:</strong>
+Endpoint: ${CONFIG.endpoint}
+Project ID: ${CONFIG.projectId}
+Database ID: ${CONFIG.databaseId}
+
+<strong>SDK Status:</strong>
+Appwrite disponibile: ${typeof Appwrite !== 'undefined'}
+Client inizializzato: ${client !== null}
+Account service: ${account !== null}
+Database service: ${databases !== null}
+
+<strong>Browser Info:</strong>
+User Agent: ${navigator.userAgent}
+Cookies: ${navigator.cookieEnabled}
+Online: ${navigator.onLine}
+            `;
+        }
+
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', function() {
+            log('Debug tool caricato');
+            
+            if (initializeAppwrite()) {
+                log('Inizializzazione completata', 'success');
+                showCurrentConfig();
+                testBasicConnection();
+            } else {
+                log('ERRORE inizializzazione', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

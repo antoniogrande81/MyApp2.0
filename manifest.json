@@ -1,0 +1,216 @@
+{
+  "name": "MyApp",
+  "short_name": "MyApp",
+  "description": "L'app ufficiale MyApp per gestire servizi, richieste e comunicazioni in modo efficace.",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  
+  "theme_color": "#1a1a2e",
+  "background_color": "#1a1a2e",
+  
+  "icons": [
+    {
+      "src": "/public/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/public/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/public/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/public/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/public/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/public/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/public/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/public/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/public/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Accesso rapido alla dashboard utente",
+      "url": "/home.html",
+      "icons": [
+        {
+          "src": "/public/icons/shortcut-dashboard.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Nuova Richiesta",
+      "short_name": "Richiesta",
+      "description": "Crea una nuova richiesta",
+      "url": "/richieste.html",
+      "icons": [
+        {
+          "src": "/public/icons/shortcut-request.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Tessera Digitale",
+      "short_name": "Tessera",
+      "description": "Visualizza la tua tessera digitale",
+      "url": "/tessera.html",
+      "icons": [
+        {
+          "src": "/public/icons/shortcut-tessera.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "News",
+      "short_name": "News",
+      "description": "Ultime notizie e comunicazioni",
+      "url": "/news.html",
+      "icons": [
+        {
+          "src": "/public/icons/shortcut-news.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  
+  "categories": [
+    "business",
+    "productivity",
+    "utilities",
+    "government"
+  ],
+  
+  "lang": "it",
+  "dir": "ltr",
+  
+  "prefer_related_applications": false,
+  
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.myapp.mobile",
+      "id": "com.myapp.mobile"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://apps.apple.com/app/myapp/id123456789",
+      "id": "123456789"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "/public/screenshots/mobile-home.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Dashboard utente su mobile"
+    },
+    {
+      "src": "/public/screenshots/mobile-tessera.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Tessera digitale su mobile"
+    },
+    {
+      "src": "/public/screenshots/tablet-dashboard.png",
+      "sizes": "1024x768",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Dashboard completa su tablet"
+    },
+    {
+      "src": "/public/screenshots/desktop-admin.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Pannello amministrativo desktop"
+    }
+  ],
+  
+  "features": [
+    "Cross Platform",
+    "Fast",
+    "Offline Support",
+    "Push Notifications"
+  ],
+  
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+myapp",
+      "url": "/handle?type=%s"
+    }
+  ],
+  
+  "file_handlers": [
+    {
+      "action": "/handle-files",
+      "accept": {
+        "application/pdf": [".pdf"],
+        "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"]
+      },
+      "icons": [
+        {
+          "src": "/public/icons/file-handler.png",
+          "sizes": "256x256"
+        }
+      ],
+      "launch_type": "single-client"
+    }
+  ]
+}

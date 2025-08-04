@@ -1,0 +1,504 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - MyApp</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="background-color" content="#1a1a2e">
+
+    <!-- Icone Standard -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/public/icons/icon-512x512.png">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+    <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+
+    <!-- Android Support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="MyApp">
+    <meta name="msapplication-TileColor" content="#1a1a2e">
+    
+    <!-- Preconnect per performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://lycrgzptkdkksukcwrld.supabase.co">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Aurora Boreale 2025 Palette
+                        primary: '#1a1a2e',      // Blu notte profondo
+                        secondary: '#16213e',     // Blu oceano
+                        accent: '#0f3460',        // Blu acciaio
+                        aurora: '#e94560',        // Rosa aurora
+                        cyan: '#00d4ff',          // Cyan elettrico
+                        magenta: '#ff006e',       // Magenta vibrante
+                        gold: '#ffd700',          // Oro elegante
+                        teal: '#03dac6',          // Teal premium
+                        dark: '#0a0a23',          // Nero cyber
+                        light: '#f8fafc',         // Bianco ghiaccio
+                        textDark: '#1C1C1E',
+                        backgroundLight: '#F4F4F8',
+                    },
+                    screens: {
+                        'xs': '320px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                        '2xl': '1536px',
+                        '3xl': '1920px',
+                        '4xl': '2560px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+        }
+
+        body {
+            background: var(--gradient-aurora);
+            background-size: 400% 400%;
+            animation: aurora 25s ease infinite;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-15px) rotate(1deg); }
+            66% { transform: translateY(-5px) rotate(-1deg); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(233, 69, 96, 0.6); }
+            50% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.8); }
+        }
+
+        @keyframes pulse-aurora {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+                box-shadow: 0 0 40px rgba(233, 69, 96, 0.6);
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.05);
+                box-shadow: 0 0 80px rgba(0, 212, 255, 0.8);
+            }
+        }
+
+        @keyframes bounce-gentle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Typography Ultra-Visibile */
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+            font-weight: 800;
+        }
+
+        .text-white {
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+        }
+
+        /* Glassmorphism Avanzato */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .glass-effect:hover::before {
+            left: 100%;
+        }
+
+        /* Bottoni Aurora */
+        .btn-aurora {
+            background: var(--gradient-magic);
+            color: white;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-aurora::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.3s;
+        }
+
+        .btn-aurora:hover::before {
+            left: 100%;
+        }
+
+        .btn-aurora:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.8);
+        }
+
+        .btn-cyber {
+            background: var(--gradient-cyber);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            color: white;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-cyber:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.4);
+            border-color: rgba(0, 212, 255, 0.8);
+        }
+
+        .offline-icon {
+            animation: pulse-aurora 3s infinite;
+            background: var(--gradient-magic);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .retry-button {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .retry-button:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .status-online {
+            background: linear-gradient(135deg, #10b981, #047857);
+            border-color: rgba(16, 185, 129, 0.3);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .status-offline {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(3, 218, 198, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(3, 218, 198, 0.15));
+            border-color: rgba(0, 212, 255, 0.4);
+        }
+
+        .tips-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(233, 69, 96, 0.1));
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .main-container {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Header glassmorphism */
+        header {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Responsive text scaling */
+        .hero-title {
+            font-size: clamp(1.8rem, 8vw, 2.5rem);
+            font-weight: 900;
+        }
+
+        .status-text {
+            font-size: clamp(0.9rem, 4vw, 1rem);
+            font-weight: 700;
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="w-full px-4 py-6 relative z-10">
+        <div class="max-w-md mx-auto flex items-center justify-center">
+            <h1 class="text-2xl font-black text-ultra-visible drop-shadow-lg">MyApp</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center px-4 pb-20">
+        <div class="glass-effect rounded-3xl p-8 text-center max-w-sm w-full main-container">
+            
+            <!-- Offline Icon -->
+            <div class="offline-icon w-24 h-24 rounded-full mx-auto mb-8 flex items-center justify-center">
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M18.364 5.636l-12.728 12.728m0-12.728l12.728 12.728M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"></path>
+                </svg>
+            </div>
+            
+            <!-- Title -->
+            <h2 class="hero-title text-primary mb-6 font-black">
+                Connessione Assente
+            </h2>
+            
+            <!-- Message -->
+            <p class="text-gray-700 mb-8 leading-relaxed font-semibold text-lg">
+                Non è possibile connettersi ai server di MyApp. Verifica la tua connessione internet e riprova.
+            </p>
+            
+            <!-- Connection Status -->
+            <div id="connectionStatus" class="mb-8 p-5 rounded-2xl border-2 status-offline">
+                <div class="flex items-center justify-center space-x-3 text-white">
+                    <div class="w-4 h-4 bg-white rounded-full animate-pulse"></div>
+                    <span class="status-text">Offline</span>
+                </div>
+            </div>
+            
+            <!-- Available Offline Features -->
+            <div class="feature-card mb-8 p-6 rounded-2xl">
+                <h3 class="font-black text-cyan mb-4 text-lg">📱 Funzioni offline disponibili:</h3>
+                <ul class="text-sm text-textDark space-y-2 text-left font-semibold">
+                    <li class="flex items-center space-x-2">
+                        <span class="text-teal">✓</span>
+                        <span>Visualizzazione tessera digitale salvata</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <span class="text-teal">✓</span>
+                        <span>Consultazione convenzioni in cache</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <span class="text-teal">✓</span>
+                        <span>Contatti dirigenti salvati</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <span class="text-teal">✓</span>
+                        <span>Navigazione tra pagine visitate</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="space-y-4">
+                <button 
+                    id="retryButton"
+                    class="retry-button btn-aurora w-full py-4 px-8 rounded-2xl shadow-lg flex items-center justify-center space-x-3"
+                    onclick="checkConnection()"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    <span id="retryText" class="font-bold text-lg">Riprova</span>
+                </button>
+                
+                <button 
+                    class="btn-cyber w-full py-4 px-8 rounded-2xl transition-all"
+                    onclick="goHome()"
+                >
+                    <span class="font-bold text-lg">🏠 Torna alla Home Offline</span>
+                </button>
+            </div>
+            
+            <!-- Tips -->
+            <div class="tips-card mt-8 pt-6 rounded-2xl p-6">
+                <h3 class="font-black text-gold mb-4 text-lg">💡 Suggerimenti:</h3>
+                <ul class="text-sm text-textDark space-y-2 font-semibold">
+                    <li class="flex items-center space-x-2">
+                        <span class="text-gold">•</span>
+                        <span>Verifica di essere connesso al WiFi</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <span class="text-gold">•</span>
+                        <span>Controlla i dati mobili se attivi</span>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <span class="text-gold">•</span>
+                        <span>Riavvia l'app se il problema persiste</span>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+    </main>
+
+    <script>
+        let isRetrying = false;
+        
+        // Check connection status
+        function updateConnectionStatus() {
+            const statusDiv = document.getElementById('connectionStatus');
+            const isOnline = navigator.onLine;
+            
+            if (isOnline) {
+                statusDiv.innerHTML = `
+                    <div class="flex items-center justify-center space-x-3 text-white">
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                        <span class="status-text">Online - Connessione ripristinata!</span>
+                    </div>
+                `;
+                statusDiv.className = 'mb-8 p-5 rounded-2xl border-2 status-online';
+                
+                // Auto-reload after connection is restored
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                statusDiv.innerHTML = `
+                    <div class="flex items-center justify-center space-x-3 text-white">
+                        <div class="w-4 h-4 bg-white rounded-full animate-pulse"></div>
+                        <span class="status-text">Offline</span>
+                    </div>
+                `;
+                statusDiv.className = 'mb-8 p-5 rounded-2xl border-2 status-offline';
+            }
+        }
+        
+        // Check connection manually
+        async function checkConnection() {
+            if (isRetrying) return;
+            
+            isRetrying = true;
+            const button = document.getElementById('retryButton');
+            const text = document.getElementById('retryText');
+            
+            // Update button state
+            button.disabled = true;
+            button.classList.add('opacity-75');
+            text.textContent = 'Controllo...';
+            
+            try {
+                // Try to fetch a small resource to check connectivity
+                const response = await fetch('/favicon.ico', { 
+                    cache: 'no-cache',
+                    mode: 'no-cors'
+                });
+                
+                // If successful, reload the page
+                window.location.reload();
+                
+            } catch (error) {
+                // Still offline
+                text.textContent = 'Ancora offline';
+                setTimeout(() => {
+                    text.textContent = 'Riprova';
+                    button.disabled = false;
+                    button.classList.remove('opacity-75');
+                    isRetrying = false;
+                }, 2000);
+            }
+        }
+        
+        // Go to home page (cached version)
+        function goHome() {
+            window.location.href = '/';
+        }
+        
+        // Listen for online/offline events
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        
+        // Initialize
+        updateConnectionStatus();
+        
+        // Auto-check connection every 30 seconds
+        setInterval(() => {
+            if (!isRetrying) {
+                updateConnectionStatus();
+            }
+        }, 30000);
+        
+        // Service Worker communication
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(registration => {
+                // Listen for SW messages
+                navigator.serviceWorker.addEventListener('message', event => {
+                    if (event.data?.type === 'CACHE_UPDATED') {
+                        console.log('Cache updated, content available offline');
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

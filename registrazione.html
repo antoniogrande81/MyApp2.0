@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyApp - Sindacato Carabinieri</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- CONFIGURAZIONE COLORI TAILWIND -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Aurora Boreale 2025 Palette
+                        primary: '#1a1a2e',      // Blu notte profondo
+                        secondary: '#16213e',     // Blu oceano
+                        accent: '#0f3460',        // Blu acciaio
+                        aurora: '#e94560',        // Rosa aurora
+                        cyan: '#00d4ff',          // Cyan elettrico
+                        magenta: '#ff006e',       // Magenta vibrante
+                        gold: '#ffd700',          // Oro elegante
+                        teal: '#03dac6',          // Teal premium
+                        dark: '#0a0a23',          // Nero cyber
+                        light: '#f8fafc',         // Bianco ghiaccio
+                        textDark: '#1C1C1E',
+                        backgroundLight: '#F4F4F8',
+                    },
+                    screens: {
+                        'xs': '320px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                        '2xl': '1536px',
+                        '3xl': '1920px',
+                        '4xl': '2560px',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- STILI CSS COMPLETI -->
+    <style>
+        /* === VARIABILI CSS === */
+        :root {
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+        }
+
+        /* === SFONDO PRINCIPALE === */
+        body {
+            background: var(--gradient-aurora);
+            background-size: 400% 400%;
+            animation: aurora 20s ease infinite;
+            min-height: 100vh;
+        }
+
+        /* === ANIMAZIONI === */
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.8); }
+        }
+
+        /* === TIPOGRAFIA ULTRA-VISIBILE === */
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+            font-weight: 800;
+        }
+
+        .text-white {
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+        }
+
+        /* === GLASSMORPHISM === */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* === BOTTONI === */
+        .btn-aurora {
+            background: var(--gradient-magic);
+            color: white;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+        }
+
+        .btn-aurora:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.8);
+        }
+
+        .btn-cyber {
+            background: var(--gradient-cyber);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            color: white;
+            font-weight: 700;
+        }
+
+        .btn-cyber:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.4);
+            border-color: rgba(0, 212, 255, 0.8);
+        }
+
+        .btn-primary {
+            background: var(--gradient-aurora);
+            color: white;
+            border: 2px solid rgba(26, 26, 46, 0.3);
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(26, 26, 46, 0.4);
+            border-color: rgba(26, 26, 46, 0.8);
+        }
+
+        /* === FORM ELEMENTS === */
+        .input-field {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 14px 18px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.2);
+            transform: scale(1.02);
+        }
+
+        /* === LOADING OVERLAY === */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* === NOTIFICATION === */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 10000;
+            min-width: 300px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.9));
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 640px) {
+            .hero-title { font-size: 2.25rem; line-height: 2.5rem; }
+            .notification { min-width: 250px; margin: 10px; }
+        }
+    </style>
+    
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
+</head>
+<body class="flex flex-col min-h-screen font-sans">
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="flex-1 flex items-center justify-center px-4 py-8">
+        <div class="w-full max-w-md">
+            
+            <!-- Logo e Titolo -->
+            <div class="text-center mb-8">
+                <div class="mb-6">
+                    <div class="text-6xl mb-4">🛡️</div>
+                    <h1 class="text-ultra-visible text-4xl font-black mb-2">
+                        MyApp
+                    </h1>
+                    <p class="text-white text-xl font-semibold">
+                        Sindacato Carabinieri
+                    </p>
+                </div>
+            </div>
+
+            <!-- Form Container -->
+            <div class="glass-card rounded-3xl p-8 shadow-2xl">
+                
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <h2 class="text-2xl font-bold text-center mb-6 text-primary">
+                        Accedi al tuo account
+                    </h2>
+                    
+                    <form id="loginFormElement">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-primary mb-2">
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    id="loginEmail"
+                                    class="input-field w-full"
+                                    placeholder="inserisci la tua email"
+                                    required
+                                >
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-primary mb-2">
+                                    Password
+                                </label>
+                                <input
+                                    type="password"
+                                    id="loginPassword"
+                                    class="input-field w-full"
+                                    placeholder="inserisci la tua password"
+                                    required
+                                >
+                            </div>
+                        </div>
+                        
+                        <button
+                            type="submit"
+                            class="btn-aurora w-full py-3 px-6 rounded-2xl text-lg font-bold mt-6"
+                        >
+                            Accedi
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-6">
+                        <p class="text-primary">
+                            Non hai un account?
+                            <button
+                                id="showRegisterForm"
+                                class="text-aurora font-bold hover:underline"
+                            >
+                                Registrati qui
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="hidden">
+                    <h2 class="text-2xl font-bold text-center mb-6 text-primary">
+                        Crea il tuo account
+                    </h2>
+                    
+                    <form id="registerFormElement">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-primary mb-2">
+                                    Nome e Cognome
+                                </label>
+                                <input
+                                    type="text"
+                                    id="registerName"
+                                    class="input-field w-full"
+                                    placeholder="inserisci nome e cognome"
+                                    required
+                                >
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-primary mb-2">
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    id="registerEmail"
+                                    class="input-field w-full"
+                                    placeholder="inserisci la tua email"
+                                    required
+                                >
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-primary mb-2">
+                                    Password
+                                </label>
+                                <input
+                                    type="password"
+                                    id="registerPassword"
+                                    class="input-field w-full"
+                                    placeholder="crea una password sicura"
+                                    required
+                                    minlength="8"
+                                >
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-primary mb-2">
+                                    Ruolo
+                                </label>
+                                <select
+                                    id="registerRole"
+                                    class="input-field w-full"
+                                    required
+                                >
+                                    <option value="">Seleziona il tuo ruolo</option>
+                                    <option value="user">Utente</option>
+                                    <option value="dirigente">Dirigente</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button
+                            type="submit"
+                            class="btn-cyber w-full py-3 px-6 rounded-2xl text-lg font-bold mt-6"
+                        >
+                            Registrati
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-6">
+                        <p class="text-primary">
+                            Hai già un account?
+                            <button
+                                id="showLoginForm"
+                                class="text-aurora font-bold hover:underline"
+                            >
+                                Accedi qui
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Info Footer -->
+            <div class="text-center mt-8">
+                <p class="text-white text-sm">
+                    🔒 I tuoi dati sono protetti e sicuri
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module">
+        // === CONFIGURAZIONE APPWRITE ===
+        const { Client, Account, Databases, ID } = Appwrite;
+
+        const client = new Client()
+            .setEndpoint('https://cloud.appwrite.io/v1')
+            .setProject('688db9670010e3113d56');
+
+        const account = new Account(client);
+        const databases = new Databases(client);
+
+        // Database e Collection IDs
+        const DATABASE_ID = '688dbfaf001fcce68c0f';
+        const COLLECTIONS = {
+            profiles: '688dc04f0034554d752f',
+            notizie: '688e02b3000595a16b2c',
+            convenzioni: '688e03f0001958f71d9e',
+            organico: '688e0501000254ad0966'
+        };
+
+        // === UTILITY FUNCTIONS ===
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+
+        function showNotification(message, type = 'info') {
+            // Rimuovi notifiche esistenti
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove dopo 5 secondi
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // === FORM SWITCHING ===
+        document.getElementById('showRegisterForm').addEventListener('click', () => {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+        });
+
+        document.getElementById('showLoginForm').addEventListener('click', () => {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        });
+
+        // === REGISTRAZIONE ===
+        document.getElementById('registerFormElement').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const role = document.getElementById('registerRole').value;
+
+            if (!name || !email || !password || !role) {
+                showNotification('Compila tutti i campi', 'error');
+                return;
+            }
+
+            if (password.length < 8) {
+                showNotification('La password deve essere di almeno 8 caratteri', 'error');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                // Crea account
+                const user = await account.create(ID.unique(), email, password, name);
+                
+                // Crea sessione
+                await account.createEmailSession(email, password);
+                
+                // Crea profilo utente
+                await databases.createDocument(
+                    DATABASE_ID,
+                    COLLECTIONS.profiles,
+                    ID.unique(),
+                    {
+                        user_id: user.$id,
+                        nome_cognome: name,
+                        email: email,
+                        ruolo: role,
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    }
+                );
+
+                showNotification('Registrazione completata con successo!', 'success');
+                
+                // Redirect dopo successo
+                setTimeout(() => {
+                    redirectBasedOnRole(role);
+                }, 2000);
+
+            } catch (error) {
+                console.error('Errore registrazione:', error);
+                
+                let errorMessage = 'Errore durante la registrazione';
+                if (error.code === 409) {
+                    errorMessage = 'Un utente con questa email esiste già';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                showNotification(errorMessage, 'error');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // === LOGIN ===
+        document.getElementById('loginFormElement').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showNotification('Inserisci email e password', 'error');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                // Crea sessione
+                await account.createEmailSession(email, password);
+                
+                // Ottieni dati utente
+                const user = await account.get();
+                
+                // Ottieni profilo utente
+                const profile = await getUserProfile(user.$id);
+                
+                if (!profile) {
+                    showNotification('Profilo utente non trovato', 'error');
+                    await account.deleteSession('current');
+                    return;
+                }
+
+                showNotification('Login effettuato con successo!', 'success');
+                
+                // Redirect dopo successo
+                setTimeout(() => {
+                    redirectBasedOnRole(profile.ruolo);
+                }, 1500);
+
+            } catch (error) {
+                console.error('Errore login:', error);
+                
+                let errorMessage = 'Credenziali non valide';
+                if (error.code === 401) {
+                    errorMessage = 'Email o password non corretti';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                showNotification(errorMessage, 'error');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // === UTILITY FUNCTIONS ===
+        async function getUserProfile(userId) {
+            try {
+                const response = await databases.listDocuments(
+                    DATABASE_ID,
+                    COLLECTIONS.profiles,
+                    [
+                        Query.equal('user_id', userId)
+                    ]
+                );
+                
+                return response.documents.length > 0 ? response.documents[0] : null;
+            } catch (error) {
+                console.error('Errore nel recupero profilo:', error);
+                return null;
+            }
+        }
+
+        function redirectBasedOnRole(role) {
+            if (role === 'dirigente' || role === 'admin') {
+                window.location.href = '/app/home_dirigenti.html';
+            } else {
+                window.location.href = '/app/home.html';
+            }
+        }
+
+        // === CHECK EXISTING SESSION ===
+        async function checkExistingSession() {
+            try {
+                const user = await account.get();
+                const profile = await getUserProfile(user.$id);
+                
+                if (profile) {
+                    redirectBasedOnRole(profile.ruolo);
+                }
+            } catch (error) {
+                // Nessuna sessione attiva, resta sulla pagina di login
+                console.log('Nessuna sessione attiva');
+            }
+        }
+
+        // Controlla sessione esistente al caricamento
+        checkExistingSession();
+
+        // === QUERY HELPER (per compatibilità) ===
+        const Query = {
+            equal: (attribute, value) => `equal("${attribute}", "${value}")`
+        };
+    </script>
+
+</body>
+</html>

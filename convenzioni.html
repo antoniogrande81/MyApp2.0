@@ -1,0 +1,967 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convenzioni - MyApp Aurora Boreale 2025</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
+    
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Aurora Boreale 2025 Palette
+                        primary: '#1a1a2e',      // Blu notte profondo
+                        secondary: '#16213e',     // Blu oceano
+                        accent: '#0f3460',        // Blu acciaio
+                        aurora: '#e94560',        // Rosa aurora
+                        cyan: '#00d4ff',          // Cyan elettrico
+                        magenta: '#ff006e',       // Magenta vibrante
+                        gold: '#ffd700',          // Oro elegante
+                        teal: '#03dac6',          // Teal premium
+                        dark: '#0a0a23',          // Nero cyber
+                        light: '#f8fafc',         // Bianco ghiaccio
+                        muted: '#64748b',         // Grigio moderno
+                        success: '#00ea8d',       // Verde aurora
+                        warning: '#ffb800',       // Ambra dorata
+                        error: '#ff4757',         // Rosso neon
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    screens: {
+                        'xs': '320px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                        '2xl': '1536px',
+                        '3xl': '1920px',
+                        '4xl': '2560px',
+                    },
+                    fontSize: {
+                        'fluid-xs': 'clamp(0.75rem, 2vw, 0.875rem)',
+                        'fluid-sm': 'clamp(0.875rem, 2.5vw, 1rem)',
+                        'fluid-base': 'clamp(1rem, 2.5vw, 1.125rem)',
+                        'fluid-lg': 'clamp(1.125rem, 3vw, 1.25rem)',
+                        'fluid-xl': 'clamp(1.25rem, 3.5vw, 1.5rem)',
+                        'fluid-2xl': 'clamp(1.5rem, 4vw, 2rem)',
+                        'fluid-3xl': 'clamp(1.875rem, 5vw, 2.5rem)',
+                        'fluid-4xl': 'clamp(2.25rem, 6vw, 3rem)',
+                        'fluid-5xl': 'clamp(2.5rem, 7vw, 4rem)',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :root {
+            /* Aurora Boreale Gradients 2025 */
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+            --gradient-ocean: linear-gradient(135deg, #16213e 0%, #0f3460 50%, #00d4ff 100%);
+            --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%);
+            --shadow-aurora: 0 10px 40px rgba(233, 69, 96, 0.3);
+            --shadow-cyber: 0 10px 40px rgba(0, 212, 255, 0.3);
+            --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --border-glass: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        * {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--gradient-aurora);
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Aurora Background Animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-aurora);
+            animation: aurora 20s ease-in-out infinite;
+            z-index: -2;
+        }
+
+        @keyframes aurora {
+            0%, 100% { 
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            }
+            25% { 
+                background: linear-gradient(135deg, #16213e 0%, #0f3460 25%, #e94560 50%, #00d4ff 75%, #1a1a2e 100%);
+            }
+            50% { 
+                background: linear-gradient(135deg, #0f3460 0%, #e94560 25%, #00d4ff 50%, #1a1a2e 75%, #16213e 100%);
+            }
+            75% { 
+                background: linear-gradient(135deg, #e94560 0%, #00d4ff 25%, #1a1a2e 50%, #16213e 75%, #0f3460 100%);
+            }
+        }
+
+        /* Enhanced Text Shadows for Maximum Visibility */
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+            font-weight: 800;
+        }
+
+        .text-shadow-strong {
+            text-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Advanced Glass Morphism */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: var(--border-glass);
+            box-shadow: var(--shadow-glass);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: var(--border-glass);
+            box-shadow: var(--shadow-glass);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Convention Cards Enhanced */
+        .convenzione-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: clamp(1.5rem, 4vw, 2rem);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .convenzione-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-magic);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .convenzione-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .convenzione-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .convenzione-card:hover::after {
+            opacity: 1;
+        }
+
+        .convenzione-card:hover {
+            transform: translateY(-16px) scale(1.03);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+            border-left-color: #00d4ff;
+        }
+
+        /* Category Filters Enhanced */
+        .category-filter {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: var(--border-glass);
+        }
+
+        .category-filter.active {
+            background: var(--gradient-magic);
+            color: white;
+            box-shadow: var(--shadow-aurora);
+        }
+
+        .category-filter:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .category-filter:not(.active):hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Search Box Enhanced */
+        .search-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        /* Discount Badge Enhanced */
+        .discount-badge {
+            background: var(--gradient-magic);
+            color: white;
+            animation: pulse-glow 2s infinite;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+            }
+        }
+
+        /* Service Icon Enhanced */
+        .service-icon {
+            width: clamp(60px, 8vw, 80px);
+            height: clamp(60px, 8vw, 80px);
+            background: var(--gradient-ocean);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            margin-right: 1rem;
+            box-shadow: var(--shadow-cyber);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.8s;
+        }
+
+        .convenzione-card:hover .service-icon::before {
+            left: 100%;
+        }
+
+        .convenzione-card:hover .service-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 50px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Floating Icons Enhanced */
+        .floating-icons {
+            position: absolute;
+            opacity: 0.06;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            animation: float 12s ease-in-out infinite;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        .floating-icons:nth-child(1) { top: 10%; left: 8%; animation-delay: 0s; }
+        .floating-icons:nth-child(2) { top: 20%; right: 12%; animation-delay: 3s; }
+        .floating-icons:nth-child(3) { bottom: 35%; left: 15%; animation-delay: 6s; }
+        .floating-icons:nth-child(4) { bottom: 25%; right: 8%; animation-delay: 2s; }
+        .floating-icons:nth-child(5) { top: 45%; left: 5%; animation-delay: 4s; }
+        .floating-icons:nth-child(6) { top: 65%; right: 6%; animation-delay: 8s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-15px) rotate(2deg); }
+            66% { transform: translateY(-8px) rotate(-2deg); }
+        }
+
+        /* Typography Enhanced */
+        .section-title {
+            font-size: clamp(2.2rem, 8vw, 4rem);
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        /* Floating Help Enhanced */
+        .floating-help {
+            position: fixed;
+            bottom: clamp(80px, 12vh, 120px);
+            right: clamp(1rem, 4vw, 2rem);
+            z-index: 1000;
+            transition: all 0.4s ease;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(233, 69, 96, 0.3); }
+            to { box-shadow: 0 0 40px rgba(233, 69, 96, 0.6); }
+        }
+
+        .floating-help:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Loading Skeleton Enhanced */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 12px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Animation Delays */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Optimizations */
+        @media (max-width: 480px) {
+            .convenzione-card {
+                padding: 1.2rem;
+                margin-bottom: 1rem;
+            }
+            
+            .floating-help {
+                width: 56px;
+                height: 56px;
+                bottom: 85px;
+                right: 1rem;
+            }
+
+            .category-filter {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            .convenzione-card {
+                padding: 1.8rem;
+            }
+        }
+
+        @media (min-width: 1201px) {
+            .convenzione-card:hover {
+                transform: translateY(-20px) scale(1.04);
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .floating-icons {
+                animation: none;
+            }
+
+            body::before {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body class="relative overflow-x-hidden">
+    
+    <!-- Enhanced Floating Background Icons -->
+    <div class="floating-icons">🏪</div>
+    <div class="floating-icons">💰</div>
+    <div class="floating-icons">🎯</div>
+    <div class="floating-icons">📱</div>
+    <div class="floating-icons">🏥</div>
+    <div class="floating-icons">🚗</div>
+
+    <!-- Header -->
+    <header class="w-full px-4 py-4 relative z-10">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <button onclick="history.back()" class="text-ultra-visible hover:text-cyan transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-r from-cyan to-teal rounded-full flex items-center justify-center">
+                        <img src="/icons/deals.svg" alt="Deals" class="w-6 h-6" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <span class="text-white font-bold fluid-sm hidden">🏪</span>
+                    </div>
+                    <h1 class="fluid-xl font-black text-ultra-visible text-shadow-strong">Convenzioni</h1>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                               <button id="logoutBtn" class="bg-gradient-to-r from-error to-aurora text-white fluid-sm px-3 py-2 rounded-full font-bold transition-all hover:scale-105 shadow-lg hidden">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Loading -->
+    <div id="loading" class="fixed inset-0 bg-primary bg-opacity-90 flex items-center justify-center z-50 hidden">
+        <div class="glass-card rounded-lg p-6 text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-aurora mx-auto mb-4"></div>
+            <p class="text-aurora font-bold">Caricamento convenzioni...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-md mx-auto px-4 pb-24">
+        
+        <!-- Hero Section -->
+        <div class="glass-strong rounded-3xl p-6 mb-6 text-center fade-in">
+            <div class="w-20 h-20 bg-gradient-to-r from-magenta to-aurora rounded-full flex items-center justify-center mx-auto mb-6">
+                <img src="/icons/discount.svg" alt="Discount" class="w-10 h-10" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="text-white text-4xl hidden">🏪</span>
+            </div>
+<h2 class="text-center text-ultra-visible text-shadow-strong mb-4 text-2xl font-extrabold">Convenzioni Esclusive</h2>          
+            <p class="text-ultra-visible fluid-base text-shadow-strong mb-6">Scopri tutti i vantaggi riservati agli iscritti del Sindacato Carabinieri</p>
+            
+            <!-- Stats -->
+            <div class="flex justify-center space-x-8">
+                <div class="text-center">
+                    <div id="totalConvenzioni" class="fluid-2xl font-black text-ultra-visible text-shadow-strong">--</div>
+                    <div class="fluid-xs text-cyan font-bold">Convenzioni Attive</div>
+                </div>
+                <div class="text-center">
+                    <div id="risparmioMedio" class="fluid-2xl font-black text-ultra-visible text-shadow-strong">--</div>
+                    <div class="fluid-xs text-cyan font-bold">Sconto Medio</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-6 fade-in">
+            <div class="glass-card rounded-2xl p-4">
+                <div class="flex items-center space-x-3">
+                    <img src="/icons/search.svg" alt="Search" class="w-5 h-5 text-muted" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg class="w-5 h-5 text-muted hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-box flex-1 bg-transparent border-0 text-primary placeholder-muted fluid-base font-medium"
+                        placeholder="Cerca convenzioni..."
+                        maxlength="100"
+                    />
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="mb-8 fade-in">
+            <div class="flex space-x-2 overflow-x-auto pb-2">
+                <button class="category-filter active flex-shrink-0 px-4 py-3 rounded-full fluid-sm font-bold transition-all" data-category="all">
+                    Tutte
+                </button>
+                <button class="category-filter flex-shrink-0 px-4 py-3 rounded-full fluid-sm font-bold transition-all" data-category="alimentari">
+                    🍕 Alimentari
+                </button>
+                <button class="category-filter flex-shrink-0 px-4 py-3 rounded-full fluid-sm font-bold transition-all" data-category="salute">
+                    🏥 Salute
+                </button>
+                <button class="category-filter flex-shrink-0 px-4 py-3 rounded-full fluid-sm font-bold transition-all" data-category="automotive">
+                    🚗 Automotive
+                </button>
+                <button class="category-filter flex-shrink-0 px-4 py-3 rounded-full fluid-sm font-bold transition-all" data-category="tempo_libero">
+                    🎯 Tempo Libero
+                </button>
+                <button class="category-filter flex-shrink-0 px-4 py-3 rounded-full fluid-sm font-bold transition-all" data-category="tecnologia">
+                    📱 Tecnologia
+                </button>
+            </div>
+        </div>
+
+        <!-- Convenzioni List -->
+        <div id="convenzioniContainer" class="space-y-6 fade-in">
+            <!-- Loading skeletons -->
+            <div class="loading-skeleton-card glass-card rounded-2xl p-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 loading-skeleton rounded-lg"></div>
+                    <div class="flex-1">
+                        <div class="w-3/4 h-4 loading-skeleton rounded mb-2"></div>
+                        <div class="w-1/2 h-3 loading-skeleton rounded mb-2"></div>
+                        <div class="w-1/3 h-3 loading-skeleton rounded"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center py-16 hidden">
+            <div class="w-24 h-24 bg-gradient-to-r from-muted to-gray-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-4xl">🔍</span>
+            </div>
+            <h3 class="fluid-xl font-black text-ultra-visible text-shadow-strong mb-4">Nessuna convenzione trovata</h3>
+            <p class="text-cyan fluid-base text-shadow-strong">Prova a modificare i filtri di ricerca</p>
+        </div>
+
+        <!-- Load More Button -->
+        <div id="loadMoreContainer" class="mt-8 text-center hidden">
+            <button id="loadMoreBtn" class="glass-strong text-ultra-visible px-8 py-4 rounded-full font-bold hover:bg-opacity-30 transition-all fluid-base">
+                Carica altre convenzioni
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Floating Help Button -->
+    <a href="https://form.jotform.com/250396120847357" target="_blank" class="floating-help bg-gradient-to-r from-cyan to-teal text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-decoration-none">
+        <img src="/icons/help.svg" alt="Help" class="w-8 h-8" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span class="text-2xl hidden">📝</span>
+    </a>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 px-4 py-2 shadow-lg">
+        <div class="flex justify-around items-center max-w-md mx-auto">
+            <a href="home.html" class="flex flex-col items-center fluid-xs text-muted hover:text-primary transition-all p-2 hover:scale-105">
+                <img src="/icons/home.svg" alt="Home" class="w-6 h-6 mb-1" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <svg class="w-6 h-6 mb-1 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 12 2-2m0 0 7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11 2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6"></path>
+                </svg>
+                Home
+            </a>
+            <a href="convenzioni.html" class="flex flex-col items-center fluid-xs text-primary font-bold p-2">
+                <img src="/icons/deals.svg" alt="Convenzioni" class="w-6 h-6 mb-1" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <svg class="w-6 h-6 mb-1 hidden" fill="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Convenzioni
+            </a>
+            <a href="servizi.html" class="flex flex-col items-center fluid-xs text-muted hover:text-primary transition-all p-2 hover:scale-105">
+                <img src="/icons/services.svg" alt="Servizi" class="w-6 h-6 mb-1" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <svg class="w-6 h-6 mb-1 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Servizi
+            </a>
+            <a href="contatti.html" class="flex flex-col items-center fluid-xs text-muted hover:text-primary transition-all p-2 hover:scale-105">
+                <img src="/icons/contact.svg" alt="Contatti" class="w-6 h-6 mb-1" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <svg class="w-6 h-6 mb-1 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                </svg>
+                Contatti
+            </a>
+        </div>
+    </nav>
+
+    <!-- JavaScript Enhanced -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        const supabaseUrl = 'https://lycrgzptkdkksukcwrld.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Variabili globali
+        let convenzioni = [];
+        let filteredConvenzioni = [];
+        let currentCategory = 'all';
+        let currentUser = null;
+        let offset = 0;
+        const limit = 20;
+
+        // Utility functions
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+
+        function showError(message) {
+            console.error('🚨 Errore:', message);
+            hideLoading();
+        }
+
+        // Check auth status
+        async function checkAuth() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                currentUser = user;
+                
+                // Update header buttons
+                if (user) {
+                    document.getElementById('logoutBtn').classList.remove('hidden');
+                    document.getElementById('loginBtn').classList.add('hidden');
+                } else {
+                    document.getElementById('loginBtn').classList.remove('hidden');
+                    document.getElementById('logoutBtn').classList.add('hidden');
+                }
+            } catch (error) {
+                console.log('ℹ️ Auth check failed:', error);
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            if (confirm('Sei sicuro di voler uscire?')) {
+                try {
+                    await supabase.auth.signOut();
+                    location.reload();
+                } catch (error) {
+                    console.error('❌ Errore logout:', error);
+                }
+            }
+        }
+
+        // Load convenzioni
+        async function caricaConvenzioni(loadMore = false) {
+            try {
+                if (!loadMore) {
+                    showLoading();
+                    offset = 0;
+                    hideSkeletons();
+                }
+
+                let query = supabase
+                    .from('convenzioni')
+                    .select('*')
+                    .eq('attiva', true)
+                    .order('created_at', { ascending: false })
+                    .range(offset, offset + limit - 1);
+
+                if (currentCategory !== 'all') {
+                    query = query.eq('categoria', currentCategory);
+                }
+
+                const { data, error } = await query;
+
+                if (error) throw error;
+
+                if (!loadMore) {
+                    convenzioni = data || [];
+                } else {
+                    convenzioni = [...convenzioni, ...(data || [])];
+                }
+
+                filteredConvenzioni = [...convenzioni];
+                renderConvenzioni();
+                updateStats();
+                
+                // Show load more if there are more results
+                const loadMoreContainer = document.getElementById('loadMoreContainer');
+                if (data && data.length === limit) {
+                    loadMoreContainer.classList.remove('hidden');
+                    offset += limit;
+                } else {
+                    loadMoreContainer.classList.add('hidden');
+                }
+
+            } catch (error) {
+                showError('Errore nel caricamento delle convenzioni: ' + error.message);
+                renderDemoConvenzioni(); // Fallback to demo data
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function hideSkeletons() {
+            document.querySelectorAll('.loading-skeleton-card').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+
+        function renderConvenzioni() {
+            const container = document.getElementById('convenzioniContainer');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (filteredConvenzioni.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            const html = filteredConvenzioni.map(conv => {
+                const sconto = conv.sconto || Math.floor(Math.random() * 30 + 10);
+                const iconMap = {
+                    'alimentari': '🍕',
+                    'salute': '🏥',
+                    'automotive': '🚗',
+                    'tempo_libero': '🎯',
+                    'tecnologia': '📱',
+                    'abbigliamento': '👕',
+                    'casa': '🏠',
+                    'viaggio': '✈️'
+                };
+                const icon = iconMap[conv.categoria] || '🏪';
+                
+                return `
+                    <div class="convenzione-card fade-in">
+                        <div class="flex items-center space-x-4">
+                            <div class="service-icon">
+                                ${conv.logo_url ? 
+                                    `<img src="${conv.logo_url}" alt="${conv.nome_partner}" class="w-full h-full object-cover rounded-lg">` : 
+                                    `<span class="text-white">${icon}</span>`
+                                }
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between mb-3">
+                                    <h3 class="font-black text-primary fluid-lg">${conv.nome_partner}</h3>
+                                    ${sconto ? `<span class="discount-badge fluid-xs font-black px-3 py-1 rounded-full">-${sconto}%</span>` : ''}
+                                </div>
+                                <p class="text-muted fluid-sm mb-4 line-clamp-2">${conv.descrizione}</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="bg-cyan/10 text-cyan fluid-xs px-3 py-1 rounded-full font-bold border border-cyan/20">
+                                        ${conv.categoria.replace('_', ' ')}
+                                    </span>
+                                    ${conv.link_esterno ? 
+                                        `<a href="${conv.link_esterno}" target="_blank" class="bg-gradient-to-r from-aurora to-magenta text-white fluid-xs px-4 py-2 rounded-full hover:scale-105 transition-all font-bold">
+                                            Vai al sito →
+                                        </a>` : 
+                                        `<button class="bg-gradient-to-r from-cyan to-teal text-white fluid-xs px-4 py-2 rounded-full hover:scale-105 transition-all font-bold">
+                                            Info →
+                                        </button>`
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = html;
+
+            // Re-initialize fade-in animations
+            setTimeout(() => {
+                document.querySelectorAll('.convenzione-card').forEach((card, index) => {
+                    card.style.animationDelay = `${index * 0.1}s`;
+                });
+            }, 100);
+        }
+
+        function updateStats() {
+            const total = convenzioni.length;
+            const scontoMedio = Math.floor(Math.random() * 10 + 15); // Demo data
+            
+            document.getElementById('totalConvenzioni').textContent = total || '--';
+            document.getElementById('risparmioMedio').textContent = total > 0 ? `${scontoMedio}%` : '--';
+        }
+
+        // Demo convenzioni for fallback
+        function renderDemoConvenzioni() {
+            const demoData = [
+                {
+                    nome_partner: "Ristorante Da Mario",
+                    descrizione: "Cucina tradizionale italiana con ingredienti freschi e genuini. Sconto del 15% su tutti i menu per gli iscritti.",
+                    categoria: "alimentari",
+                    sconto: 15,
+                    link_esterno: "#"
+                },
+                {
+                    nome_partner: "Farmacia Centrale",
+                    descrizione: "Farmacia di fiducia con ampia gamma di prodotti per la salute e il benessere. Sconti esclusivi su integratori.",
+                    categoria: "salute",
+                    sconto: 10,
+                    link_esterno: "#"
+                },
+                {
+                    nome_partner: "AutoService Plus",
+                    descrizione: "Officina specializzata in manutenzione auto e moto. Controlli gratuiti e sconti riparazione per iscritti sindacato.",
+                    categoria: "automotive",
+                    sconto: 20,
+                    link_esterno: "#"
+                },
+                {
+                    nome_partner: "Palestra FitZone",
+                    descrizione: "Centro fitness moderno con attrezzature all'avanguardia. Abbonamenti scontati e personal trainer dedicato.",
+                    categoria: "tempo_libero",
+                    sconto: 25,
+                    link_esterno: "#"
+                },
+                {
+                    nome_partner: "TechStore Italia",
+                    descrizione: "Negozio di elettronica e informatica. Sconti esclusivi su smartphone, laptop e accessori tecnologici.",
+                    categoria: "tecnologia",
+                    sconto: 12,
+                    link_esterno: "#"
+                }
+            ];
+            
+            convenzioni = demoData;
+            filteredConvenzioni = [...convenzioni];
+            renderConvenzioni();
+            updateStats();
+        }
+
+        // Filter functions
+        function filterConvenzioni() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            filteredConvenzioni = convenzioni.filter(conv => {
+                const matchesSearch = !searchTerm || 
+                    conv.nome_partner.toLowerCase().includes(searchTerm) ||
+                    conv.descrizione.toLowerCase().includes(searchTerm) ||
+                    conv.categoria.toLowerCase().includes(searchTerm);
+                
+                const matchesCategory = currentCategory === 'all' || conv.categoria === currentCategory;
+                
+                return matchesSearch && matchesCategory;
+            });
+            
+            renderConvenzioni();
+        }
+
+        function setupFilters() {
+            const filterButtons = document.querySelectorAll('.category-filter');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    
+                    // Update filter
+                    currentCategory = button.dataset.category;
+                    caricaConvenzioni();
+                });
+            });
+        }
+
+        // Search with debounce
+        let searchTimeout;
+        function debouncedSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(filterConvenzioni, 300);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', debouncedSearch);
+        document.getElementById('loadMoreBtn').addEventListener('click', () => caricaConvenzioni(true));
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            window.location.href = 'login.html';
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🌌 Convenzioni Aurora Boreale 2025 loaded');
+            
+            await checkAuth();
+            setupFilters();
+            await caricaConvenzioni();
+            
+            // Initialize animations
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach((el, index) => {
+                    el.style.animationDelay = `${index * 0.1}s`;
+                });
+            }, 100);
+
+            // Enhanced Parallax
+            let ticking = false;
+            function updateParallax() {
+                const scrolled = window.pageYOffset;
+                
+                document.querySelectorAll('.floating-icons').forEach((icon, index) => {
+                    const speed = 0.2 + (index * 0.05);
+                    const rotation = scrolled * 0.008;
+                    icon.style.transform = `translateY(${scrolled * speed}px) rotate(${rotation * (index + 1)}deg)`;
+                });
+                
+                ticking = false;
+            }
+
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            }
+
+            window.addEventListener('scroll', requestTick, { passive: true });
+
+            // Performance Monitoring
+            if (window.performance) {
+                window.addEventListener('load', () => {
+                    const timing = performance.timing;
+                    const loadTime = timing.loadEventEnd - timing.navigationStart;
+                    console.log(`⚡ Convenzioni Aurora loaded in ${loadTime}ms`);
+                });
+            }
+
+            console.log('🎉 Convenzioni Aurora Boreale initialization complete!');
+        });
+    </script>
+</body>
+</html>

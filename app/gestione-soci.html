@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Soci</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1a1a2e',
+                        secondary: '#16213e',
+                        accent: '#0f3460',
+                        aurora: '#e94560',
+                        cyan: '#00d4ff',
+                        magenta: '#ff006e',
+                        gold: '#ffd700',
+                        teal: '#03dac6',
+                        dark: '#0a0a23',
+                        light: '#f8fafc',
+                        success: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        :root {
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--gradient-aurora);
+            background-size: 400% 400%;
+            animation: aurora 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes aurora {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fade-in 0.6s ease-out forwards;
+        }
+
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+            font-weight: 800;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .section-title {
+            font-size: clamp(1.25rem, 4vw, 1.75rem);
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(16, 185, 129, 0.15);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.15);
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(16, 185, 129, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            border-left: 5px solid #10b981;
+        }
+
+        .member-card:hover {
+            border-color: rgba(16, 185, 129, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.1);
+        }
+
+        .btn-aurora {
+            background: var(--gradient-magic);
+            color: white;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 44px;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-aurora:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1a1a2e;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            min-height: 44px;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+            border-color: rgba(16, 185, 129, 0.6);
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin: 0.125rem;
+        }
+
+        .role-badge.admin {
+            background: var(--gradient-gold);
+            color: #1a1a2e;
+        }
+
+        .role-badge.dirigente {
+            background: var(--gradient-magic);
+            color: white;
+        }
+
+        .role-badge.user {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid rgba(16, 185, 129, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            border-color: rgba(16, 185, 129, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: #1a1a2e;
+            opacity: 0.8;
+        }
+
+        input, select {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            min-height: 44px;
+            padding: 0.75rem;
+        }
+
+        input:focus, select:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+            outline: none;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            border: 3px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #10b981;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .glass-card {
+                border-radius: 16px;
+                padding: 1.5rem;
+            }
+
+            .member-card {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body class="font-inter">
+
+    <!-- Back Button -->
+    <div class="absolute top-6 left-6 z-10">
+        <button onclick="history.back()" class="flex items-center gap-3 text-ultra-visible hover:text-success transition-all duration-300 transform hover:scale-110 group">
+            <svg class="w-8 h-8 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span class="text-lg font-bold">Indietro</span>
+        </button>
+    </div>
+
+    <main class="min-h-screen px-4 py-8 max-w-6xl mx-auto">
+
+        <!-- Hero Section -->
+        <div class="text-center mb-8 fade-in">
+            <div class="w-20 h-20 bg-gradient-to-br from-success to-teal rounded-full mx-auto mb-6 flex items-center justify-center shadow-2xl">
+                <span class="text-3xl text-white">👥</span>
+            </div>
+            <h1 class="hero-title text-ultra-visible mb-4">Gestione Soci</h1>
+            <p class="text-lg text-ultra-visible opacity-90 max-w-2xl mx-auto font-semibold">
+                Amministra membri e iscrizioni della community
+            </p>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="glass-card p-6 mb-8 fade-in">
+            <h3 class="section-title text-primary mb-6 text-center">📊 Panoramica Soci</h3>
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalMembers">0</div>
+                    <div class="stat-label">Soci Totali</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalDirigenti">0</div>
+                    <div class="stat-label">Dirigenti</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalAdmins">0</div>
+                    <div class="stat-label">Amministratori</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="newMembersMonth">0</div>
+                    <div class="stat-label">Nuovi Questo Mese</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Bar -->
+        <div class="glass-card p-6 mb-8 fade-in">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <button onclick="loadMembers()" class="btn-success" id="refreshBtn">
+                        <span class="mr-2">🔄</span>
+                        Aggiorna Lista
+                    </button>
+                    <button onclick="exportMembers()" class="btn-secondary" id="exportBtn">
+                        <span class="mr-2">📊</span>
+                        Esporta Dati
+                    </button>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <input type="text" id="searchInput" placeholder="Cerca per nome o email..." class="text-sm w-64" onkeyup="filterMembers()">
+                    <select id="filterRole" onchange="filterMembers()" class="text-sm">
+                        <option value="all">Tutti i ruoli</option>
+                        <option value="USER">Utenti</option>
+                        <option value="DIRIGENTE">Dirigenti</option>
+                        <option value="ADMIN">Amministratori</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members List -->
+        <div class="glass-card p-6 fade-in">
+            <h3 class="section-title text-primary mb-6">👥 Lista Soci</h3>
+            <div id="membersContainer">
+                <div class="text-center py-8">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-600 font-semibold">Caricamento soci...</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+        
+        const supabase = createClient(
+            'https://lycrgzptkdkksukcwrld.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk'
+        );
+
+        let currentUser = null;
+        let currentUserRoles = [];
+        let allMembers = [];
+
+        // Initialize app
+        async function init() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) {
+                    window.location.href = '../login.html';
+                    return;
+                }
+
+                currentUser = user;
+                await loadUserProfile();
+                await loadMembers();
+                await loadStats();
+
+            } catch (error) {
+                console.error('Errore inizializzazione:', error);
+                showNotification('❌ Errore nel caricamento', 'error');
+            }
+        }
+
+        async function loadUserProfile() {
+            try {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('nome, email, ruoli')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (!profile) throw new Error('Profilo non trovato');
+
+                currentUserRoles = profile.ruoli || ['USER'];
+
+                // Check if user has required permissions (DIRIGENTE or ADMIN)
+                if (!currentUserRoles.includes('DIRIGENTE') && !currentUserRoles.includes('ADMIN')) {
+                    window.location.href = 'home.html';
+                    return;
+                }
+
+            } catch (error) {
+                console.error('Errore caricamento profilo:', error);
+                showNotification('❌ Errore nel caricamento del profilo', 'error');
+            }
+        }
+
+        async function loadMembers() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            refreshBtn.innerHTML = '<div class="spinner"></div>Caricamento...';
+            refreshBtn.disabled = true;
+
+            try {
+                const { data: members, error } = await supabase
+                    .from('profiles')
+                    .select('id, nome, cognome, email, telefono, ruoli, created_at, updated_at')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                allMembers = members || [];
+                displayMembers();
+
+                refreshBtn.innerHTML = '<span class="mr-2">✅</span>Aggiornato';
+                setTimeout(() => {
+                    refreshBtn.innerHTML = '<span class="mr-2">🔄</span>Aggiorna Lista';
+                }, 2000);
+
+            } catch (error) {
+                console.error('Errore caricamento soci:', error);
+                showNotification('❌ Errore nel caricamento dei soci', 'error');
+                refreshBtn.innerHTML = '<span class="mr-2">⚠️</span>Errore';
+            } finally {
+                refreshBtn.disabled = false;
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const totalMembers = allMembers.length;
+                const totalDirigenti = allMembers.filter(m => m.ruoli && m.ruoli.includes('DIRIGENTE')).length;
+                const totalAdmins = allMembers.filter(m => m.ruoli && m.ruoli.includes('ADMIN')).length;
+                
+                // New members this month
+                const thisMonth = new Date();
+                thisMonth.setDate(1);
+                const newMembersMonth = allMembers.filter(m => 
+                    new Date(m.created_at) >= thisMonth
+                ).length;
+
+                // Animate counters
+                animateCounter('totalMembers', totalMembers);
+                animateCounter('totalDirigenti', totalDirigenti);
+                animateCounter('totalAdmins', totalAdmins);
+                animateCounter('newMembersMonth', newMembersMonth);
+
+            } catch (error) {
+                console.error('Errore caricamento statistiche:', error);
+            }
+        }
+
+        function displayMembers() {
+            const container = document.getElementById('membersContainer');
+            
+            if (allMembers.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="text-6xl mb-4">👥</div>
+                        <h3 class="text-xl font-bold text-primary mb-2">Nessun socio trovato</h3>
+                        <p class="text-gray-600">La lista dei soci è vuota</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const filteredMembers = getFilteredMembers();
+            
+            if (filteredMembers.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-4">🔍</div>
+                        <p class="text-gray-600 font-semibold">Nessun socio corrisponde ai filtri selezionati</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredMembers.map(member => {
+                const memberRoles = member.ruoli || ['USER'];
+                const rolesHtml = memberRoles.map(role => {
+                    const badgeClass = role === 'ADMIN' ? 'admin' : role === 'DIRIGENTE' ? 'dirigente' : 'user';
+                    const icon = role === 'ADMIN' ? '👑' : role === 'DIRIGENTE' ? '🎯' : '👤';
+                    return `<span class="role-badge ${badgeClass}">${icon} ${role}</span>`;
+                }).join('');
+
+                const fullName = [member.nome, member.cognome].filter(Boolean).join(' ') || 'Nome non disponibile';
+                const isCurrentUser = member.id === currentUser.id;
+
+                return `
+                    <div class="member-card">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-success to-teal rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                        ${fullName.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-primary text-lg">
+                                            ${fullName}
+                                            ${isCurrentUser ? '<span class="text-aurora text-sm">(Tu)</span>' : ''}
+                                        </h4>
+                                        <p class="text-gray-600">${member.email || 'Email non disponibile'}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-wrap items-center gap-2 mb-3">
+                                    ${rolesHtml}
+                                </div>
+
+                                <div class="flex items-center gap-4 text-sm text-gray-500">
+                                    <span>📅 Iscritto: ${new Date(member.created_at).toLocaleDateString('it-IT')}</span>
+                                    ${member.telefono ? `<span>📞 ${member.telefono}</span>` : ''}
+                                    ${member.updated_at ? `<span>🔄 Aggiornato: ${new Date(member.updated_at).toLocaleDateString('it-IT')}</span>` : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="ml-4 flex gap-2">
+                                ${currentUserRoles.includes('ADMIN') && !isCurrentUser ? `
+                                    <button onclick="editMemberRoles('${member.id}')" class="btn-secondary text-sm px-3 py-2">
+                                        <span class="mr-1">👑</span>
+                                        Ruoli
+                                    </button>
+                                ` : ''}
+                                <button onclick="viewMemberDetails('${member.id}')" class="btn-success text-sm px-3 py-2">
+                                    <span class="mr-1">👁️</span>
+                                    Dettagli
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getFilteredMembers() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const roleFilter = document.getElementById('filterRole').value;
+
+            return allMembers.filter(member => {
+                const fullName = [member.nome, member.cognome].filter(Boolean).join(' ').toLowerCase();
+                const email = (member.email || '').toLowerCase();
+                const searchMatch = fullName.includes(searchTerm) || email.includes(searchTerm);
+
+                const memberRoles = member.ruoli || ['USER'];
+                const roleMatch = roleFilter === 'all' || memberRoles.includes(roleFilter);
+
+                return searchMatch && roleMatch;
+            });
+        }
+
+        function filterMembers() {
+            displayMembers();
+        }
+
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const duration = 1000;
+            const increment = targetValue / (duration / 16);
+            let currentValue = 0;
+
+            const counter = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    element.textContent = targetValue;
+                    clearInterval(counter);
+                } else {
+                    element.textContent = Math.floor(currentValue);
+                }
+            }, 16);
+        }
+
+        function editMemberRoles(memberId) {
+            // Redirect to role management (already implemented in areadirigenti.html)
+            window.location.href = `areadirigenti.html#user-${memberId}`;
+        }
+
+        function viewMemberDetails(memberId) {
+            const member = allMembers.find(m => m.id === memberId);
+            if (!member) return;
+
+            const fullName = [member.nome, member.cognome].filter(Boolean).join(' ') || 'Nome non disponibile';
+            const memberRoles = member.ruoli || ['USER'];
+            
+            alert(`Dettagli Socio:
+            
+Nome: ${fullName}
+Email: ${member.email || 'Non disponibile'}
+Telefono: ${member.telefono || 'Non disponibile'}
+Ruoli: ${memberRoles.join(', ')}
+Iscrizione: ${new Date(member.created_at).toLocaleDateString('it-IT')}
+${member.updated_at ? `Ultimo aggiornamento: ${new Date(member.updated_at).toLocaleDateString('it-IT')}` : ''}`);
+        }
+
+        async function exportMembers() {
+            const exportBtn = document.getElementById('exportBtn');
+            exportBtn.innerHTML = '<div class="spinner"></div>Esportando...';
+            exportBtn.disabled = true;
+
+            try {
+                // Prepare export data
+                const exportData = {
+                    timestamp: new Date().toISOString(),
+                    total_members: allMembers.length,
+                    members: allMembers.map(member => ({
+                        nome: member.nome,
+                        cognome: member.cognome,
+                        email: member.email,
+                        telefono: member.telefono,
+                        ruoli: member.ruoli,
+                        data_iscrizione: member.created_at
+                    })),
+                    exported_by: currentUser.id
+                };
+
+                // Create and download file
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `aurora-soci-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                showNotification('✅ Lista soci esportata con successo!', 'success');
+                
+                exportBtn.innerHTML = '<span class="mr-2">✅</span>Completato';
+                setTimeout(() => {
+                    exportBtn.innerHTML = '<span class="mr-2">📊</span>Esporta Dati';
+                }, 2000);
+
+            } catch (error) {
+                console.error('Errore esportazione:', error);
+                showNotification('❌ Errore nell\'esportazione', 'error');
+                exportBtn.innerHTML = '<span class="mr-2">⚠️</span>Errore';
+            } finally {
+                exportBtn.disabled = false;
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'bg-gradient-to-r from-green-500 to-green-600',
+                error: 'bg-gradient-to-r from-red-500 to-red-600',
+                info: 'bg-gradient-to-r from-blue-500 to-blue-600'
+            };
+            
+            notification.className = `fixed top-6 right-6 ${colors[type]} text-white px-6 py-4 rounded-2xl shadow-2xl z-50 transform translate-x-full transition-transform duration-500 font-bold text-base backdrop-blur-md border border-white/20`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 500);
+            }, 4000);
+        }
+
+        // Expose functions globally
+        window.loadMembers = loadMembers;
+        window.filterMembers = filterMembers;
+        window.editMemberRoles = editMemberRoles;
+        window.viewMemberDetails = viewMemberDetails;
+        window.exportMembers = exportMembers;
+
+        // Initialize app
+        init();
+    </script>
+
+</body>
+</html>

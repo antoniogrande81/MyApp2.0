@@ -1,0 +1,527 @@
+// 🔧 CONFIGURAZIONE APPWRITE CENTRALIZZATA
+// File: appwrite-config.js
+
+// =====================================================
+// CONFIGURAZIONE APPWRITE PER MYAPP
+// =====================================================
+
+// 🌐 ENDPOINT E PROJECT ID
+const APPWRITE_CONFIG = {
+    endpoint: 'https://fra.cloud.appwrite.io/v1',
+    projectId: '688db9670010e3113d56', // ✅ Project ID corretto
+    databaseId: '688dbfaf001fcce68c0f', // main-database
+    
+    // 📁 COLLECTIONS IDs
+    collections: {
+        user_profiles: '688dca4f00345547d52f',    // Profili utente
+        tessere: '688e6222002987f97521',          // Tessere digitali
+        notizie: '688e02b3000595a16b2c',          // News e comunicazioni
+        convenzioni: '688e03f000195871d9e',       // Convenzioni
+        organico_dirigenti: '688e0501000254ad0966', // Organico dirigenti sindacali
+        requests: '688e6222002987f97521'          // Usa tessere come placeholder per richieste
+    },
+
+    // 🗂️ STORAGE BUCKETS (da configurare se necessari)
+    buckets: {
+        documents: 'documents-bucket',    // Documenti utenti
+        images: 'images-bucket',          // Immagini e media
+        tessere: 'tessere-bucket'         // Immagini tessere
+    }
+};
+
+// 🚀 INIZIALIZZAZIONE CLIENT APPWRITE
+let appwriteClient = null;
+let appwriteAccount = null;
+let appwriteDatabases = null;
+let appwriteStorage = null;
+
+function initializeAppwrite() {
+    if (typeof Appwrite === 'undefined') {
+        console.error('❌ Appwrite SDK non caricato. Assicurati di includere il CDN.');
+        return false;
+    }
+
+    try {
+        const { Client, Account, Databases, Storage } = Appwrite;
+
+        // Inizializza client
+        appwriteClient = new Client()
+            .setEndpoint(APPWRITE_CONFIG.endpoint)
+            .setProject(APPWRITE_CONFIG.projectId);
+
+        // Inizializza servizi
+        appwriteAccount = new Account(appwriteClient);
+        appwriteDatabases = new Databases(appwriteClient);
+        appwriteStorage = new Storage(appwriteClient);
+
+        console.log('✅ Appwrite inizializzato correttamente');
+        return true;
+    } catch (error) {
+        console.error('❌ Errore inizializzazione Appwrite:', error);
+        return false;
+    }
+}
+
+// 👤 UTILITY FUNCTIONS PER USER MANAGEMENT
+const AppwriteUserManager = {
+    // Get current user
+    getCurrentUser: async () => {
+        try {
+            return await appwriteAccount.get();
+        } catch (error) {
+            console.error('❌ Errore recupero utente corrente:', error);
+            throw error;
+        }
+    },
+
+    // Get user profile
+    getUserProfile: async (userId) => {
+        try {
+            const { Query } = Appwrite;
+            const response = await appwriteDatabases.listDocuments(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.user_profiles,
+                [Query.equal('user_id', userId)]
+            );
+            
+            return response.documents.length > 0 ? response.documents[0] : null;
+        } catch (error) {
+            console.error('❌ Errore caricamento profilo:', error);
+            throw error;
+        }
+    },
+
+    // Get user tessera
+    getUserTessera: async (userId) => {
+        try {
+            const { Query } = Appwrite;
+            const response = await appwriteDatabases.listDocuments(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.tessere,
+                [Query.equal('user_id', userId)]
+            );
+            
+            return response.documents.length > 0 ? response.documents[0] : null;
+        } catch (error) {
+            console.error('❌ Errore caricamento tessera:', error);
+            throw error;
+        }
+    },
+
+    // Create user profile
+    createUserProfile: async (userData, userId) => {
+        try {
+            const { ID } = Appwrite;
+            const profileData = {
+                user_id: userId,
+                email: userData.email,
+                full_name: `${userData.nome} ${userData.cognome}`.trim(),
+                cognome: userData.cognome,
+                telefono: userData.telefono,
+                role: 'USER',
+                data_nascita: userData.data_nascita,
+                luogo_nascita: userData.luogo_nascita,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+            
+            return await appwriteDatabases.createDocument(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.user_profiles,
+                ID.unique(),
+                profileData
+            );
+        } catch (error) {
+            console.error('❌ Errore creazione profilo:', error);
+            throw error;
+        }
+    },
+
+    // Create tessera
+    createTessera: async (userId, profileData) => {
+        try {
+            const { ID } = Appwrite;
+            const year = new Date().getFullYear();
+            const random = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+            
+            const tesseraData = {
+                user_id: userId,
+                numero_tessera: `SC${year}${random}`,
+                nome_completo: profileData.full_name,
+                email: profileData.email,
+                telefono: profileData.telefono,
+                data_emissione: new Date().toISOString(),
+                data_scadenza: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+                stato: 'ATTIVA',
+                tipo: 'STANDARD',
+                created_at: new Date().toISOString()
+            };
+            
+            return await appwriteDatabases.createDocument(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.tessere,
+                ID.unique(),
+                tesseraData
+            );
+        } catch (error) {
+            console.error('❌ Errore creazione tessera:', error);
+            throw error;
+        }
+    },
+
+    // Login user
+    login: async (email, password) => {
+        try {
+            return await appwriteAccount.createEmailPasswordSession(email, password);
+        } catch (error) {
+            console.error('❌ Errore login:', error);
+            throw error;
+        }
+    },
+
+    // Register user
+    register: async (userData) => {
+        try {
+            const { ID } = Appwrite;
+            
+            // Create account
+            const user = await appwriteAccount.create(
+                ID.unique(),
+                userData.email,
+                userData.password,
+                `${userData.nome} ${userData.cognome}`
+            );
+
+            // Login automatically
+            await appwriteAccount.createEmailPasswordSession(userData.email, userData.password);
+
+            // Create profile
+            const profile = await AppwriteUserManager.createUserProfile(userData, user.$id);
+
+            // Create tessera
+            const tessera = await AppwriteUserManager.createTessera(user.$id, profile);
+
+            return { user, profile, tessera };
+        } catch (error) {
+            console.error('❌ Errore registrazione:', error);
+            throw error;
+        }
+    },
+
+    // Logout user
+    logout: async () => {
+        try {
+            await appwriteAccount.deleteSession('current');
+        } catch (error) {
+            console.error('❌ Errore logout:', error);
+            throw error;
+        }
+    },
+
+    // Check if user is admin
+    isAdmin: async (userId) => {
+        try {
+            const profile = await AppwriteUserManager.getUserProfile(userId);
+            const role = profile?.role?.toUpperCase();
+            return role === 'ADMIN' || role === 'DIRIGENTE';
+        } catch (error) {
+            console.error('❌ Errore verifica privilegi admin:', error);
+            return false;
+        }
+    }
+};
+
+// 📊 UTILITY FUNCTIONS PER DATA MANAGEMENT
+const AppwriteDataManager = {
+    // Get all users (admin only)
+    getAllUsers: async (limit = 100) => {
+        try {
+            const { Query } = Appwrite;
+            const response = await appwriteDatabases.listDocuments(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.user_profiles,
+                [Query.limit(limit), Query.orderDesc('created_at')]
+            );
+            
+            return response.documents;
+        } catch (error) {
+            console.error('❌ Errore caricamento utenti:', error);
+            throw error;
+        }
+    },
+
+    // Get all tessere (admin only)
+    getAllTessere: async (limit = 100) => {
+        try {
+            const { Query } = Appwrite;
+            const response = await appwriteDatabases.listDocuments(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.tessere,
+                [Query.limit(limit), Query.orderDesc('created_at')]
+            );
+            
+            return response.documents;
+        } catch (error) {
+            console.error('❌ Errore caricamento tessere:', error);
+            throw error;
+        }
+    },
+
+    // Create request
+    createRequest: async (requestData) => {
+        try {
+            const { ID } = Appwrite;
+            const data = {
+                ...requestData,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                status: 'PENDING'
+            };
+            
+            return await appwriteDatabases.createDocument(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.requests,
+                ID.unique(),
+                data
+            );
+        } catch (error) {
+            console.error('❌ Errore creazione richiesta:', error);
+            throw error;
+        }
+    },
+
+    // Get user requests
+    getUserRequests: async (userId) => {
+        try {
+            const { Query } = Appwrite;
+            const response = await appwriteDatabases.listDocuments(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.requests,
+                [Query.equal('user_id', userId), Query.orderDesc('created_at')]
+            );
+            
+            return response.documents;
+        } catch (error) {
+            console.error('❌ Errore caricamento richieste utente:', error);
+            throw error;
+        }
+    },
+
+    // Get all requests (admin only)
+    getAllRequests: async (limit = 100) => {
+        try {
+            const { Query } = Appwrite;
+            const response = await appwriteDatabases.listDocuments(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.requests,
+                [Query.limit(limit), Query.orderDesc('created_at')]
+            );
+            
+            return response.documents;
+        } catch (error) {
+            console.error('❌ Errore caricamento tutte le richieste:', error);
+            throw error;
+        }
+    },
+
+    // Update request status
+    updateRequestStatus: async (requestId, status, notes = '') => {
+        try {
+            const updateData = {
+                status: status,
+                updated_at: new Date().toISOString()
+            };
+            
+            if (notes) {
+                updateData.admin_notes = notes;
+            }
+            
+            return await appwriteDatabases.updateDocument(
+                APPWRITE_CONFIG.databaseId,
+                APPWRITE_CONFIG.collections.requests,
+                requestId,
+                updateData
+            );
+        } catch (error) {
+            console.error('❌ Errore aggiornamento stato richiesta:', error);
+            throw error;
+        }
+    }
+};
+
+// 📄 UTILITY FUNCTIONS PER FILE MANAGEMENT
+const AppwriteFileManager = {
+    // Upload file
+    uploadFile: async (bucketId, file, permissions = []) => {
+        try {
+            const { ID, Permission, Role } = Appwrite;
+            
+            return await appwriteStorage.createFile(
+                bucketId,
+                ID.unique(),
+                file,
+                permissions.length > 0 ? permissions : [
+                    Permission.read(Role.any()),
+                    Permission.write(Role.users())
+                ]
+            );
+        } catch (error) {
+            console.error('❌ Errore upload file:', error);
+            throw error;
+        }
+    },
+
+    // Get file preview URL
+    getFilePreview: (bucketId, fileId, width = 400, height = 400) => {
+        try {
+            return appwriteStorage.getFilePreview(bucketId, fileId, width, height);
+        } catch (error) {
+            console.error('❌ Errore generazione preview:', error);
+            throw error;
+        }
+    },
+
+    // Get file download URL
+    getFileDownload: (bucketId, fileId) => {
+        try {
+            return appwriteStorage.getFileDownload(bucketId, fileId);
+        } catch (error) {
+            console.error('❌ Errore generazione download URL:', error);
+            throw error;
+        }
+    },
+
+    // Delete file
+    deleteFile: async (bucketId, fileId) => {
+        try {
+            return await appwriteStorage.deleteFile(bucketId, fileId);
+        } catch (error) {
+            console.error('❌ Errore eliminazione file:', error);
+            throw error;
+        }
+    }
+};
+
+// 🔄 UTILITY FUNCTIONS GENERALI
+const AppwriteUtils = {
+    // Format date for Italian locale
+    formatDate: (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('it-IT');
+    },
+
+    // Format currency
+    formatCurrency: (amount) => {
+        return new Intl.NumberFormat('it-IT', {
+            style: 'currency',
+            currency: 'EUR'
+        }).format(amount);
+    },
+
+    // Get initials from name
+    getInitials: (name) => {
+        return name
+            .split(' ')
+            .map(word => word.charAt(0))
+            .join('')
+            .toUpperCase()
+            .substring(0, 2);
+    },
+
+    // Safe redirect with delay
+    safeRedirect: (url, delay = 500) => {
+        console.log(`🔄 Redirect a: ${url} tra ${delay}ms`);
+        setTimeout(() => {
+            window.location.href = url;
+        }, delay);
+    },
+
+    // Show toast notification
+    showToast: (message, type = 'info', duration = 5000) => {
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-300 transform translate-x-full`;
+        
+        // Set toast style based on type
+        const styles = {
+            success: 'bg-green-500 text-white',
+            error: 'bg-red-500 text-white',
+            warning: 'bg-yellow-500 text-white',
+            info: 'bg-blue-500 text-white'
+        };
+        
+        toast.classList.add(...styles[type].split(' '));
+        toast.innerHTML = `
+            <div class="flex items-center gap-3">
+                <span class="text-lg">
+                    ${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}
+                </span>
+                <span class="font-semibold">${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-lg opacity-75 hover:opacity-100">
+                    ×
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Animate in
+        setTimeout(() => {
+            toast.classList.remove('translate-x-full');
+        }, 100);
+        
+        // Auto remove
+        setTimeout(() => {
+            toast.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 300);
+        }, duration);
+    },
+
+    // Check internet connection
+    isOnline: () => {
+        return navigator.onLine;
+    },
+
+    // Validate email
+    isValidEmail: (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    },
+
+    // Validate phone
+    isValidPhone: (phone) => {
+        return /^\+?[1-9]\d{1,14}$/.test(phone.replace(/[\s\-\(\)]/g, ''));
+    }
+};
+
+// 🚀 AUTO-INIZIALIZZAZIONE
+// Inizializza Appwrite quando il DOM è pronto
+document.addEventListener('DOMContentLoaded', () => {
+    if (!initializeAppwrite()) {
+        console.error('❌ Impossibile inizializzare Appwrite. Verifica la configurazione.');
+    }
+});
+
+// 📤 EXPORT DELLE FUNZIONI (per uso globale)
+window.APPWRITE_CONFIG = APPWRITE_CONFIG;
+window.AppwriteUserManager = AppwriteUserManager;
+window.AppwriteDataManager = AppwriteDataManager;
+window.AppwriteFileManager = AppwriteFileManager;
+window.AppwriteUtils = AppwriteUtils;
+
+// Export per ES6 modules (se supportati)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        APPWRITE_CONFIG,
+        AppwriteUserManager,
+        AppwriteDataManager,
+        AppwriteFileManager,
+        AppwriteUtils,
+        initializeAppwrite
+    };
+}
+
+console.log('🔧 Configurazione Appwrite caricata - MyApp Sindacato Carabinieri');

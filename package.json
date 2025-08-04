@@ -1,0 +1,61 @@
+{
+  "name": "la-mia-app2026",
+  "version": "2.0.0",
+  "description": "Progressive Web App per Sindacato Carabinieri - Il tuo dirigente sempre con te",
+  "main": "public/index.html",
+  "homepage": "https://antoniogrande81.github.io/la-mia-app2026",
+  "scripts": {
+    "dev": "npx http-server public -p 3000 -c-1",
+    "start": "npm run dev",
+    "build": "echo 'Build completato - App pronta per deploy'",
+    "deploy": "git add . && git commit -m 'Deploy update' && git push origin main",
+    "test": "echo 'Test suite non ancora implementata'",
+    "serve": "npx http-server . -p 8080"
+  },
+  "keywords": [
+    "pwa",
+    "sindacato",
+    "carabinieri",
+    "webapp",
+    "mobile-app",
+    "supabase",
+    "tailwind"
+  ],
+  "author": {
+    "name": "Antonio Grande",
+    "email": "antoniogrande81@example.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antoniogrande81/la-mia-app2026.git"
+  },
+  "bugs": {
+    "url": "https://github.com/antoniogrande81/la-mia-app2026/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "pwa": {
+    "name": "MyApp Sindacato Carabinieri",
+    "short_name": "MyApp",
+    "description": "Il tuo dirigente sempre con te",
+    "theme_color": "#2400C1",
+    "background_color": "#F4F4F8",
+    "display": "standalone",
+    "orientation": "portrait"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie <= 11"
+  ]
+}

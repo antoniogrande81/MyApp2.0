@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Redirect - MyApp</title>
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2400C1">
+    <meta name="background-color" content="#2400C1">
+
+    <!-- Icone Standard -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/public/icons/icon-512x512.png">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+    <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+
+    <!-- Android Support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="MyApp">
+    <meta name="msapplication-TileColor" content="#2400C1">
+    
+    <!-- Preconnect per performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://lycrgzptkdkksukcwrld.supabase.co">
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #2400C1, #8E008C);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        button {
+            background: white;
+            color: #2400C1;
+            border: none;
+            padding: 12px 24px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { background: rgba(0,255,0,0.2); }
+        .error { background: rgba(255,0,0,0.2); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Test Redirect MyApp</h1>
+        <p>Questo strumento ti aiuta a diagnosticare il problema del redirect dopo il login.</p>
+        
+        <h2>📁 Test Esistenza File</h2>
+        <button onclick="testFileExists()">Verifica se home.html esiste</button>
+        <div id="fileResult" class="result"></div>
+        
+        <h2>🔄 Test Redirect</h2>
+        <button onclick="testRedirect('../app/home.html')">Test: ../app/home.html</button>
+        <button onclick="testRedirect('./app/home.html')">Test: ./app/home.html</button>
+        <button onclick="testRedirect('/app/home.html')">Test: /app/home.html</button>
+        <button onclick="testRedirect('app/home.html')">Test: app/home.html</button>
+        <div id="redirectResult" class="result"></div>
+        
+        <h2>🔗 Link Diretti</h2>
+        <a href="../app/home.html" target="_blank" style="color: #00BFFF;">→ ../app/home.html</a><br><br>
+        <a href="./app/home.html" target="_blank" style="color: #00BFFF;">→ ./app/home.html</a><br><br>
+        <a href="/app/home.html" target="_blank" style="color: #00BFFF;">→ /app/home.html</a><br><br>
+        <a href="app/home.html" target="_blank" style="color: #00BFFF;">→ app/home.html</a><br><br>
+        
+        <h2>📍 Info Correnti</h2>
+        <div id="pathInfo" class="result"></div>
+        
+        <h2>🧪 Simula Login</h2>
+        <button onclick="simulateLogin()">Simula Login Completo</button>
+        <div id="loginResult" class="result"></div>
+    </div>
+
+    <script>
+        // Mostra info percorsi
+        document.getElementById('pathInfo').textContent = `
+Current URL: ${window.location.href}
+Pathname: ${window.location.pathname}
+Origin: ${window.location.origin}
+Protocol: ${window.location.protocol}
+Host: ${window.location.host}
+        `;
+
+        // Test esistenza file
+        async function testFileExists() {
+            const result = document.getElementById('fileResult');
+            result.textContent = 'Testing...\n';
+            
+            const paths = [
+                '../app/home.html',
+                './app/home.html',
+                '/app/home.html',
+                'app/home.html'
+            ];
+            
+            let results = '';
+            
+            for (let path of paths) {
+                try {
+                    const response = await fetch(path, { method: 'HEAD' });
+                    const status = response.ok ? '✅' : '❌';
+                    results += `${status} ${path} → ${response.status} ${response.statusText}\n`;
+                    
+                    if (response.ok) {
+                        result.className = 'result success';
+                        results += `\n🎯 TROVATO: ${path} è il percorso corretto!\n`;
+                    }
+                } catch (error) {
+                    results += `❌ ${path} → Error: ${error.message}\n`;
+                }
+            }
+            
+            result.textContent = results;
+            if (!results.includes('🎯')) {
+                result.className = 'result error';
+                result.textContent += '\n🚨 PROBLEMA: Nessun file home.html trovato!\nControlla la struttura delle cartelle.';
+            }
+        }
+
+        // Test redirect
+        async function testRedirect(path) {
+            const result = document.getElementById('redirectResult');
+            result.textContent = `Testing redirect to: ${path}\n`;
+            
+            try {
+                // Test se il file esiste
+                const response = await fetch(path, { method: 'HEAD' });
+                
+                if (response.ok) {
+                    result.textContent += `✅ File exists (${response.status})\n`;
+                    result.textContent += `🔄 Redirecting in 3 seconds...\n`;
+                    result.className = 'result success';
+                    
+                    setTimeout(() => {
+                        window.location.href = path;
+                    }, 3000);
+                } else {
+                    result.textContent += `❌ File not found (${response.status})\n`;
+                    result.className = 'result error';
+                }
+            } catch (error) {
+                result.textContent += `❌ Error: ${error.message}\n`;
+                result.className = 'result error';
+            }
+        }
+
+        // Simula il processo di login completo
+        async function simulateLogin() {
+            const result = document.getElementById('loginResult');
+            result.textContent = 'Simulando processo di login...\n';
+            
+            // Step 1: Check file
+            result.textContent += 'Step 1: Verifica file home.html...\n';
+            
+            const paths = ['../app/home.html', './app/home.html', '/app/home.html', 'app/home.html'];
+            let workingPath = null;
+            
+            for (let path of paths) {
+                try {
+                    const response = await fetch(path, { method: 'HEAD' });
+                    if (response.ok) {
+                        workingPath = path;
+                        result.textContent += `✅ Trovato: ${path}\n`;
+                        break;
+                    }
+                } catch (error) {
+                    // Continue testing
+                }
+            }
+            
+            if (!workingPath) {
+                result.textContent += '❌ ERRORE: Nessun file home.html trovato!\n';
+                result.textContent += '\n🔧 SOLUZIONI:\n';
+                result.textContent += '1. Controlla che esista il file /app/home.html\n';
+                result.textContent += '2. Verifica la struttura delle cartelle\n';
+                result.textContent += '3. Controlla i permessi dei file\n';
+                result.className = 'result error';
+                return;
+            }
+            
+            // Step 2: Simula login success
+            result.textContent += '\nStep 2: Simula login riuscito...\n';
+            result.textContent += '✅ Login simulato con successo\n';
+            
+            // Step 3: Test redirect
+            result.textContent += '\nStep 3: Test redirect...\n';
+            result.textContent += `🔄 Reindirizzamento verso: ${workingPath}\n`;
+            result.textContent += 'Redirect in 3 secondi...\n';
+            result.className = 'result success';
+            
+            let countdown = 3;
+            const countdownInterval = setInterval(() => {
+                result.textContent += `${countdown}...\n`;
+                countdown--;
+                
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    result.textContent += '🚀 REDIRECT!\n';
+                    window.location.href = workingPath;
+                }
+            }, 1000);
+        }
+
+        // Auto-test all'avvio
+        window.addEventListener('load', () => {
+            testFileExists();
+        });
+    </script>
+</body>
+</html>

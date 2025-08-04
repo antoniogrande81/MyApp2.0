@@ -1,0 +1,915 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - MyApp</title>
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2400C1">
+    <meta name="background-color" content="#2400C1">
+
+    <!-- Icone Standard -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/public/icons/icon-512x512.png">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MyApp">
+    <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+
+    <!-- Android Support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="MyApp">
+    <meta name="msapplication-TileColor" content="#2400C1">
+    
+    <!-- Preconnect per performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://lycrgzptkdkksukcwrld.supabase.co">
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2400C1',
+                        secondary: '#8E008C',
+                        accent: '#00BFFF',
+                        textDark: '#1C1C1E',
+                        backgroundLight: '#F4F4F8',
+                        white: '#FFFFFF',
+                    },
+                    backgroundImage: {
+                        hero: "linear-gradient(135deg, #2400C1, #8E008C)"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #2400C1, #8E008C);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .text-white {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .floating-help {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .accordion-button {
+            transition: all 0.3s ease;
+        }
+
+        .accordion-button:hover {
+            background: rgba(36, 0, 193, 0.05);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .accordion-content.active {
+            max-height: 1000px;
+        }
+
+        .toc-link {
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover {
+            background: rgba(36, 0, 193, 0.1);
+            padding-left: 1rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(36, 0, 193, 0.1), rgba(142, 0, 140, 0.1));
+            border-left: 4px solid #2400C1;
+        }
+
+        .gdpr-badge {
+            background: linear-gradient(135deg, #2400C1, #8E008C);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block;
+            }
+            body {
+                background: white !important;
+            }
+            .section-card {
+                background: white !important;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Standard -->
+    <header class="w-full px-4 py-4 relative z-10 no-print">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <button onclick="history.back()" class="text-white hover:text-accent transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <h1 class="text-xl font-bold text-white drop-shadow-lg">Privacy Policy</h1>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="window.print()" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white text-sm px-4 py-2 rounded-full font-semibold transition-colors shadow-lg">
+                    📄 Stampa
+                </button>
+                <a href="/login.html" class="bg-accent hover:bg-blue-600 text-white text-sm px-4 py-2 rounded-full font-semibold transition-colors shadow-lg">
+                    Accedi
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Print Header -->
+    <div class="print-only text-center py-4 border-b">
+        <h1 class="text-2xl font-bold text-gray-800">Privacy Policy - MyApp Sindacato Carabinieri</h1>
+        <p class="text-sm text-gray-600 mt-2">Documento stampato il: <span id="printDate"></span></p>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-4 py-6 pb-20 max-w-4xl mx-auto">
+        <!-- Hero Section -->
+        <div class="text-center mb-8 fade-in-up no-print">
+            <div class="gdpr-badge w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-2xl text-white">🛡️</span>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">Protezione dei Dati Personali</h2>
+            <p class="text-white text-opacity-90 text-sm max-w-2xl mx-auto">
+                Il Sindacato Carabinieri è impegnato nella protezione della tua privacy secondo le normative GDPR vigenti
+            </p>
+        </div>
+
+        <!-- Quick Info -->
+        <div class="grid md:grid-cols-3 gap-4 mb-8 fade-in-up no-print" style="animation-delay: 0.2s">
+            <div class="highlight-box rounded-lg p-4">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">📅</span>
+                    <div>
+                        <div class="font-semibold text-primary">Ultimo Aggiornamento</div>
+                        <div class="text-sm text-gray-600">21 Luglio 2025</div>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box rounded-lg p-4">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">⚖️</span>
+                    <div>
+                        <div class="font-semibold text-primary">Conformità GDPR</div>
+                        <div class="text-sm text-gray-600">Reg. UE 2016/679</div>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box rounded-lg p-4">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl">📞</span>
+                    <div>
+                        <div class="font-semibold text-primary">DPO Contatti</div>
+                        <div class="text-sm text-gray-600">dpo@sindacato.it</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="section-card rounded-xl p-6 mb-6 fade-in-up no-print" style="animation-delay: 0.4s">
+            <h3 class="text-lg font-bold text-primary mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                </svg>
+                Indice dei Contenuti
+            </h3>
+            <div class="grid md:grid-cols-2 gap-2">
+                <a href="#titolare" class="toc-link block py-2 px-3 rounded text-sm text-gray-700 hover:text-primary">
+                    1. Titolare del Trattamento
+                </a>
+                <a href="#dati-raccolti" class="toc-link block py-2 px-3 rounded text-sm text-gray-700 hover:text-primary">
+                    2. Dati Personali Raccolti
+                </a>
+                <a href="#finalita" class="toc-link block py-2 px-3 rounded text-sm text-gray-700 hover:text-primary">
+                    3. Finalità del Trattamento
+                </a>
+                <a href="#base-giuridica" class="toc-link block py-2 px-3 rounded text-sm text-gray-700 hover:text-primary">
+                    4. Base Giuridica
+                </a>
+                <a href="#conservazione" class="toc-link block py-2 px-3 rounded text-sm text-gray-700 hover:text-primary">
+                    5. Conservazione dei Dati
+                </a>
+                <a href="#diritti" class="toc-link block py-2 px-3 rounded text-sm text-gray-700 hover:text-primary">
+                    6. Diritti dell'Interessato
+                </a>
+                <a href="#sicurezza" class="toc-link block py-2 px-3 rounded text-sm text-gray-700 hover:text-primary">
+                    7. Misure di Sicurezza
+                </a>
+                <a href="#cookie" class="toc-link block py-2 px-3 rounded text-sm text-gray-700 hover:text-primary">
+                    8. Cookie Policy
+                </a>
+            </div>
+        </div>
+
+        <!-- Section 1: Titolare -->
+        <div class="section-card rounded-xl mb-6 fade-in-up" style="animation-delay: 0.6s">
+            <button class="accordion-button w-full text-left p-6 flex justify-between items-center" onclick="toggleAccordion('titolare')">
+                <h3 id="titolare" class="text-lg font-bold text-primary flex items-center">
+                    <span class="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">1</span>
+                    Titolare del Trattamento
+                </h3>
+                <svg class="accordion-icon w-5 h-5 text-primary transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div class="accordion-content" id="titolare-content">
+                <div class="px-6 pb-6">
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <h4 class="font-semibold text-textDark mb-2">🏛️ Sindacato Carabinieri</h4>
+                        <div class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <strong>Sede Legale:</strong><br>
+                                Via del Sindacato, 123<br>
+                                00100 Roma (RM)
+                            </div>
+                            <div>
+                                <strong>Contatti:</strong><br>
+                                📧 privacy@sindacato-carabinieri.it<br>
+                                📞 +39 06 1234 5678
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-textDark mb-2">👨‍💼 Data Protection Officer (DPO)</h4>
+                        <p class="text-sm text-gray-700">
+                            <strong>Nome:</strong> Dott. Mario Rossi<br>
+                            <strong>Email:</strong> dpo@sindacato-carabinieri.it<br>
+                            <strong>Telefono:</strong> +39 06 1234 5679
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Dati Raccolti -->
+        <div class="section-card rounded-xl mb-6 fade-in-up" style="animation-delay: 0.7s">
+            <button class="accordion-button w-full text-left p-6 flex justify-between items-center" onclick="toggleAccordion('dati-raccolti')">
+                <h3 id="dati-raccolti" class="text-lg font-bold text-primary flex items-center">
+                    <span class="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">2</span>
+                    Dati Personali Raccolti
+                </h3>
+                <svg class="accordion-icon w-5 h-5 text-primary transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div class="accordion-content" id="dati-raccolti-content">
+                <div class="px-6 pb-6">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-800 mb-3">📝 Dati di Registrazione</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>• Nome e Cognome</li>
+                                <li>• Indirizzo Email</li>
+                                <li>• Numero di Telefono</li>
+                                <li>• Matricola (se Carabiniere)</li>
+                                <li>• Grado/Ruolo</li>
+                                <li>• Comando di Appartenenza</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-800 mb-3">🔒 Dati di Navigazione</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>• Indirizzo IP</li>
+                                <li>• Browser utilizzato</li>
+                                <li>• Pagine visitate</li>
+                                <li>• Tempo di permanenza</li>
+                                <li>• Sistema operativo</li>
+                                <li>• Dispositivo utilizzato</li>
+                            </ul>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-purple-800 mb-3">📱 Dati App Mobile</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>• Token push notifications</li>
+                                <li>• Preferenze app</li>
+                                <li>• Log di utilizzo</li>
+                                <li>• Dati offline (cache)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-orange-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-orange-800 mb-3">🎯 Dati Comportamentali</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>• Convenzioni utilizzate</li>
+                                <li>• Sezioni più visitate</li>
+                                <li>• Frequenza di accesso</li>
+                                <li>• Feedback forniti</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Finalità -->
+        <div class="section-card rounded-xl mb-6 fade-in-up" style="animation-delay: 0.8s">
+            <button class="accordion-button w-full text-left p-6 flex justify-between items-center" onclick="toggleAccordion('finalita')">
+                <h3 id="finalita" class="text-lg font-bold text-primary flex items-center">
+                    <span class="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">3</span>
+                    Finalità del Trattamento
+                </h3>
+                <svg class="accordion-icon w-5 h-5 text-primary transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div class="accordion-content" id="finalita-content">
+                <div class="px-6 pb-6">
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h4 class="font-semibold text-green-700">🎯 Erogazione Servizi Sindacali</h4>
+                            <p class="text-sm text-gray-600 mt-1">
+                                Gestione tessera digitale, accesso convenzioni, assistenza legale, tutela diritti
+                            </p>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <h4 class="font-semibold text-blue-700">📞 Comunicazioni Istituzionali</h4>
+                            <p class="text-sm text-gray-600 mt-1">
+                                Invio newsletter, aggiornamenti normativi, comunicazioni urgenti, notifiche app
+                            </p>
+                        </div>
+                        <div class="border-l-4 border-purple-500 pl-4">
+                            <h4 class="font-semibold text-purple-700">⚖️ Obblighi di Legge</h4>
+                            <p class="text-sm text-gray-600 mt-1">
+                                Adempimenti fiscali, contabili, contributivi previsti dalla normativa vigente
+                            </p>
+                        </div>
+                        <div class="border-l-4 border-orange-500 pl-4">
+                            <h4 class="font-semibold text-orange-700">📊 Miglioramento Servizi</h4>
+                            <p class="text-sm text-gray-600 mt-1">
+                                Analisi utilizzo app, statistiche anonime, ottimizzazione user experience
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Base Giuridica -->
+        <div class="section-card rounded-xl mb-6 fade-in-up" style="animation-delay: 0.9s">
+            <button class="accordion-button w-full text-left p-6 flex justify-between items-center" onclick="toggleAccordion('base-giuridica')">
+                <h3 id="base-giuridica" class="text-lg font-bold text-primary flex items-center">
+                    <span class="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">4</span>
+                    Base Giuridica del Trattamento
+                </h3>
+                <svg class="accordion-icon w-5 h-5 text-primary transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div class="accordion-content" id="base-giuridica-content">
+                <div class="px-6 pb-6">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-textDark mb-3">📋 Art. 6 GDPR - Basi Giuridiche</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-start space-x-3">
+                                <span class="text-green-600 font-bold">a)</span>
+                                <div>
+                                    <strong>Consenso</strong> - Per newsletter e comunicazioni promozionali
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-blue-600 font-bold">b)</span>
+                                <div>
+                                    <strong>Esecuzione contratto</strong> - Per l'erogazione dei servizi sindacali
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-purple-600 font-bold">c)</span>
+                                <div>
+                                    <strong>Obbligo legale</strong> - Per adempimenti fiscali e normativi
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <span class="text-orange-600 font-bold">f)</span>
+                                <div>
+                                    <strong>Interesse legittimo</strong> - Per sicurezza informatica e miglioramento servizi
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Conservazione -->
+        <div class="section-card rounded-xl mb-6 fade-in-up" style="animation-delay: 1.0s">
+            <button class="accordion-button w-full text-left p-6 flex justify-between items-center" onclick="toggleAccordion('conservazione')">
+                <h3 id="conservazione" class="text-lg font-bold text-primary flex items-center">
+                    <span class="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">5</span>
+                    Conservazione dei Dati
+                </h3>
+                <svg class="accordion-icon w-5 h-5 text-primary transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div class="accordion-content" id="conservazione-content">
+                <div class="px-6 pb-6">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-800 mb-2">⏰ Dati Account</h4>
+                            <p class="text-sm text-gray-700">
+                                <strong>Durata:</strong> Fino alla cancellazione account<br>
+                                <strong>Post-cancellazione:</strong> 30 giorni per recupero<br>
+                                <strong>Backup:</strong> Eliminazione entro 90 giorni
+                            </p>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-800 mb-2">📄 Dati Contabilità</h4>
+                            <p class="text-sm text-gray-700">
+                                <strong>Durata:</strong> 10 anni (obbligo fiscale)<br>
+                                <strong>Accesso:</strong> Solo personale autorizzato<br>
+                                <strong>Formato:</strong> Archiviazione digitale sicura
+                            </p>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-purple-800 mb-2">🔍 Log Tecnici</h4>
+                            <p class="text-sm text-gray-700">
+                                <strong>Durata:</strong> 12 mesi<br>
+                                <strong>Finalità:</strong> Sicurezza e troubleshooting<br>
+                                <strong>Anonimizzazione:</strong> Dopo 6 mesi
+                            </p>
+                        </div>
+                        <div class="bg-orange-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-orange-800 mb-2">📧 Comunicazioni</h4>
+                            <p class="text-sm text-gray-700">
+                                <strong>Email:</strong> 5 anni<br>
+                                <strong>Chat/Supporto:</strong> 2 anni<br>
+                                <strong>Newsletter:</strong> Fino a revoca consenso
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Diritti -->
+        <div class="section-card rounded-xl mb-6 fade-in-up" style="animation-delay: 1.1s">
+            <button class="accordion-button w-full text-left p-6 flex justify-between items-center" onclick="toggleAccordion('diritti')">
+                <h3 id="diritti" class="text-lg font-bold text-primary flex items-center">
+                    <span class="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">6</span>
+                    Diritti dell'Interessato
+                </h3>
+                <svg class="accordion-icon w-5 h-5 text-primary transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div class="accordion-content" id="diritti-content">
+                <div class="px-6 pb-6">
+                    <div class="highlight-box rounded-lg p-4 mb-4">
+                        <h4 class="font-semibold text-primary mb-2">⚡ Esercizio Rapido dei Diritti</h4>
+                        <div class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <strong>📧 Email DPO:</strong> dpo@sindacato-carabinieri.it<br>
+                                <strong>📞 Telefono:</strong> +39 06 1234 5679<br>
+                                <strong>⏰ Risposta:</strong> Entro 30 giorni
+                            </div>
+                            <div>
+                                <strong>🌐 Portale Online:</strong> Accesso da app/profilo<br>
+                                <strong>📋 Moduli:</strong> Download da sito web<br>
+                                <strong>🆔 Identificazione:</strong> Documento valido richiesto
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-3">
+                            <div class="border border-blue-200 rounded-lg p-3">
+                                <h5 class="font-semibold text-blue-800 text-sm">👁️ Diritto di Accesso</h5>
+                                <p class="text-xs text-gray-600 mt-1">Sapere quali dati abbiamo e come li usiamo</p>
+                            </div>
+                            <div class="border border-green-200 rounded-lg p-3">
+                                <h5 class="font-semibold text-green-800 text-sm">✏️ Diritto di Rettifica</h5>
+                                <p class="text-xs text-gray-600 mt-1">Correggere dati inesatti o incompleti</p>
+                            </div>
+                            <div class="border border-red-200 rounded-lg p-3">
+                                <h5 class="font-semibold text-red-800 text-sm">🗑️ Diritto di Cancellazione</h5>
+                                <p class="text-xs text-gray-600 mt-1">Eliminare i tuoi dati (diritto all'oblio)</p>
+                            </div>
+                            <div class="border border-purple-200 rounded-lg p-3">
+                                <h5 class="font-semibold text-purple-800 text-sm">⏸️ Diritto di Limitazione</h5>
+                                <p class="text-xs text-gray-600 mt-1">Bloccare temporaneamente il trattamento</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="border border-orange-200 rounded-lg p-3">
+                                <h5 class="font-semibold text-orange-800 text-sm">📤 Diritto di Portabilità</h5>
+                                <p class="text-xs text-gray-600 mt-1">Ricevere i tuoi dati in formato leggibile</p>
+                            </div>
+                            <div class="border border-yellow-200 rounded-lg p-3">
+                                <h5 class="font-semibold text-yellow-800 text-sm">❌ Diritto di Opposizione</h5>
+                                <p class="text-xs text-gray-600 mt-1">Opporti al trattamento per motivi legittimi</p>
+                            </div>
+                            <div class="border border-pink-200 rounded-lg p-3">
+                                <h5 class="font-semibold text-pink-800 text-sm">🚫 Revoca Consenso</h5>
+                                <p class="text-xs text-gray-600 mt-1">Ritirare il consenso in qualsiasi momento</p>
+                            </div>
+                            <div class="border border-indigo-200 rounded-lg p-3">
+                                <h5 class="font-semibold text-indigo-800 text-sm">⚖️ Reclamo Autorità</h5>
+                                <p class="text-xs text-gray-600 mt-1">Presentare reclamo al Garante Privacy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: Sicurezza -->
+        <div class="section-card rounded-xl mb-6 fade-in-up" style="animation-delay: 1.2s">
+            <button class="accordion-button w-full text-left p-6 flex justify-between items-center" onclick="toggleAccordion('sicurezza')">
+                <h3 id="sicurezza" class="text-lg font-bold text-primary flex items-center">
+                    <span class="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">7</span>
+                    Misure di Sicurezza
+                </h3>
+                <svg class="accordion-icon w-5 h-5 text-primary transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div class="accordion-content" id="sicurezza-content">
+                <div class="px-6 pb-6">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-red-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-red-800 mb-3">🔒 Misure Tecniche</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>• Crittografia AES-256</li>
+                                <li>• Connessioni HTTPS/TLS</li>
+                                <li>• Firewall avanzati</li>
+                                <li>• Backup automatici giornalieri</li>
+                                <li>• Monitoraggio 24/7</li>
+                                <li>• Test penetrazione periodici</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-800 mb-3">👥 Misure Organizzative</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>• Accesso su base need-to-know</li>
+                                <li>• Formazione periodica staff</li>
+                                <li>• Audit interni trimestrali</li>
+                                <li>• Procedure incident response</li>
+                                <li>• Contratti con fornitori GDPR</li>
+                                <li>• Data breach register</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-800 mb-3">🌐 Hosting e Cloud</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>• Server EU (GDPR compliant)</li>
+                                <li>• Certificazioni ISO 27001</li>
+                                <li>• Ridondanza geografica</li>
+                                <li>• SLA 99.9% uptime</li>
+                                <li>• DPA con provider cloud</li>
+                            </ul>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-purple-800 mb-3">📱 App Mobile</h4>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                <li>• Autenticazione biometrica</li>
+                                <li>• Token JWT sicuri</li>
+                                <li>• Certificate pinning</li>
+                                <li>• Offuscazione codice</li>
+                                <li>• Auto-logout temporizzato</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight-box rounded-lg p-4 mt-4">
+                        <h4 class="font-semibold text-primary mb-2">🚨 Data Breach Response</h4>
+                        <p class="text-sm text-gray-700">
+                            In caso di violazione dei dati, seguiamo il protocollo GDPR: notifica al Garante entro 72 ore 
+                            e comunicazione agli interessati entro 72 ore se sussiste alto rischio per i diritti e le libertà.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: Cookie Policy -->
+        <div class="section-card rounded-xl mb-6 fade-in-up" style="animation-delay: 1.3s">
+            <button class="accordion-button w-full text-left p-6 flex justify-between items-center" onclick="toggleAccordion('cookie')">
+                <h3 id="cookie" class="text-lg font-bold text-primary flex items-center">
+                    <span class="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">8</span>
+                    Cookie Policy
+                </h3>
+                <svg class="accordion-icon w-5 h-5 text-primary transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div class="accordion-content" id="cookie-content">
+                <div class="px-6 pb-6">
+                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <h4 class="font-semibold text-green-800 text-sm mb-2">✅ Cookie Tecnici</h4>
+                            <p class="text-xs text-gray-600 mb-2">Necessari per il funzionamento</p>
+                            <ul class="text-xs text-gray-700 space-y-1">
+                                <li>• Session ID</li>
+                                <li>• Autenticazione</li>
+                                <li>• Carrello convenzioni</li>
+                                <li>• Preferenze lingua</li>
+                            </ul>
+                            <p class="text-xs text-green-600 font-medium mt-2">Consenso: Non richiesto</p>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-3">
+                            <h4 class="font-semibold text-blue-800 text-sm mb-2">📊 Cookie Analitici</h4>
+                            <p class="text-xs text-gray-600 mb-2">Misurazione performance</p>
+                            <ul class="text-xs text-gray-700 space-y-1">
+                                <li>• Google Analytics</li>
+                                <li>• Hotjar (anonimo)</li>
+                                <li>• Page views</li>
+                                <li>• Tempo sessione</li>
+                            </ul>
+                            <p class="text-xs text-blue-600 font-medium mt-2">Consenso: Opzionale</p>
+                        </div>
+                        <div class="bg-orange-50 rounded-lg p-3">
+                            <h4 class="font-semibold text-orange-800 text-sm mb-2">🎯 Cookie Marketing</h4>
+                            <p class="text-xs text-gray-600 mb-2">Personalizzazione contenuti</p>
+                            <ul class="text-xs text-gray-700 space-y-1">
+                                <li>• Facebook Pixel</li>
+                                <li>• Google Ads</li>
+                                <li>• Retargeting</li>
+                                <li>• Social sharing</li>
+                            </ul>
+                            <p class="text-xs text-orange-600 font-medium mt-2">Consenso: Richiesto</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-textDark mb-2">⚙️ Gestione Cookie</h4>
+                        <p class="text-sm text-gray-700 mb-3">
+                            Puoi gestire le tue preferenze sui cookie in qualsiasi momento attraverso:
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <strong>🎛️ Pannello Preferenze:</strong><br>
+                                Accessibile dal footer del sito web
+                            </div>
+                            <div>
+                                <strong>🔧 Impostazioni Browser:</strong><br>
+                                Sezione privacy/cookie del tuo browser
+                            </div>
+                        </div>
+                        <div class="mt-3 p-3 bg-yellow-100 rounded border-l-4 border-yellow-500">
+                            <p class="text-xs text-yellow-800">
+                                <strong>Nota:</strong> Disabilitare alcuni cookie potrebbe limitare la funzionalità dell'app
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact DPO -->
+        <div class="section-card rounded-xl mb-6 fade-in-up" style="animation-delay: 1.4s">
+            <div class="p-6">
+                <h3 class="text-lg font-bold text-primary mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    Contatta il DPO
+                </h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-blue-800 mb-2">📞 Contatti Diretti</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center space-x-2">
+                                <span>📧</span>
+                                <a href="mailto:dpo@sindacato.it" class="text-blue-600 hover:text-blue-800">
+                                    dpo@sindacato.it
+                                </a>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span>📞</span>
+                                <a href="tel:+390612345679" class="text-blue-600 hover:text-blue-800">
+                                    +39 06 1234 5679
+                                </a>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span>⏰</span>
+                                <span class="text-gray-700">Lun-Ven 9:00-17:00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-green-800 mb-2">📋 Moduli e Richieste</h4>
+                        <div class="space-y-2 text-sm">
+                            <a href="#" class="block text-green-600 hover:text-green-800">📄 Modulo accesso dati</a>
+                            <a href="#" class="block text-green-600 hover:text-green-800">📄 Modulo cancellazione</a>
+                            <a href="#" class="block text-green-600 hover:text-green-800">📄 Modulo rettifica</a>
+                            <a href="#" class="block text-green-600 hover:text-green-800">📄 Reclamo Garante</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="section-card rounded-xl fade-in-up" style="animation-delay: 1.5s">
+            <div class="p-6 text-center">
+                <div class="gdpr-badge w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-white text-xl">⚖️</span>
+                </div>
+                <h3 class="text-lg font-bold text-primary mb-2">Garante per la Protezione dei Dati Personali</h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    In caso di mancata risoluzione di una problematica riguardante la privacy, 
+                    puoi presentare reclamo all'Autorità di controllo competente:
+                </p>
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <strong>🏛️ Garante Privacy</strong><br>
+                            Piazza di Monte Citorio, 121<br>
+                            00186 Roma (RM)
+                        </div>
+                        <div>
+                            <strong>📞 Contatti:</strong><br>
+                            Tel: +39 06 69677.1<br>
+                            📧 garante@gpdp.it
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Help Button -->
+    <button class="floating-help bg-secondary hover:bg-opacity-90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110 no-print">
+        <span class="text-xl">🆘</span>
+    </button>
+
+    <!-- Bottom Navigation Standard -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 no-print">
+        <div class="flex justify-around items-center max-w-md mx-auto">
+            <a href="/index.html" class="flex flex-col items-center text-xs text-gray-600 hover:text-primary transition-colors p-2">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m3 12 2-2m0 0 7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11 2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6"></path>
+                </svg>
+                Home
+            </a>
+            <a href="/convenzioni.html" class="flex flex-col items-center text-xs text-gray-600 hover:text-primary transition-colors p-2">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Convenzioni
+            </a>
+            <a href="/contatti.html" class="flex flex-col items-center text-xs text-gray-600 hover:text-primary transition-colors p-2">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                </svg>
+                Contatti
+            </a>
+            <a href="/login.html" class="flex flex-col items-center text-xs text-gray-600 hover:text-primary transition-colors p-2">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                </svg>
+                Accedi
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // Set print date
+        document.getElementById('printDate')?.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('printDate').textContent = new Date().toLocaleDateString('it-IT');
+        });
+
+        // Accordion functionality
+        function toggleAccordion(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const icon = content.previousElementSibling.querySelector('.accordion-icon');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // Close all other accordions
+                document.querySelectorAll('.accordion-content.active').forEach(el => {
+                    el.classList.remove('active');
+                    el.parentElement.querySelector('.accordion-icon').style.transform = 'rotate(0deg)';
+                });
+                
+                // Open clicked accordion
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Smooth scroll for TOC links
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    // Open accordion if closed
+                    const content = document.getElementById(targetId + '-content');
+                    if (content && !content.classList.contains('active')) {
+                        toggleAccordion(targetId);
+                    }
+                    
+                    // Scroll to element
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 300);
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Print functionality
+        window.addEventListener('beforeprint', () => {
+            document.getElementById('printDate').textContent = new Date().toLocaleDateString('it-IT');
+            // Open all accordions for printing
+            document.querySelectorAll('.accordion-content').forEach(content => {
+                content.classList.add('active');
+            });
+        });
+
+        window.addEventListener('afterprint', () => {
+            // Close accordions after printing
+            document.querySelectorAll('.accordion-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.accordion-icon').forEach(icon => {
+                icon.style.transform = 'rotate(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>

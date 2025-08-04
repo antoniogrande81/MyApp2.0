@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strumenti</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="background-color" content="#1a1a2e">
+
+    <!-- Icone Standard -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/public/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/public/icons/icon-512x512.png">
+
+    <!-- iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Strumenti Aurora">
+    <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+
+    <!-- Android Support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Strumenti Aurora">
+    <meta name="msapplication-TileColor" content="#1a1a2e">
+    
+    <!-- Preconnect per performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://lycrgzptkdkksukcwrld.supabase.co">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Aurora Boreale 2025 Palette
+                        primary: '#1a1a2e',
+                        secondary: '#16213e',
+                        accent: '#0f3460',
+                        aurora: '#e94560',
+                        cyan: '#00d4ff',
+                        magenta: '#ff006e',
+                        gold: '#ffd700',
+                        teal: '#03dac6',
+                        dark: '#0a0a23',
+                        light: '#f8fafc',
+                        success: '#10b981'
+                    },
+                    screens: {
+                        'xs': '320px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
+                        '2xl': '1536px',
+                        '3xl': '1920px',
+                        '4xl': '2560px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --gradient-aurora: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #e94560 75%, #00d4ff 100%);
+            --gradient-cyber: linear-gradient(135deg, #0a0a23 0%, #1a1a2e 50%, #00d4ff 100%);
+            --gradient-magic: linear-gradient(135deg, #ff006e 0%, #e94560 50%, #03dac6 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--gradient-aurora);
+            background-size: 400% 400%;
+            animation: aurora 15s ease infinite;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes aurora {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(233, 69, 96, 0.8), 0 0 60px rgba(0, 212, 255, 0.4); }
+        }
+
+        .fade-in {
+            animation: fade-in 0.6s ease-out forwards;
+        }
+
+        .text-ultra-visible {
+            color: #ffffff;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
+            font-weight: 800;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 6vw, 3rem);
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 4vw, 1.5rem);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-aurora {
+            background: var(--gradient-magic);
+            color: white;
+            border: 2px solid rgba(233, 69, 96, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            min-height: 44px;
+        }
+
+        .btn-aurora::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-aurora:hover::before {
+            left: 100%;
+        }
+
+        .btn-aurora:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(233, 69, 96, 0.4);
+            border-color: rgba(233, 69, 96, 0.6);
+        }
+
+        .btn-cyber {
+            background: var(--gradient-cyber);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 44px;
+        }
+
+        .btn-cyber:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 212, 255, 0.4);
+            border-color: rgba(0, 212, 255, 0.6);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #1a1a2e;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            min-height: 44px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Stili calendario aggiornati */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .calendar-day {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .calendar-day.header {
+            background: var(--gradient-cyber);
+            color: white;
+            font-weight: 900;
+            cursor: default;
+            min-height: 40px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .calendar-day.header:hover {
+            transform: none;
+        }
+        
+        .calendar-day.turno-mattina { 
+            background: linear-gradient(135deg, #fef3c7, #fbbf24);
+            color: #92400e;
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+        }
+        .calendar-day.turno-pomeriggio { 
+            background: linear-gradient(135deg, #fed7aa, #fb923c);
+            color: #9a3412;
+            border-left: 4px solid #ea580c;
+            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.3);
+        }
+        .calendar-day.turno-sera { 
+            background: linear-gradient(135deg, #fca5a5, #ef4444);
+            color: #991b1b;
+            border-left: 4px solid #dc2626;
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+        }
+        .calendar-day.turno-notte { 
+            background: linear-gradient(135deg, #c7d2fe, #6366f1);
+            color: #3730a3;
+            border-left: 4px solid #4f46e5;
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+        }
+        .calendar-day.turno-riposo { 
+            background: linear-gradient(135deg, #d1fae5, #10b981);
+            color: #065f46;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+        .calendar-day.vuoto { 
+            background: rgba(249, 250, 251, 0.8);
+            color: #6b7280;
+            border-left: none;
+        }
+        .calendar-day.licenza { 
+            background: linear-gradient(135deg, #e0e7ff, #8b5cf6);
+            color: #3730a3;
+            border-left: 4px solid #6366f1;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+        .calendar-day.oggi {
+            background: var(--gradient-magic) !important;
+            color: white !important;
+            box-shadow: 0 0 30px rgba(233, 69, 96, 0.6), 0 8px 25px rgba(233, 69, 96, 0.4) !important;
+            border-left: 4px solid #ffffff !important;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .turno-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .edit-button {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 0.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .calendar-day:hover .edit-button {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        /* Modal aggiornati */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            min-height: 32px;
+        }
+
+        .edit-btn {
+            background: var(--gradient-cyber);
+            color: white;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .delete-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Sezioni strumenti */
+        .tool-section {
+            display: none;
+        }
+        .tool-section.active {
+            display: block;
+        }
+
+        /* Pulsanti di navigazione strumenti */
+        .tool-nav-btn {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            min-height: 44px;
+        }
+        .tool-nav-btn.active {
+            background: var(--gradient-magic) !important;
+            color: white !important;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(233, 69, 96, 0.4);
+            border: 2px solid rgba(233, 69, 96, 0.6);
+        }
+        .tool-nav-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Form inputs aggiornati */
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 12px !important;
+            transition: all 0.3s ease !important;
+            font-family: 'Inter', sans-serif !important;
+            min-height: 44px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-color: #e94560 !important;
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.3) !important;
+            outline: none !important;
+        }
+
+        /* Cards aggiornate */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Stats container */
+        .stats-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .stats-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Floating elements */
+        .fade-in {
+            animation: fade-in 0.6s ease-out forwards;
+        }
+
+        /* Utility buttons */
+        .utility-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .utility-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .calendar-day {
+                padding: 0.375rem;
+                min-height: 50px;
+                font-size: 0.7rem;
+            }
+            
+            .turno-label {
+                font-size: 0.55rem;
+            }
+
+            .edit-button {
+                width: 14px;
+                height: 14px;
+                font-size: 0.45rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .section-title {
+                font-size: clamp(1.5rem, 5vw, 2.5rem);
+            }
+
+            .hero-title {
+                font-size: clamp(2rem, 6vw, 3.5rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .calendar-day {
+                padding: 0.25rem;
+                min-height: 45px;
+                font-size: 0.65rem;
+            }
+
+            .calendar {
+                gap: 1px;
+            }
+
+            .modal-content {
+                padding: 1rem;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .glass-card {
+                background: rgba(255, 255, 255, 0.05);
+                color: white;
+            }
+        }
+
+        /* Accessibility improvements */
+        .btn-aurora:focus,
+        .btn-cyber:focus,
+        .btn-secondary:focus,
+        .tool-nav-btn:focus,
+        .action-btn:focus {
+            outline: 2px solid #00d4ff;
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .text-ultra-visible {
+                text-shadow: none;
+                color: #ffffff;
+            }
+            
+            .glass-card {
+                background: rgba(255, 255, 255, 0.98);
+                border: 2px solid #1a1a2e;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter">
+    <!-- Main Content -->
+    <main class="min-h-screen px-4 py-8 max-w-6xl mx-auto">
+        
+        <!-- Back Button -->
+        <div class="mb-6">
+            <button onclick="history.back()" class="flex items-center gap-3 text-ultra-visible hover:text-cyan transition-all duration-300 transform hover:scale-110 group">
+                <svg class="w-8 h-8 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                <span class="text-lg font-bold">Indietro</span>
+            </button>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="text-center mb-12 fade-in">
+            <div class="w-24 h-24 bg-gradient-to-br from-aurora to-cyan rounded-full mx-auto mb-8 flex items-center justify-content shadow-2xl">
+                <span class="text-4xl text-white mx-auto">🛠️</span>
+            </div>
+            <h1 class="hero-title text-ultra-visible mb-6">Strumenti</h1>
+            <p class="hero-subtitle text-ultra-visible opacity-90 max-w-3xl mx-auto">
+                Gestisci i tuoi turni, licenze e strumenti di lavoro con l'eleganza del design moderno
+            </p>
+        </div>
+
+        <!-- Menu Strumenti -->
+        <div class="glass-strong rounded-3xl p-6 md:p-8 mb-8 fade-in">
+            <!-- Navigation Tabs -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
+                <button onclick="showTool('turni')" class="tool-nav-btn active p-4 md:p-6 rounded-2xl font-black text-base md:text-lg">
+                    🗓️ Turni
+                </button>
+                <button onclick="showTool('licenze')" class="tool-nav-btn p-4 md:p-6 rounded-2xl font-black text-base md:text-lg">
+                    🏖️ Licenze
+                </button>
+                <button onclick="showTool('recuperi')" class="tool-nav-btn p-4 md:p-6 rounded-2xl font-black text-base md:text-lg">
+                    🔄 Recuperi
+                </button>
+                <button onclick="showTool('utilita')" class="tool-nav-btn p-4 md:p-6 rounded-2xl font-black text-base md:text-lg">
+                    ⚙️ Utilità
+                </button>
+            </div>
+        </div>
+
+        <!-- Sezione Turni -->
+        <div id="turni-section" class="tool-section active">
+            <!-- Calendario Turni -->
+            <div class="glass-strong rounded-3xl p-6 md:p-8 mb-8 card-hover fade-in">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4">
+                    <h3 class="text-xl md:text-2xl font-black text-ultra-visible" id="calendar-title">📅 Calendario Turni</h3>
+                    <div class="flex gap-3">
+                        <button onclick="previousMonth()" class="btn-cyber px-4 md:px-6 py-3 rounded-xl font-bold text-base md:text-lg">
+                            ← Prec
+                        </button>
+                        <button onclick="nextMonth()" class="btn-cyber px-4 md:px-6 py-3 rounded-xl font-bold text-base md:text-lg">
+                            Succ →
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="calendar mb-6" id="calendar-container">
+                    <!-- Calendario generato dinamicamente -->
+                </div>
+                
+                <!-- Legenda -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3 text-xs md:text-sm text-center">
+                    <div class="flex items-center justify-center space-x-2 stats-item">
+                        <div class="w-3 h-3 md:w-4 md:h-4 bg-gradient-to-r from-yellow-200 to-yellow-400 rounded border-l-4 border-yellow-500"></div>
+                        <span class="text-ultra-visible font-bold">Mattina</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2 stats-item">
+                        <div class="w-3 h-3 md:w-4 md:h-4 bg-gradient-to-r from-orange-200 to-orange-400 rounded border-l-4 border-orange-500"></div>
+                        <span class="text-ultra-visible font-bold">Pomeriggio</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2 stats-item">
+                        <div class="w-3 h-3 md:w-4 md:h-4 bg-gradient-to-r from-red-200 to-red-400 rounded border-l-4 border-red-500"></div>
+                        <span class="text-ultra-visible font-bold">Sera</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2 stats-item">
+                        <div class="w-3 h-3 md:w-4 md:h-4 bg-gradient-to-r from-blue-200 to-blue-400 rounded border-l-4 border-blue-500"></div>
+                        <span class="text-ultra-visible font-bold">Notte</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2 stats-item">
+                        <div class="w-3 h-3 md:w-4 md:h-4 bg-gradient-to-r from-green-200 to-green-400 rounded border-l-4 border-green-500"></div>
+                        <span class="text-ultra-visible font-bold">Riposo</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2 stats-item">
+                        <div class="w-3 h-3 md:w-4 md:h-4 bg-gradient-to-r from-indigo-200 to-indigo-400 rounded border-l-4 border-indigo-500"></div>
+                        <span class="text-ultra-visible font-bold">Licenza</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Azioni Rapide Turni -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                <div class="glass-card rounded-3xl p-6 md:p-8 card-hover fade-in">
+                    <h3 class="text-lg md:text-xl font-black text-primary mb-6">🗓️ Nuovo Turno</h3>
+                    <button onclick="openTurnoModal()" class="w-full btn-aurora font-black py-4 px-6 rounded-2xl text-base md:text-lg mb-6">
+                        ✨ Programma Turno
+                    </button>
+                    <div class="mt-6 text-sm md:text-base text-gray-700 bg-gradient-to-r from-cyan/20 to-aurora/20 p-4 rounded-xl border border-cyan/30">
+                        <strong class="text-aurora">💡 Suggerimento:</strong> Clicca su un giorno del calendario per modificarlo con stile futuristico
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-3xl p-6 md:p-8 card-hover fade-in">
+                    <h3 class="text-lg md:text-xl font-black text-primary mb-6">📊 Statistiche Mese</h3>
+                    <div class="space-y-3 text-base md:text-lg" id="stats-container">
+                        <div class="flex justify-between stats-item">
+                            <span class="font-bold text-gray-700">Turni Mattina:</span>
+                            <span class="font-black text-aurora text-lg md:text-xl" id="stat-mattina">0</span>
+                        </div>
+                        <div class="flex justify-between stats-item">
+                            <span class="font-bold text-gray-700">Turni Pomeriggio:</span>
+                            <span class="font-black text-aurora text-lg md:text-xl" id="stat-pomeriggio">0</span>
+                        </div>
+                        <div class="flex justify-between stats-item">
+                            <span class="font-bold text-gray-700">Turni Sera:</span>
+                            <span class="font-black text-aurora text-lg md:text-xl" id="stat-sera">0</span>
+                        </div>
+                        <div class="flex justify-between stats-item">
+                            <span class="font-bold text-gray-700">Turni Notte:</span>
+                            <span class="font-black text-aurora text-lg md:text-xl" id="stat-notte">0</span>
+                        </div>
+                        <div class="flex justify-between stats-item">
+                            <span class="font-bold text-gray-700">Giorni Riposo:</span>
+                            <span class="font-black text-aurora text-lg md:text-xl" id="stat-riposo">0</span>
+                        </div>
+                        <div class="flex justify-between stats-item">
+                            <span class="font-bold text-gray-700">Licenze:</span>
+                            <span class="font-black text-aurora text-lg md:text-xl" id="stat-licenze">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sezione Licenze -->
+        <div id="licenze-section" class="tool-section">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                <div class="glass-card rounded-3xl p-6 md:p-8 card-hover fade-in">
+                    <h3 class="text-lg md:text-xl font-black text-primary mb-6">🏖️ Nuova Licenza</h3>
+                    <button onclick="openLicenzaModal()" class="w-full btn-aurora font-black py-4 px-6 rounded-2xl text-base md:text-lg mb-6">
+                        ✨ Programma Licenza/Permesso
+                    </button>
+                </div>
+
+                <div class="glass-card rounded-3xl p-6 md:p-8 card-hover fade-in">
+                    <h3 class="text-lg md:text-xl font-black text-primary mb-6">📋 Licenze Programmate</h3>
+                    <div class="space-y-4 max-h-72 overflow-y-auto" id="licenze-list">
+                        <p class="text-gray-500 text-base md:text-lg text-center font-semibold">Nessuna licenza programmata</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sezione Recuperi -->
+        <div id="recuperi-section" class="tool-section">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                <div class="glass-card rounded-3xl p-6 md:p-8 card-hover fade-in">
+                    <h3 class="text-lg md:text-xl font-black text-primary mb-6">🔄 Nuovo Recupero</h3>
+                    <button onclick="openRecuperoModal()" class="w-full btn-cyber font-black py-4 px-6 rounded-2xl text-base md:text-lg mb-6">
+                        ✨ Registra Recupero
+                    </button>
+                </div>
+
+                <div class="glass-card rounded-3xl p-6 md:p-8 card-hover fade-in">
+                    <h3 class="text-lg md:text-xl font-black text-primary mb-6">📊 Recuperi Registrati</h3>
+                    <div class="space-y-4 max-h-72 overflow-y-auto" id="recuperi-list">
+                        <p class="text-gray-500 text-base md:text-lg text-center font-semibold">Nessun recupero registrato</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sezione Utilità -->
+        <div id="utilita-section" class="tool-section">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <div class="utility-card rounded-3xl p-6 md:p-8 text-center fade-in">
+                    <div class="w-16 h-16 bg-gradient-to-br from-cyan to-blue-600 rounded-full mx-auto mb-6 flex items-center justify-center shadow-2xl">
+                        <span class="text-2xl text-white">📊</span>
+                    </div>
+                    <h3 class="font-black text-ultra-visible text-lg md:text-xl mb-3">Rapporti</h3>
+                    <p class="text-base md:text-lg text-ultra-visible font-semibold opacity-90 mb-6">Genera rapporti sui turni e le ore lavorate</p>
+                    <button class="btn-cyber px-6 py-3 rounded-xl text-base md:text-lg font-bold">
+                        🚀 Prossimamente
+                    </button>
+                </div>
+
+                <div class="utility-card rounded-3xl p-6 md:p-8 text-center fade-in">
+                    <div class="w-16 h-16 bg-gradient-to-br from-teal to-green-600 rounded-full mx-auto mb-6 flex items-center justify-center shadow-2xl">
+                        <span class="text-2xl text-white">⏰</span>
+                    </div>
+                    <h3 class="font-black text-ultra-visible text-lg md:text-xl mb-3">Calcolo Ore</h3>
+                    <p class="text-base md:text-lg text-ultra-visible font-semibold opacity-90 mb-6">Calcola ore straordinario e permessi</p>
+                    <button class="btn-aurora px-6 py-3 rounded-xl text-base md:text-lg font-bold">
+                        🚀 Prossimamente
+                    </button>
+                </div>
+
+                <div class="utility-card rounded-3xl p-6 md:p-8 text-center fade-in">
+                    <div class="w-16 h-16 bg-gradient-to-br from-magenta to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center shadow-2xl">
+                        <span class="text-2xl text-white">📱</span>
+                    </div>
+                    <h3 class="font-black text-ultra-visible text-lg md:text-xl mb-3">Export Data</h3>
+                    <p class="text-base md:text-lg text-ultra-visible font-semibold opacity-90 mb-6">Esporta dati turni in PDF o Excel</p>
+                    <button class="btn-cyber px-6 py-3 rounded-xl text-base md:text-lg font-bold">
+                        🚀 Prossimamente
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="glass-strong rounded-3xl p-6 md:p-8 text-center mt-12 fade-in">
+            <h2 class="section-title text-ultra-visible mb-4">Serve Assistenza?</h2>
+            <p class="hero-subtitle text-ultra-visible opacity-90 mb-8 max-w-2xl mx-auto">
+                Il nostro team dirigenti è sempre pronto ad aiutarti con qualsiasi necessità
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="../dirigenti_index.html" class="btn-aurora font-black py-4 px-8 rounded-2xl text-base md:text-lg inline-block">
+                    📞 Contatta Dirigenti
+                </a>
+                <a href="../index.html" class="btn-secondary font-black py-4 px-8 rounded-2xl text-base md:text-lg inline-block">
+                    🏠 Torna alla Home
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    
+    <!-- MODAL PROGRAMMAZIONE TURNO -->
+    <div id="turnoModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl md:text-2xl font-black text-primary" id="turno-modal-title">✨ Programma Turno Aurora</h3>
+                <button onclick="closeTurnoModal()" class="text-gray-500 hover:text-aurora text-3xl font-bold transition-colors" aria-label="Chiudi">&times;</button>
+            </div>
+            <form id="turnoForm" class="space-y-6">
+                <input type="hidden" name="turno_id" id="turno-id">
+                <div>
+                    <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">📅 Data</label>
+                    <input name="data_turno" type="date" class="w-full p-4 text-base md:text-lg font-semibold" required>
+                </div>
+                <div>
+                    <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">🎯 Tipo Turno</label>
+                    <select name="tipo_turno" class="w-full p-4 text-base md:text-lg font-semibold" required>
+                        <option value="">Seleziona turno...</option>
+                        <option value="mattina">🌅 Mattina</option>
+                        <option value="pomeriggio">☀️ Pomeriggio</option>
+                        <option value="sera">🌆 Sera</option>
+                        <option value="notte">🌙 Notte</option>
+                        <option value="riposo">😴 Riposo</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">📝 Note (opzionale)</label>
+                    <textarea name="note" rows="3" class="w-full p-4 text-base md:text-lg" placeholder="Eventuali note..."></textarea>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button type="submit" class="flex-1 btn-aurora py-4 px-6 rounded-2xl font-black text-base md:text-lg" id="turno-submit-btn">
+                        ✅ Salva Turno
+                    </button>
+                    <button type="button" onclick="closeTurnoModal()" class="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white py-4 px-6 rounded-2xl font-black text-base md:text-lg hover:from-gray-600 hover:to-gray-700 transition-all">
+                        ❌ Annulla
+                    </button>
+                </div>
+                <div id="turno-delete-section" class="hidden">
+                    <button type="button" onclick="deleteTurno()" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-2xl font-black text-base md:text-lg hover:from-red-600 hover:to-red-700 transition-all">
+                        🗑️ Elimina Turno
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL LICENZA/PERMESSO -->
+    <div id="licenzaModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl md:text-2xl font-black text-primary" id="licenza-modal-title">🏖️ Programma Licenza</h3>
+                <button onclick="closeLicenzaModal()" class="text-gray-500 hover:text-aurora text-3xl font-bold transition-colors" aria-label="Chiudi">&times;</button>
+            </div>
+            <form id="licenzaForm" class="space-y-6">
+                <input type="hidden" name="licenza_id" id="licenza-id">
+                <div>
+                    <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">🎯 Tipo</label>
+                    <select name="tipo_licenza" class="w-full p-4 text-base md:text-lg font-semibold" required>
+                        <option value="">Seleziona tipo...</option>
+                        <option value="ordinaria">🏖️ Licenza Ordinaria</option>
+                        <option value="straordinaria">⭐ Licenza Straordinaria</option>
+                        <option value="speciale">🎯 Licenza Speciale</option>
+                        <option value="permesso">📋 Permesso</option>
+                        <option value="riposo_settimanale">🛏️ Riposo Settimanale</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">📅 Data Inizio</label>
+                        <input name="data_inizio" type="date" class="w-full p-4 text-base md:text-lg font-semibold" required>
+                    </div>
+                    <div>
+                        <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">📅 Data Fine</label>
+                        <input name="data_fine" type="date" class="w-full p-4 text-base md:text-lg font-semibold" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">📝 Note (opzionale)</label>
+                    <textarea name="note" rows="3" class="w-full p-4 text-base md:text-lg" placeholder="Eventuali note..."></textarea>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button type="submit" class="flex-1 btn-aurora py-4 px-6 rounded-2xl font-black text-base md:text-lg" id="licenza-submit-btn">
+                        ✅ Programma
+                    </button>
+                    <button type="button" onclick="closeLicenzaModal()" class="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white py-4 px-6 rounded-2xl font-black text-base md:text-lg hover:from-gray-600 hover:to-gray-700 transition-all">
+                        ❌ Annulla
+                    </button>
+                </div>
+                <div id="licenza-delete-section" class="hidden">
+                    <button type="button" onclick="deleteLicenzaFromModal()" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-2xl font-black text-base md:text-lg hover:from-red-600 hover:to-red-700 transition-all">
+                        🗑️ Elimina Licenza
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL RECUPERO -->
+    <div id="recuperoModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl md:text-2xl font-black text-primary" id="recupero-modal-title">🔄 Registra Recupero</h3>
+                <button onclick="closeRecuperoModal()" class="text-gray-500 hover:text-aurora text-3xl font-bold transition-colors" aria-label="Chiudi">&times;</button>
+            </div>
+            <form id="recuperoForm" class="space-y-6">
+                <input type="hidden" name="recupero_id" id="recupero-id">
+                <div>
+                    <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">🎯 Tipo Recupero</label>
+                    <select name="tipo_recupero" class="w-full p-4 text-base md:text-lg font-semibold" required>
+                        <option value="">Seleziona tipo...</option>
+                        <option value="festività">🎄 Festività</option>
+                        <option value="settimana_del">📅 Settimana del...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">📅 Data</label>
+                    <input name="data_maturazione" type="date" class="w-full p-4 text-base md:text-lg font-semibold" required>
+                </div>
+                <div>
+                    <label class="block text-base md:text-lg font-bold text-gray-700 mb-3">📝 Descrizione</label>
+                    <textarea name="descrizione" rows="3" class="w-full p-4 text-base md:text-lg" placeholder="Descrivi il motivo del recupero..." required></textarea>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button type="submit" class="flex-1 btn-cyber py-4 px-6 rounded-2xl font-black text-base md:text-lg" id="recupero-submit-btn">
+                        ✅ Registra
+                    </button>
+                    <button type="button" onclick="closeRecuperoModal()" class="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white py-4 px-6 rounded-2xl font-black text-base md:text-lg hover:from-gray-600 hover:to-gray-700 transition-all">
+                        ❌ Annulla
+                    </button>
+                </div>
+                <div id="recupero-delete-section" class="hidden">
+                    <button type="button" onclick="deleteRecuperoFromModal()" class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-2xl font-black text-base md:text-lg hover:from-red-600 hover:to-red-700 transition-all">
+                        🗑️ Elimina Recupero
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // ========================================================================
+        //                    CONFIGURAZIONE SUPABASE
+        // ========================================================================
+        const SUPABASE_URL = "https://lycrgzptkdkksukcwrld.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk";
+        
+        let supabase;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (error) {
+            console.error("Errore durante l'inizializzazione di Supabase:", error);
+            alert("Impossibile connettersi al database.");
+        }
+
+        // ========================================================================
+        //                    VARIABILI GLOBALI E INIZIALIZZAZIONE
+        // ========================================================================
+        
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let currentUser = null;
+        let turniData = [];
+        let licenzeData = [];
+        let recuperiData = [];
+        let editingTurno = null;
+        let editingLicenza = null;
+        let editingRecupero = null;
+
+        // ========================================================================
+        //                    GESTIONE NAVIGAZIONE STRUMENTI
+        // ========================================================================
+        
+        function showTool(toolName) {
+            // Nasconde tutte le sezioni
+            document.querySelectorAll('.tool-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Rimuove classe active da tutti i pulsanti
+            document.querySelectorAll('.tool-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Mostra la sezione selezionata
+            document.getElementById(toolName + '-section').classList.add('active');
+            
+            // Attiva il pulsante corrispondente
+            event.target.classList.add('active');
+            
+            // Se è la sezione turni, carica i dati
+            if (toolName === 'turni') {
+                loadUserData();
+            }
+        }
+
+        // ========================================================================
+        //                          INIZIALIZZAZIONE UTENTE
+        // ========================================================================
+        
+        async function initializeUser() {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) {
+                    window.location.href = '/login-minimal.html';
+                    return;
+                }
+                currentUser = session.user;
+                console.log('✅ Utente autenticato:', currentUser.id);
+            } catch (error) {
+                console.error('Errore inizializzazione:', error);
+                showNotification('❌ Errore nel caricamento', 'error');
+                window.location.href = '/login-minimal.html';
+            }
+        }
+
+        async function loadUserData() {
+            if (!currentUser) return;
+            await Promise.all([
+                loadTurniFromDB(),
+                loadLicenzeFromDB(),
+                loadRecuperiFromDB()
+            ]);
+        }
+
+        // ========================================================================
+        //                          GESTIONE TURNI
+        // ========================================================================
+
+        async function loadTurniFromDB() {
+            try {
+                console.log(`🔄 Caricamento turni per ${currentMonth + 1}/${currentYear}...`);
+                
+                const { data: turni, error } = await supabase
+                    .from('turni')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .gte('data_turno', `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`)
+                    .lt('data_turno', `${currentYear}-${String(currentMonth + 2).padStart(2, '0')}-01`)
+                    .order('data_turno');
+
+                if (error) throw error;
+                
+                turniData = turni || [];
+                console.log(`✅ Caricati ${turniData.length} turni:`, turniData);
+                
+                updateCalendar();
+                updateStats();
+            } catch (error) {
+                console.error('❌ Errore caricamento turni:', error);
+                turniData = [];
+                updateCalendar();
+                updateStats();
+            }
+        }
+
+        async function saveTurnoDB(turnoData) {
+            try {
+                let result;
+                
+                if (editingTurno) {
+                    // Aggiorna turno esistente
+                    const { data, error } = await supabase
+                        .from('turni')
+                        .update({
+                            data_turno: turnoData.data,
+                            tipo_turno: turnoData.tipo,
+                            note: turnoData.note || ''
+                        })
+                        .eq('id', editingTurno.id)
+                        .eq('user_id', currentUser.id)
+                        .select();
+                    
+                    if (error) throw error;
+                    result = data;
+                    showNotification('✅ Turno aggiornato!', 'success');
+                } else {
+                    // Crea nuovo turno
+                    const { data, error } = await supabase
+                        .from('turni')
+                        .upsert({
+                            user_id: currentUser.id,
+                            data_turno: turnoData.data,
+                            tipo_turno: turnoData.tipo,
+                            note: turnoData.note || ''
+                        })
+                        .select();
+
+                    if (error) throw error;
+                    result = data;
+                    showNotification('✅ Turno salvato!', 'success');
+                }
+
+                await loadTurniFromDB();
+                return true;
+            } catch (error) {
+                console.error('Errore salvataggio turno:', error);
+                showNotification('❌ Errore nel salvataggio', 'error');
+                return false;
+            }
+        }
+
+        async function deleteTurno() {
+            if (!editingTurno) return;
+            
+            if (!confirm('Sei sicuro di voler eliminare questo turno?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('turni')
+                    .delete()
+                    .eq('id', editingTurno.id)
+                    .eq('user_id', currentUser.id);
+
+                if (error) throw error;
+                
+                showNotification('✅ Turno eliminato!', 'success');
+                closeTurnoModal();
+                await loadTurniFromDB();
+            } catch (error) {
+                console.error('Errore eliminazione turno:', error);
+                showNotification('❌ Errore nell\'eliminazione', 'error');
+            }
+        }
+
+        // ========================================================================
+        //                          GESTIONE LICENZE
+        // ========================================================================
+
+        async function loadLicenzeFromDB() {
+            try {
+                const { data: licenze, error } = await supabase
+                    .from('licenze')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('data_inizio', { ascending: false });
+
+                if (error) throw error;
+                licenzeData = licenze || [];
+                updateLicenzeList();
+                updateCalendar();
+            } catch (error) {
+                console.error('Errore caricamento licenze:', error);
+                licenzeData = [];
+                updateLicenzeList();
+                updateCalendar();
+            }
+        }
+
+        async function saveLicenzaDB(licenzaData) {
+            try {
+                let result;
+                
+                if (editingLicenza) {
+                    const { data, error } = await supabase
+                        .from('licenze')
+                        .update({
+                            tipo_licenza: licenzaData.tipo,
+                            data_inizio: licenzaData.dataInizio,
+                            data_fine: licenzaData.dataFine,
+                            giorni_totali: calculateDaysBetween(licenzaData.dataInizio, licenzaData.dataFine),
+                            note: licenzaData.note || ''
+                        })
+                        .eq('id', editingLicenza.id)
+                        .eq('user_id', currentUser.id)
+                        .select();
+                    
+                    if (error) throw error;
+                    result = data;
+                    showNotification('✅ Licenza aggiornata!', 'success');
+                } else {
+                    const { data, error } = await supabase
+                        .from('licenze')
+                        .insert({
+                            user_id: currentUser.id,
+                            tipo_licenza: licenzaData.tipo,
+                            data_inizio: licenzaData.dataInizio,
+                            data_fine: licenzaData.dataFine,
+                            giorni_totali: calculateDaysBetween(licenzaData.dataInizio, licenzaData.dataFine),
+                            note: licenzaData.note || ''
+                        })
+                        .select();
+
+                    if (error) throw error;
+                    result = data;
+                    showNotification('✅ Licenza programmata!', 'success');
+                }
+
+                // Naviga al mese della licenza se necessario
+                const dataInizio = new Date(licenzaData.dataInizio);
+                if (dataInizio.getMonth() !== currentMonth || dataInizio.getFullYear() !== currentYear) {
+                    currentMonth = dataInizio.getMonth();
+                    currentYear = dataInizio.getFullYear();
+                    await loadTurniFromDB();
+                }
+
+                await loadLicenzeFromDB();
+                return true;
+            } catch (error) {
+                console.error('Errore salvataggio licenza:', error);
+                showNotification('❌ Errore nel salvataggio', 'error');
+                return false;
+            }
+        }
+
+        async function deleteLicenza(licenzaId) {
+            if (!confirm('Eliminare questa licenza?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('licenze')
+                    .delete()
+                    .eq('id', licenzaId)
+                    .eq('user_id', currentUser.id);
+
+                if (error) throw error;
+                showNotification('✅ Licenza eliminata!', 'success');
+                await loadLicenzeFromDB();
+            } catch (error) {
+                showNotification('❌ Errore nell\'eliminazione', 'error');
+            }
+        }
+
+        async function deleteLicenzaFromModal() {
+            if (!editingLicenza) return;
+            
+            if (!confirm('Sei sicuro di voler eliminare questa licenza?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('licenze')
+                    .delete()
+                    .eq('id', editingLicenza.id)
+                    .eq('user_id', currentUser.id);
+
+                if (error) throw error;
+                
+                showNotification('✅ Licenza eliminata!', 'success');
+                closeLicenzaModal();
+                await loadLicenzeFromDB();
+            } catch (error) {
+                console.error('Errore eliminazione licenza:', error);
+                showNotification('❌ Errore nell\'eliminazione', 'error');
+            }
+        }
+
+        function editLicenza(licenzaId) {
+            const licenza = licenzeData.find(l => l.id === licenzaId);
+            if (!licenza) return;
+            
+            editingLicenza = licenza;
+            
+            const form = document.getElementById('licenzaForm');
+            form.licenza_id.value = licenza.id;
+            form.tipo_licenza.value = licenza.tipo_licenza;
+            form.data_inizio.value = licenza.data_inizio;
+            form.data_fine.value = licenza.data_fine;
+            form.note.value = licenza.note || '';
+            
+            document.getElementById('licenza-modal-title').textContent = '✏️ Modifica Licenza Aurora';
+            document.getElementById('licenza-submit-btn').textContent = '✅ Aggiorna';
+            document.getElementById('licenza-delete-section').classList.remove('hidden');
+            
+            openLicenzaModal();
+        }
+
+        // ========================================================================
+        //                          GESTIONE RECUPERI
+        // ========================================================================
+
+        async function loadRecuperiFromDB() {
+            try {
+                const { data: recuperi, error } = await supabase
+                    .from('recuperi')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('data_maturazione', { ascending: false });
+
+                if (error) throw error;
+                recuperiData = recuperi || [];
+                updateRecuperiList();
+            } catch (error) {
+                console.error('Errore caricamento recuperi:', error);
+                recuperiData = [];
+                updateRecuperiList();
+            }
+        }
+
+        async function saveRecuperoDB(recuperoData) {
+            try {
+                let result;
+                
+                if (editingRecupero) {
+                    const { data, error } = await supabase
+                        .from('recuperi')
+                        .update({
+                            tipo_recupero: recuperoData.tipo,
+                            data_maturazione: recuperoData.dataMaturazione,
+                            descrizione: recuperoData.descrizione
+                        })
+                        .eq('id', editingRecupero.id)
+                        .eq('user_id', currentUser.id)
+                        .select();
+                    
+                    if (error) throw error;
+                    result = data;
+                    showNotification('✅ Recupero aggiornato!', 'success');
+                } else {
+                    const { data, error } = await supabase
+                        .from('recuperi')
+                        .insert({
+                            user_id: currentUser.id,
+                            tipo_recupero: recuperoData.tipo,
+                            data_maturazione: recuperoData.dataMaturazione,
+                            descrizione: recuperoData.descrizione
+                        })
+                        .select();
+
+                    if (error) throw error;
+                    result = data;
+                    showNotification('✅ Recupero registrato!', 'success');
+                }
+
+                await loadRecuperiFromDB();
+                return true;
+            } catch (error) {
+                console.error('Errore salvataggio recupero:', error);
+                showNotification('❌ Errore nel salvataggio', 'error');
+                return false;
+            }
+        }
+
+        async function deleteRecupero(recuperoId) {
+            if (!confirm('Eliminare questo recupero?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('recuperi')
+                    .delete()
+                    .eq('id', recuperoId)
+                    .eq('user_id', currentUser.id);
+
+                if (error) throw error;
+                showNotification('✅ Recupero eliminato!', 'success');
+                await loadRecuperiFromDB();
+            } catch (error) {
+                showNotification('❌ Errore nell\'eliminazione', 'error');
+            }
+        }
+
+        async function deleteRecuperoFromModal() {
+            if (!editingRecupero) return;
+            
+            if (!confirm('Sei sicuro di voler eliminare questo recupero?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('recuperi')
+                    .delete()
+                    .eq('id', editingRecupero.id)
+                    .eq('user_id', currentUser.id);
+
+                if (error) throw error;
+                
+                showNotification('✅ Recupero eliminato!', 'success');
+                closeRecuperoModal();
+                await loadRecuperiFromDB();
+            } catch (error) {
+                console.error('Errore eliminazione recupero:', error);
+                showNotification('❌ Errore nell\'eliminazione', 'error');
+            }
+        }
+
+        function editRecupero(recuperoId) {
+            const recupero = recuperiData.find(r => r.id === recuperoId);
+            if (!recupero) return;
+            
+            editingRecupero = recupero;
+            
+            const form = document.getElementById('recuperoForm');
+            form.recupero_id.value = recupero.id;
+            form.tipo_recupero.value = recupero.tipo_recupero;
+            form.data_maturazione.value = recupero.data_maturazione;
+            form.descrizione.value = recupero.descrizione || '';
+            
+            document.getElementById('recupero-modal-title').textContent = '✏️ Modifica Recupero Aurora';
+            document.getElementById('recupero-submit-btn').textContent = '✅ Aggiorna';
+            document.getElementById('recupero-delete-section').classList.remove('hidden');
+            
+            openRecuperoModal();
+        }
+
+        // ========================================================================
+        //                          NAVIGAZIONE CALENDARIO
+        // ========================================================================
+
+        async function previousMonth() {
+            console.log('📅 Navigazione: mese precedente');
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            console.log(`📅 Nuovo periodo: ${currentMonth + 1}/${currentYear}`);
+            await loadTurniFromDB();
+        }
+        
+        async function nextMonth() {
+            console.log('📅 Navigazione: mese successivo');
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            console.log(`📅 Nuovo periodo: ${currentMonth + 1}/${currentYear}`);
+            await loadTurniFromDB();
+        }
+
+        // ========================================================================
+        //                          FUNZIONI HELPER
+        // ========================================================================
+
+        function isDateInLicenza(dateStr) {
+            return licenzeData.some(licenza => {
+                const dataInizio = new Date(licenza.data_inizio);
+                const dataFine = new Date(licenza.data_fine);
+                const dataCheck = new Date(dateStr);
+                
+                return dataCheck >= dataInizio && dataCheck <= dataFine && 
+                       licenza.stato !== 'rifiutata' && licenza.stato !== 'annullata';
+            });
+        }
+
+        function getLicenzaForDate(dateStr) {
+            return licenzeData.find(licenza => {
+                const dataInizio = new Date(licenza.data_inizio);
+                const dataFine = new Date(licenza.data_fine);
+                const dataCheck = new Date(dateStr);
+                
+                return dataCheck >= dataInizio && dataCheck <= dataFine && 
+                       licenza.stato !== 'rifiutata' && licenza.stato !== 'annullata';
+            });
+        }
+
+        function getTurnoLabel(tipo) {
+            const labels = {
+                'mattina': 'Mattina',
+                'pomeriggio': 'Pomeriggio', 
+                'sera': 'Sera',
+                'notte': 'Notte',
+                'riposo': 'Riposo'
+            };
+            return labels[tipo] || '';
+        }
+
+        function getLicenzaShortName(tipo) {
+            const names = {
+                'ordinaria': 'Licenza',
+                'straordinaria': 'Lic. Str.',
+                'speciale': 'Lic. Sp.',
+                'permesso': 'Permesso',
+                'riposo_settimanale': 'Riposo S.'
+            };
+            return names[tipo] || 'Licenza';
+        }
+
+        function getLicenzaIcon(tipo) {
+            const icons = {
+                'ordinaria': '🏖️',
+                'straordinaria': '⭐',
+                'speciale': '🎯',
+                'permesso': '📋',
+                'riposo_settimanale': '🛏️'
+            };
+            return icons[tipo] || '📅';
+        }
+
+        function getLicenzaName(tipo) {
+            const names = {
+                'ordinaria': 'Licenza Ordinaria',
+                'straordinaria': 'Licenza Straordinaria',
+                'speciale': 'Licenza Speciale',
+                'permesso': 'Permesso',
+                'riposo_settimanale': 'Riposo Settimanale'
+            };
+            return names[tipo] || 'Licenza';
+        }
+
+        function getRecuperoIcon(tipo) {
+            const icons = {
+                'festività': '🎄',
+                'settimana_del': '📅'
+            };
+            return icons[tipo] || '📅';
+        }
+
+        function getRecuperoName(tipo) {
+            const names = {
+                'festività': 'Festività',
+                'settimana_del': 'Settimana del...'
+            };
+            return names[tipo] || 'Recupero';
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('it-IT');
+        }
+
+        function calculateDaysBetween(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const timeDiff = end.getTime() - start.getTime();
+            return Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+        }
+
+        // ========================================================================
+        //                          AGGIORNAMENTO INTERFACCIA
+        // ========================================================================
+
+        function updateCalendar() {
+            console.log('🖼️ Aggiornamento calendario...');
+            
+            const monthNames = [
+                'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+                'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
+            ];
+            
+            const calendarTitle = document.getElementById('calendar-title');
+            if (calendarTitle) {
+                calendarTitle.innerHTML = `📅 ${monthNames[currentMonth]} ${currentYear}`;
+            }
+
+            const calendarContainer = document.getElementById('calendar-container');
+            if (!calendarContainer) return;
+
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay() === 0 ? 7 : firstDay.getDay();
+
+            let calendarHTML = `
+                <div class="calendar-day header">Lun</div>
+                <div class="calendar-day header">Mar</div>
+                <div class="calendar-day header">Mer</div>
+                <div class="calendar-day header">Gio</div>
+                <div class="calendar-day header">Ven</div>
+                <div class="calendar-day header">Sab</div>
+                <div class="calendar-day header">Dom</div>
+            `;
+
+            // Celle vuote prima del primo giorno
+            for (let i = 1; i < startingDayOfWeek; i++) {
+                calendarHTML += '<div class="calendar-day"></div>';
+            }
+
+            // Giorni del mese
+            const today = new Date();
+            const isCurrentMonth = today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const turno = turniData.find(t => t.data_turno === dateStr);
+                const isToday = isCurrentMonth && today.getDate() === day;
+                const isInLicenza = isDateInLicenza(dateStr);
+                const licenza = getLicenzaForDate(dateStr);
+                
+                let turnoClass = '';
+                let turnoLabel = '';
+                let displayDay = day;
+                let extraInfo = '';
+                
+                if (isToday) {
+                    turnoClass = 'oggi';
+                    turnoLabel = 'OGGI';
+                } else if (isInLicenza && licenza) {
+                    turnoClass = 'licenza';
+                    turnoLabel = getLicenzaShortName(licenza.tipo_licenza);
+                    if (turno) {
+                        extraInfo = `<div class="turno-info">⏰ ${getTurnoLabel(turno.tipo_turno)}</div>`;
+                    }
+                } else if (turno) {
+                    turnoClass = `turno-${turno.tipo_turno}`;
+                    turnoLabel = getTurnoLabel(turno.tipo_turno);
+                } else {
+                    turnoClass = 'vuoto';
+                    turnoLabel = '';
+                }
+
+                calendarHTML += `
+                    <div class="calendar-day ${turnoClass}" onclick="openDayModal('${dateStr}', ${turno ? `'${turno.id}'` : 'null'})">
+                        <button class="edit-button" onclick="event.stopPropagation(); editDayTurno('${dateStr}', ${turno ? `'${turno.id}'` : 'null'})" aria-label="Modifica">✏️</button>
+                        <strong>${displayDay}</strong>
+                        <div class="turno-label">${turnoLabel}</div>
+                        ${extraInfo}
+                    </div>
+                `;
+            }
+
+            calendarContainer.innerHTML = calendarHTML;
+        }
+
+        function updateLicenzeList() {
+            const licenzeList = document.getElementById('licenze-list');
+            if (!licenzeList) return;
+
+            if (licenzeData.length === 0) {
+                licenzeList.innerHTML = '<p class="text-gray-500 text-base md:text-lg text-center font-semibold">Nessuna licenza programmata</p>';
+                return;
+            }
+
+            licenzeList.innerHTML = licenzeData.slice(0, 5).map(licenza => `
+                <div class="bg-gradient-to-r from-white/80 to-white/60 backdrop-blur-md p-4 rounded-2xl border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                    <div class="flex justify-between items-center">
+                        <div class="flex-1">
+                            <div class="font-black text-gray-900 text-base md:text-lg flex items-center">
+                                <span class="mr-3 text-xl md:text-2xl">${getLicenzaIcon(licenza.tipo_licenza)}</span>
+                                ${getLicenzaName(licenza.tipo_licenza)}
+                            </div>
+                            <div class="text-sm md:text-base text-gray-600 font-semibold">
+                                ${formatDate(licenza.data_inizio)} - ${formatDate(licenza.data_fine)}
+                            </div>
+                            ${licenza.note ? `<div class="text-sm md:text-base text-gray-500 mt-2 font-medium">${licenza.note}</div>` : ''}
+                        </div>
+                        <div class="action-buttons ml-3">
+                            <button onclick="editLicenza('${licenza.id}')" class="action-btn edit-btn" aria-label="Modifica licenza">
+                                ✏️
+                            </button>
+                            <button onclick="deleteLicenza('${licenza.id}')" class="action-btn delete-btn" aria-label="Elimina licenza">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateRecuperiList() {
+            const recuperiList = document.getElementById('recuperi-list');
+            if (!recuperiList) return;
+
+            if (recuperiData.length === 0) {
+                recuperiList.innerHTML = '<p class="text-gray-500 text-base md:text-lg text-center font-semibold">Nessun recupero registrato</p>';
+                return;
+            }
+
+            recuperiList.innerHTML = recuperiData.slice(0, 5).map(recupero => `
+                <div class="bg-gradient-to-r from-white/80 to-white/60 backdrop-blur-md p-4 rounded-2xl border border-white/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                    <div class="flex justify-between items-center">
+                        <div class="flex-1">
+                            <div class="font-black text-gray-900 text-base md:text-lg flex items-center">
+                                <span class="mr-3 text-xl md:text-2xl">${getRecuperoIcon(recupero.tipo_recupero)}</span>
+                                ${getRecuperoName(recupero.tipo_recupero)}
+                            </div>
+                            <div class="text-sm md:text-base text-gray-600 font-semibold">
+                                ${formatDate(recupero.data_maturazione)}
+                            </div>
+                            <div class="text-sm md:text-base text-gray-500 font-medium">
+                                ${recupero.descrizione}
+                            </div>
+                        </div>
+                        <div class="action-buttons ml-3">
+                            <button onclick="editRecupero('${recupero.id}')" class="action-btn edit-btn" aria-label="Modifica recupero">
+                                ✏️
+                            </button>
+                            <button onclick="deleteRecupero('${recupero.id}')" class="action-btn delete-btn" aria-label="Elimina recupero">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            if (!turniData) return;
+            
+            const stats = {
+                mattina: turniData.filter(t => t.tipo_turno === 'mattina').length,
+                pomeriggio: turniData.filter(t => t.tipo_turno === 'pomeriggio').length,
+                sera: turniData.filter(t => t.tipo_turno === 'sera').length,
+                notte: turniData.filter(t => t.tipo_turno === 'notte').length,
+                riposo: turniData.filter(t => t.tipo_turno === 'riposo').length,
+                licenze: licenzeData.filter(l => {
+                    const dataInizio = new Date(l.data_inizio);
+                    const dataFine = new Date(l.data_fine);
+                    const meseCorrente = new Date(currentYear, currentMonth, 1);
+                    const meseProssimo = new Date(currentYear, currentMonth + 1, 0);
+                    return (dataInizio <= meseProssimo && dataFine >= meseCorrente);
+                }).length
+            };
+            
+            document.getElementById('stat-mattina').textContent = stats.mattina;
+            document.getElementById('stat-pomeriggio').textContent = stats.pomeriggio;
+            document.getElementById('stat-sera').textContent = stats.sera;
+            document.getElementById('stat-notte').textContent = stats.notte;
+            document.getElementById('stat-riposo').textContent = stats.riposo;
+            document.getElementById('stat-licenze').textContent = stats.licenze;
+        }
+
+        // ========================================================================
+        //                          FUNZIONI MODAL
+        // ========================================================================
+
+        function openTurnoModal() {
+            document.getElementById('turnoModal').classList.add('active');
+        }
+
+        function closeTurnoModal() {
+            document.getElementById('turnoModal').classList.remove('active');
+            resetTurnoModal();
+        }
+
+        function resetTurnoModal() {
+            editingTurno = null;
+            const form = document.getElementById('turnoForm');
+            form.reset();
+            form.turno_id.value = '';
+            
+            document.getElementById('turno-modal-title').textContent = '✨ Programma Turno Aurora';
+            document.getElementById('turno-submit-btn').textContent = '✅ Salva Turno';
+            document.getElementById('turno-delete-section').classList.add('hidden');
+        }
+
+        function openLicenzaModal() {
+            document.getElementById('licenzaModal').classList.add('active');
+        }
+
+        function closeLicenzaModal() {
+            document.getElementById('licenzaModal').classList.remove('active');
+            resetLicenzaModal();
+        }
+
+        function resetLicenzaModal() {
+            editingLicenza = null;
+            const form = document.getElementById('licenzaForm');
+            form.reset();
+            form.licenza_id.value = '';
+            
+            document.getElementById('licenza-modal-title').textContent = '🏖️ Programma Licenza Aurora';
+            document.getElementById('licenza-submit-btn').textContent = '✅ Programma';
+            document.getElementById('licenza-delete-section').classList.add('hidden');
+        }
+
+        function openRecuperoModal() {
+            document.getElementById('recuperoModal').classList.add('active');
+        }
+
+        function closeRecuperoModal() {
+            document.getElementById('recuperoModal').classList.remove('active');
+            resetRecuperoModal();
+        }
+
+        function resetRecuperoModal() {
+            editingRecupero = null;
+            const form = document.getElementById('recuperoForm');
+            form.reset();
+            form.recupero_id.value = '';
+            
+            document.getElementById('recupero-modal-title').textContent = '🔄 Registra Recupero Aurora';
+            document.getElementById('recupero-submit-btn').textContent = '✅ Registra';
+            document.getElementById('recupero-delete-section').classList.add('hidden');
+        }
+
+        function openDayModal(dateStr, turnoId) {
+            if (turnoId && turnoId !== 'null') {
+                editDayTurno(dateStr, turnoId);
+            } else {
+                const form = document.getElementById('turnoForm');
+                form.data_turno.value = dateStr;
+                form.tipo_turno.value = '';
+                openTurnoModal();
+            }
+        }
+
+        function editDayTurno(dateStr, turnoId) {
+            if (turnoId && turnoId !== 'null') {
+                const turno = turniData.find(t => t.id === turnoId);
+                if (turno) {
+                    editingTurno = turno;
+                    
+                    const form = document.getElementById('turnoForm');
+                    form.turno_id.value = turno.id;
+                    form.data_turno.value = turno.data_turno;
+                    form.tipo_turno.value = turno.tipo_turno;
+                    form.note.value = turno.note || '';
+                    
+                    document.getElementById('turno-modal-title').textContent = '✏️ Modifica Turno Aurora';
+                    document.getElementById('turno-submit-btn').textContent = '✅ Aggiorna';
+                    document.getElementById('turno-delete-section').classList.remove('hidden');
+                    
+                    openTurnoModal();
+                }
+            } else {
+                const form = document.getElementById('turnoForm');
+                form.data_turno.value = dateStr;
+                form.tipo_turno.value = '';
+                openTurnoModal();
+            }
+        }
+
+        // ========================================================================
+        //                          NOTIFICHE E UTILITY
+        // ========================================================================
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'bg-gradient-to-r from-green-500 to-green-600',
+                error: 'bg-gradient-to-r from-red-500 to-red-600',
+                info: 'bg-gradient-to-r from-blue-500 to-blue-600'
+            };
+            
+            notification.className = `fixed top-6 right-6 ${colors[type]} text-white px-6 py-4 rounded-2xl shadow-2xl z-50 transform translate-x-full transition-transform duration-500 font-bold text-base md:text-lg backdrop-blur-md border border-white/20`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 500);
+            }, 4000);
+        }
+
+        // ========================================================================
+        //                    ANIMAZIONI E INTERSEZIONE OBSERVER
+        // ========================================================================
+
+        function initializeAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Osserva tutti gli elementi che devono essere animati
+            document.querySelectorAll('.card-hover, .utility-card').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // ========================================================================
+        //                          INIZIALIZZAZIONE E EVENT LISTENERS
+        // ========================================================================
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🚀 Inizializzazione Aurora Strumenti...');
+            
+            // Inizializza animazioni
+            initializeAnimations();
+            
+            // Inizializza l'utente
+            await initializeUser();
+            
+            // Carica i dati se l'utente è autenticato
+            if (currentUser) {
+                await loadUserData();
+            }
+            
+            // Form turno
+            const turnoForm = document.getElementById('turnoForm');
+            if (turnoForm) {
+                turnoForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('📝 Sottomissione form turno...');
+                    
+                    const formData = new FormData(e.target);
+                    const turnoData = {
+                        data: formData.get('data_turno'),
+                        tipo: formData.get('tipo_turno'),
+                        note: formData.get('note')
+                    };
+                    
+                    console.log('📊 Dati turno:', turnoData);
+                    
+                    if (!turnoData.data || !turnoData.tipo) {
+                        showNotification('❌ Compila tutti i campi obbligatori', 'error');
+                        return;
+                    }
+                    
+                    const success = await saveTurnoDB(turnoData);
+                    if (success) {
+                        closeTurnoModal();
+                    }
+                });
+                console.log('✅ Event listener turno aggiunto');
+            }
+
+            // Form licenza
+            const licenzaForm = document.getElementById('licenzaForm');
+            if (licenzaForm) {
+                licenzaForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('📝 Sottomissione form licenza...');
+                    
+                    const formData = new FormData(e.target);
+                    const licenzaData = {
+                        tipo: formData.get('tipo_licenza'),
+                        dataInizio: formData.get('data_inizio'),
+                        dataFine: formData.get('data_fine'),
+                        note: formData.get('note')
+                    };
+                    
+                    console.log('📊 Dati licenza:', licenzaData);
+                    
+                    if (!licenzaData.tipo || !licenzaData.dataInizio || !licenzaData.dataFine) {
+                        showNotification('❌ Compila tutti i campi obbligatori', 'error');
+                        return;
+                    }
+                    
+                    const success = await saveLicenzaDB(licenzaData);
+                    if (success) {
+                        closeLicenzaModal();
+                    }
+                });
+                console.log('✅ Event listener licenza aggiunto');
+            }
+
+            // Form recupero
+            const recuperoForm = document.getElementById('recuperoForm');
+            if (recuperoForm) {
+                recuperoForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('📝 Sottomissione form recupero...');
+                    
+                    const formData = new FormData(e.target);
+                    const recuperoData = {
+                        tipo: formData.get('tipo_recupero'),
+                        dataMaturazione: formData.get('data_maturazione'),
+                        descrizione: formData.get('descrizione')
+                    };
+                    
+                    console.log('📊 Dati recupero:', recuperoData);
+                    
+                    if (!recuperoData.tipo || !recuperoData.dataMaturazione || !recuperoData.descrizione) {
+                        showNotification('❌ Compila tutti i campi obbligatori', 'error');
+                        return;
+                    }
+                    
+                    const success = await saveRecuperoDB(recuperoData);
+                    if (success) {
+                        closeRecuperoModal();
+                    }
+                });
+                console.log('✅ Event listener recupero aggiunto');
+            }
+            
+            // Chiudi modal cliccando fuori
+            document.addEventListener('click', function(e) {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                        if (modal.id === 'turnoModal') resetTurnoModal();
+                        if (modal.id === 'licenzaModal') resetLicenzaModal();
+                        if (modal.id === 'recuperoModal') resetRecuperoModal();
+                    }
+                });
+            });
+            
+            // Event listener per tasti ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const activeModal = document.querySelector('.modal.active');
+                    if (activeModal) {
+                        activeModal.classList.remove('active');
+                        if (activeModal.id === 'turnoModal') resetTurnoModal();
+                        if (activeModal.id === 'licenzaModal') resetLicenzaModal();
+                        if (activeModal.id === 'recuperoModal') resetRecuperoModal();
+                    }
+                }
+            });
+            
+            console.log('🎉 Inizializzazione Aurora completata');
+        });
+
+        // Esporta funzioni globali per l'uso nei click handlers
+        window.showTool = showTool;
+        window.openTurnoModal = openTurnoModal;
+        window.closeTurnoModal = closeTurnoModal;
+        window.openLicenzaModal = openLicenzaModal;
+        window.closeLicenzaModal = closeLicenzaModal;
+        window.openRecuperoModal = openRecuperoModal;
+        window.closeRecuperoModal = closeRecuperoModal;
+        window.openDayModal = openDayModal;
+        window.editDayTurno = editDayTurno;
+        window.previousMonth = previousMonth;
+        window.nextMonth = nextMonth;
+        window.deleteLicenza = deleteLicenza;
+        window.deleteRecupero = deleteRecupero;
+        window.editLicenza = editLicenza;
+        window.editRecupero = editRecupero;
+        window.deleteTurno = deleteTurno;
+        window.deleteLicenzaFromModal = deleteLicenzaFromModal;
+        window.deleteRecuperoFromModal = deleteRecuperoFromModal;
+        
+        console.log('🌐 Funzioni globali Aurora esportate');
+    </script>
+
+    <!-- Smart Navigation System -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+        
+        const supabase = createClient(
+            'https://lycrgzptkdkksukcwrld.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx5Y3JnenB0a2Rra3N1a2N3cmxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3ODQyMzAsImV4cCI6MjA2ODM2MDIzMH0.ZJGOXAMC3hKKrnwXHKEa2_Eh7ZpOKeLYvYlYneBiEfk'
+        );
+
+        // Smart Home Redirect
+        async function smartHomeRedirect() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (!user) {
+                    window.location.href = '../login.html';
+                    return;
+                }
+
+                // Ottieni ruoli utente
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('ruoli')
+                    .eq('id', user.id)
+                    .single();
+
+                const userRoles = profile?.ruoli || ['USER'];
+                
+                // Determina la home corretta
+                if (userRoles.includes('DIRIGENTE') || userRoles.includes('ADMIN')) {
+                    window.location.href = '../app/home_dirigenti.html';
+                } else {
+                    window.location.href = '../app/home.html';
+                }
+            } catch (error) {
+                console.error('Errore smart navigation:', error);
+                window.location.href = '../app/home.html';
+            }
+        }
+
+        // Esponi globalmente
+        window.smartHomeRedirect = smartHomeRedirect;
+    </script>
+</body>
+</html>
